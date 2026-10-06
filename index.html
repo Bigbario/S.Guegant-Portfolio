@@ -359,7 +359,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: contrast(1.1) brightness(0.95);
+            filter: contrast(1.05) brightness(0.98);
         }
 
         .status-pill {
@@ -379,12 +379,13 @@
             box-shadow: 0 0 10px #39ff14;
         }
 
-        /* Attributs & Barres de Stats */
+        /* Attributs & Barres de Stats (Alignement corrigé via GRID) */
         .stat-row {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 140px 1fr 30px;
             align-items: center;
-            margin-bottom: 10px;
+            gap: 10px;
+            margin-bottom: 12px;
             font-size: 0.9rem;
         }
 
@@ -392,10 +393,11 @@
             font-family: 'Orbitron', sans-serif;
             color: #e0b0ff;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .stat-bar-container {
-            width: 120px;
+            width: 100%;
             height: 10px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
@@ -413,7 +415,6 @@
             font-family: 'Orbitron', sans-serif;
             color: #00f0ff;
             font-weight: 700;
-            width: 25px;
             text-align: right;
         }
 
@@ -527,7 +528,7 @@
                 <!-- COLONNE 1 : AVATAR & STATUS -->
                 <div class="cyber-card avatar-box">
                     <div class="avatar-frame">
-                        <img src="images/profile.jpg" alt="Samuel Guegant Avatar" onerror="this.src='https://via.placeholder.com/280x280/1a0033/00f0ff?text=SAMUEL+GUEGANT'">
+                        <img src="images/PhotoPro_Samuel_GUEGANT.png" alt="Samuel Guegant Avatar" onerror="this.src='https://via.placeholder.com/280x280/1a0033/00f0ff?text=SAMUEL+GUEGANT'">
                     </div>
                     <div class="status-pill">
                         <div class="status-dot"></div>
