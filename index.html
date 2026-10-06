@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Samuel Guegant Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@600;700;900&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@600;700;900&family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -159,12 +159,32 @@
             pointer-events: none;
             transition: opacity 0.4s ease;
             padding: 30px 50px;
-            background: rgba(11, 2, 26, 0.95);
+            background: rgba(11, 2, 26, 0.92);
         }
 
         #projectsStage.active {
             opacity: 1;
             pointer-events: auto;
+        }
+
+        /* FOND D'ÉCRAN APERÇU SURVOL BULLE */
+        .stage-bg-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            filter: blur(4px) brightness(0.35);
+            transition: opacity 0.5s ease-in-out;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .stage-bg-preview.active {
+            opacity: 1;
         }
 
         .stage-header {
@@ -213,6 +233,7 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            z-index: 5;
         }
 
         .cone-wall-left, .cone-wall-right {
@@ -245,10 +266,10 @@
         }
 
         .project-bubble {
-            width: 160px;
-            height: 160px;
+            width: 170px;
+            height: 170px;
             border-radius: 50%;
-            background: rgba(30, 10, 60, 0.8);
+            background: rgba(30, 10, 60, 0.85);
             border: 3px solid #00f0ff;
             box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
             display: flex;
@@ -273,7 +294,7 @@
             object-fit: cover;
             position: absolute;
             top: 0; left: 0;
-            opacity: 0.65;
+            opacity: 0.75;
             transition: opacity 0.3s, transform 0.3s;
         }
 
@@ -281,24 +302,25 @@
             position: relative;
             z-index: 2;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 700;
             text-align: center;
-            padding: 5px 10px;
+            padding: 6px 10px;
             background: rgba(10, 2, 25, 0.85);
             border-radius: 12px;
             border: 1px solid rgba(0, 240, 255, 0.5);
             text-shadow: 0 0 8px #00f0ff;
+            max-width: 90%;
         }
 
         .project-bubble:hover {
-            transform: scale(1.15) !important;
+            transform: scale(1.18) !important;
             border-color: #ffffff;
-            box-shadow: 0 0 40px #00f0ff, inset 0 0 20px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 45px #00f0ff, inset 0 0 20px rgba(255, 255, 255, 0.8);
             z-index: 10;
         }
 
-        .project-bubble:hover img { opacity: 0.9; transform: scale(1.1); }
+        .project-bubble:hover img { opacity: 1; transform: scale(1.1); }
 
         .stage-nav-bar {
             width: 100%;
@@ -370,7 +392,6 @@
 
         .video-container iframe { width: 100%; height: 100%; border: none; }
 
-        /* BOUTON FERMER BIEN INTÉGRÉ AU CADRE */
         .close-btn {
             position: absolute;
             top: 15px;
@@ -401,7 +422,7 @@
             width: 90vw;
             max-width: 1200px;
             max-height: 88vh;
-            background: rgba(22, 8, 42, 0.92);
+            background: rgba(22, 8, 42, 0.94);
             border: 2px solid rgba(190, 80, 255, 0.8);
             border-radius: 16px;
             box-shadow: 0 0 50px rgba(160, 30, 255, 0.5);
@@ -515,6 +536,109 @@
         .bio-text p { margin-bottom: 10px; }
         .bio-text strong { color: #00f0ff; }
 
+        /* --- NOUVELLE MODALE PROJET (LAYOUT 2 COLONNES) --- */
+        .project-modal-container {
+            width: 92vw;
+            max-width: 1300px;
+            max-height: 88vh;
+            background: rgba(18, 5, 35, 0.95);
+            border: 2px solid rgba(0, 240, 255, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.3);
+            padding: 55px 35px 35px 35px;
+            position: relative;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .project-detail-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 950px) {
+            .project-detail-layout { grid-template-columns: 1fr; }
+        }
+
+        .project-info-col h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: #00f0ff;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .project-skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .project-skill-badge {
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid rgba(0, 240, 255, 0.6);
+            color: #ffffff;
+            font-size: 0.85rem;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .project-overview {
+            color: #d1c4e9;
+            line-height: 1.7;
+            font-size: 0.98rem;
+            background: rgba(35, 12, 65, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #d488ff;
+        }
+
+        .project-gallery-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .gallery-item {
+            background: rgba(30, 8, 60, 0.6);
+            border: 1px solid rgba(180, 50, 255, 0.4);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .gallery-media {
+            width: 100%;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            max-height: 250px;
+            background: #000;
+        }
+
+        .gallery-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-caption {
+            font-size: 0.88rem;
+            color: #e0b0ff;
+            line-height: 1.4;
+        }
+
         /* EFFET SLASH AU CLIC */
         .slash-effect {
             position: fixed;
@@ -556,6 +680,8 @@
 
     <!-- SCÈNE DES PROJETS -->
     <div id="projectsStage">
+        <div class="stage-bg-preview" id="stageBgPreview"></div>
+
         <div class="stage-header">
             <button class="back-menu-btn" id="backToMenuBtn">← ACCUEIL</button>
             <h2 class="domain-title" id="domainTitle">GD & PROG</h2>
@@ -669,12 +795,28 @@
         </div>
     </div>
 
-    <!-- MODAL DETAIL PROJET -->
+    <!-- MODAL DETAIL PROJET RENOVELÉE -->
     <div class="project-detail-modal" id="projectDetailModal">
-        <div class="char-sheet-container" style="max-width: 700px;">
+        <div class="project-modal-container">
             <button class="close-btn" id="closeProjectDetailBtn">FERMER [X]</button>
-            <h2 id="modalProjectTitle" style="font-family:'Orbitron'; color:#00f0ff; margin-bottom:15px; font-size:2rem;">PROJET</h2>
-            <p id="modalProjectDesc" style="color:#d1c4e9; line-height:1.7; font-size:1.1rem;"></p>
+            <h2 id="modalProjectTitle" style="font-family:'Orbitron'; color:#00f0ff; font-size:2.2rem; border-bottom: 2px solid rgba(0,240,255,0.4); padding-bottom:10px;">PROJET</h2>
+            
+            <div class="project-detail-layout">
+                <!-- COLONNE GAUCHE : INFOS & DESCRIPTIONS -->
+                <div class="project-info-col">
+                    <h3>Compétences Clés & Rôles</h3>
+                    <div class="project-skills-list" id="modalProjectSkills"></div>
+
+                    <h3>À Propos du Projet</h3>
+                    <div class="project-overview" id="modalProjectDesc"></div>
+                </div>
+
+                <!-- COLONNE DROITE : GALERIE D'IMAGES / MÉDIAS -->
+                <div class="project-gallery-col">
+                    <h3 style="font-family:'Orbitron'; color:#00f0ff; font-size:1.1rem; text-transform:uppercase;">Galerie & Aperçus</h3>
+                    <div id="modalProjectGallery" style="display:flex; flex-direction:column; gap:15px;"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -778,36 +920,132 @@
             }
         }
 
-        // DONNÉES ET GESTION DES PROJETS
+        // DONNÉES ET GESTION DES PROJETS AVEC IMAGES DÉDIÉES ET MÉTADONNÉES DÉTAILLÉES
         const domains = [
             {
                 id: 'level_design',
                 title: 'LEVEL DESIGN',
                 projects: [
-                    { title: 'Tomb Raider Dungeon', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Dungeon', desc: 'Level Design - Puzzle Design - Documentation' },
-                    { title: 'Portal Level', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Portal', desc: 'Level Design - Puzzle Design - Documentation' },
-                    { title: '3D Blockout', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=UEFN', desc: 'Level Design - Documentation' },
-                    { title: 'Echoes of Above', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Echoes', desc: 'Game Design - Level Design - Puzzle Design - Encounter Design - Integration - Programming - Management' },
+                    { 
+                        title: 'Tomb Raider Dungeon', 
+                        img: 'images/TombRaider.png', 
+                        skills: ['Level Design', 'Puzzle Design', 'Documentation', 'Unreal Engine'],
+                        desc: 'Conception complète d\'un donjon d\'exploration inspiré de Tomb Raider. Structuration des énigmes environnementales, balisage de l\'espace et pacing de la progression du joueur.',
+                        gallery: [
+                            { img: 'images/TombRaider.png', caption: 'Aperçu de la salle des énigmes principale.' }
+                        ]
+                    },
+                    { 
+                        title: 'Portal Level', 
+                        img: 'images/PortalLD.png', 
+                        skills: ['Level Design', 'Puzzle Design', 'Documentation'],
+                        desc: 'Design d\'un niveau d\'énigmes basé sur les mécaniques de la physique et la spatialisation propre à Portal. Focalisation sur le guidage visuel et l\'apprentissage organique.',
+                        gallery: [
+                            { img: 'images/PortalLD.png', caption: 'Vue du parcours d\'initiation et des mécaniques de téléportation.' }
+                        ]
+                    },
+                    { 
+                        title: '3D Blockout', 
+                        img: 'images/LD3D Whale\'s Inside Logo.png', 
+                        skills: ['Level Design', '3D Blockout', 'Documentation', 'UEFN'],
+                        desc: 'Création d\'un blockout 3D immersif à l\'intérieur d\'un organisme géant. Travail approfondi sur la verticalité, la composition de cadrage et la narration environnementale.',
+                        gallery: [
+                            { img: 'images/LD3D Whale\'s Inside Logo.png', caption: 'Blockout structural de la zone interne.' }
+                        ]
+                    },
+                    { 
+                        title: 'Echoes of Above', 
+                        img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', 
+                        skills: ['Game Design', 'Level Design', 'Puzzle Design', 'Encounter Design', 'Integration', 'Programming', 'Management'],
+                        desc: 'Jeu de puzzle / aventure disponible sur Steam. Direction créative du Level Design et conception des systèmes d\'interactions et d\'énigmes dynamiques.',
+                        gallery: [
+                            { img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', caption: 'Affiche promotionnelle et aperçu de la direction artistique.' }
+                        ]
+                    }
                 ]
             },
             {
                 id: 'gd_prog',
                 title: 'GD & PROG',
                 projects: [
-                    { title: 'Echoes of Above', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Echoes', desc: 'Game Design - Level Design - Puzzle Design - Encounter Design - Integration - Programming - Management' },
-                    { title: 'The Unseelie Court', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=QTE+Plugin', desc: 'Game Design - Level Design - Narrative Design - World Design ' },
-                    { title: 'FlipIt', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=HUD+System', desc: 'Game Design - Programming - Balancing' },
-                    { title: 'Rpg Maker Games', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Point+de+Break', desc: 'Game Design - Level Design - World Design - Narrative Design - Balancing - Programming' }
+                    { 
+                        title: 'Echoes of Above', 
+                        img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', 
+                        skills: ['Game Design', 'Level Design', 'Puzzle Design', 'Encounter Design', 'Integration', 'Programming', 'Management'],
+                        desc: 'Projet complet développé sur Steam. Conception du système de règles, programmation C# / Unity des systèmes d\'énigmes et équilibrage global.',
+                        gallery: [
+                            { img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', caption: 'Illustration principale d\'Echoes of Above.' }
+                        ]
+                    },
+                    { 
+                        title: 'The Unseelie Court', 
+                        img: 'images/The UnseelieCourt.png', 
+                        skills: ['Game Design', 'Level Design', 'Narrative Design', 'World Design'],
+                        desc: 'Conception d\'un univers féérique sombre. Élaboration des mécaniques narratives à choix multiples et architecture du monde interactif.',
+                        gallery: [
+                            { img: 'images/The UnseelieCourt.png', caption: 'Concept et ambiances visuelles du projet.' }
+                        ]
+                    },
+                    { 
+                        title: 'FlipIt', 
+                        img: 'images/FlipIt.png', 
+                        skills: ['Game Design', 'Programming', 'Balancing', 'HUD System'],
+                        desc: 'Jeu d\'action / réflexe axé sur le retournement et l\'inversion de mécaniques. Découpage UI/UX, programmation des systèmes de jeu et équilibrage des niveaux.',
+                        gallery: [
+                            { img: 'images/FlipIt.png', caption: 'Interface utilisateur HUD et gameplay en action.' }
+                        ]
+                    },
+                    { 
+                        title: 'RPG Maker Games', 
+                        img: 'images/RPGMakerGameIcon.png', 
+                        skills: ['Game Design', 'Level Design', 'World Design', 'Narrative Design', 'Balancing', 'Programming'],
+                        desc: 'Collection de modules et plugins personnalisés JavaScript développés pour RPG Maker MV (Systèmes de QTE, menus personnalisés, mécaniques d\'esquive).',
+                        gallery: [
+                            { img: 'images/RPGMakerGameIcon.png', caption: 'Aperçu du système de plugins et UI personnalisés.' }
+                        ]
+                    }
                 ]
             },
             {
                 id: 'documents',
                 title: 'DOCUMENTS',
                 projects: [
-                    { title: 'Umamusume Report', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=GDD', desc: 'UX Research - Gameplay Analysis - Marketing Analysis - Video Game Market Analysis - Documentation' },
-                    { title: 'Video games and discriminations', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Climate+Doc', desc: 'Inclusivity - Socio-economic analysis - Video Game Market Analysis - Documentation' },
-                    { title: 'Finance & Pop-culture', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Excel+Balancing', desc: 'UX Research - Benchmarking - Game Design Analysis - Documentation' },
-                    { title: 'Données et Gouvernance', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=UX+Doc', desc: 'Territorial Management analysis - Data market analysis - New technology - Research Paper' }
+                    { 
+                        title: 'Umamusume Report', 
+                        img: 'images/PSP_MGD1_GUEGANT_Samuel.png', 
+                        skills: ['UX Research', 'Gameplay Analysis', 'Marketing Analysis', 'Video Game Market Analysis', 'Documentation'],
+                        desc: 'Analyse approfondie de la boucle de gameplay, du modèle économique Gacha et des facteurs de succès UX/UI de la franchise Umamusume sur le marché asiatique et mondial.',
+                        gallery: [
+                            { img: 'images/PSP_MGD1_GUEGANT_Samuel.png', caption: 'Extrait du rapport d\'analyse Game Design & Marché.' }
+                        ]
+                    },
+                    { 
+                        title: 'Video games and discriminations', 
+                        img: 'images/VideoGameDiscriminations.png', 
+                        skills: ['Inclusivity', 'Socio-economic analysis', 'Video Game Market Analysis', 'Documentation'],
+                        desc: 'Dossier de recherche analysant la représentation des minorités, la lutte contre la toxicité et l\'accessibilité numérique dans l\'industrie du jeu vidéo moderne.',
+                        gallery: [
+                            { img: 'images/VideoGameDiscriminations.png', caption: 'Couverture et données statistiques de l\'étude.' }
+                        ]
+                    },
+                    { 
+                        title: 'Finance & Pop-culture', 
+                        img: 'images/Finance&Popculture.png', 
+                        skills: ['UX Research', 'Benchmarking', 'Game Design Analysis', 'Documentation'],
+                        desc: 'Étude comparative sur la manière dont les mécaniques financières réelles (bourse, rareté, marchés) sont ludifiées dans les univers de la pop-culture.',
+                        gallery: [
+                            { img: 'images/Finance&Popculture.png', caption: 'Schémas comparatifs et analyse des boucles économiques.' }
+                        ]
+                    },
+                    { 
+                        title: 'Données et Gouvernance', 
+                        img: 'images/MemoireIcon.png', 
+                        skills: ['Territorial Management analysis', 'Data market analysis', 'New technology', 'Research Paper'],
+                        desc: 'Mémoire universitaire d\'analyse socio-politique et technique sur l\'utilisation des données publiques, les marchés de la data et les enjeux de gouvernance numérique.',
+                        gallery: [
+                            { img: 'images/MemoireIcon.png', caption: 'Aperçu de la synthèse du mémoire de recherche.' }
+                        ]
+                    }
                 ]
             }
         ];
@@ -817,6 +1055,7 @@
         const openProjectsBtn = document.getElementById('openProjectsBtn');
         const backToMenuBtn = document.getElementById('backToMenuBtn');
         const projectsStage = document.getElementById('projectsStage');
+        const stageBgPreview = document.getElementById('stageBgPreview');
         const mainMenu = document.getElementById('mainMenu');
         const domainTitle = document.getElementById('domainTitle');
         const projectsGrid = document.getElementById('projectsGrid');
@@ -834,13 +1073,27 @@
             prevDomainLabel.textContent = `Vers ${domains[prevIndex].title}`;
             nextDomainLabel.textContent = `Vers ${domains[nextIndex].title}`;
 
+            // Réinitialisation fond survol
+            stageBgPreview.classList.remove('active');
+
             projectsGrid.style.opacity = 0;
             setTimeout(() => {
                 projectsGrid.innerHTML = '';
                 current.projects.forEach(p => {
                     const bubble = document.createElement('div');
                     bubble.className = 'project-bubble';
-                    bubble.innerHTML = `<img src="${p.img}" alt="${p.title}"><div class="bubble-title">${p.title}</div>`;
+                    bubble.innerHTML = `<img src="${p.img}" alt="${p.title}" onerror="this.src='https://via.placeholder.com/170/1a0033/00f0ff?text=${encodeURIComponent(p.title)}'"><div class="bubble-title">${p.title}</div>`;
+                    
+                    // Événements survol pour afficher l'image en grand en background
+                    bubble.addEventListener('mouseenter', () => {
+                        stageBgPreview.style.backgroundImage = `url('${p.img}')`;
+                        stageBgPreview.classList.add('active');
+                    });
+                    bubble.addEventListener('mouseleave', () => {
+                        stageBgPreview.classList.remove('active');
+                    });
+
+                    // Événement clic pour ouvrir les détails
                     bubble.addEventListener('click', () => openProjectDetail(p));
                     projectsGrid.appendChild(bubble);
                 });
@@ -906,16 +1159,52 @@
         function closeCharSheet() { charSheetModal.classList.remove('active'); }
         closeCharSheetBtn.addEventListener('click', closeCharSheet);
 
+        // MODALE PROJET ENRICHIE
         const projectDetailModal = document.getElementById('projectDetailModal');
         const closeProjectDetailBtn = document.getElementById('closeProjectDetailBtn');
         const modalProjectTitle = document.getElementById('modalProjectTitle');
+        const modalProjectSkills = document.getElementById('modalProjectSkills');
         const modalProjectDesc = document.getElementById('modalProjectDesc');
+        const modalProjectGallery = document.getElementById('modalProjectGallery');
 
         function openProjectDetail(project) {
             modalProjectTitle.textContent = project.title;
-            modalProjectDesc.textContent = project.desc;
+            
+            // Affichage des compétences sous forme de badges
+            modalProjectSkills.innerHTML = '';
+            if (project.skills) {
+                project.skills.forEach(s => {
+                    const badge = document.createElement('span');
+                    badge.className = 'project-skill-badge';
+                    badge.textContent = s;
+                    modalProjectSkills.appendChild(badge);
+                });
+            }
+
+            // Description générale du projet
+            modalProjectDesc.textContent = project.desc || 'Aucune description disponible pour ce projet.';
+
+            // Galerie d'images / vidéos à droite
+            modalProjectGallery.innerHTML = '';
+            if (project.gallery && project.gallery.length > 0) {
+                project.gallery.forEach(item => {
+                    const gItem = document.createElement('div');
+                    gItem.className = 'gallery-item';
+                    gItem.innerHTML = `
+                        <div class="gallery-media">
+                            <img src="${item.img}" alt="${project.title}" onerror="this.src='https://via.placeholder.com/400x220/1a0033/00f0ff?text=Aperçu'">
+                        </div>
+                        <div class="gallery-caption">${item.caption || ''}</div>
+                    `;
+                    modalProjectGallery.appendChild(gItem);
+                });
+            } else {
+                modalProjectGallery.innerHTML = '<div style="color:#a0a0a0; font-size:0.9rem;">Aucun visuel supplémentaire pour le moment.</div>';
+            }
+
             projectDetailModal.classList.add('active');
         }
+
         closeProjectDetailBtn.addEventListener('click', () => projectDetailModal.classList.remove('active'));
 
         [videoModal, charSheetModal, projectDetailModal].forEach(modal => {
