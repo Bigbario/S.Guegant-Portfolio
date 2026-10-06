@@ -13,29 +13,73 @@
 		<meta name="keywords" content="" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<style>
-			/* Intro section full-screen layout */
-			section.intro {
-				min-height: 100vh;
-				display: flex;
-				align-items: center;
-			}
-			.video-container {
+			/* Vidéo en haut grand format */
+			.hero-video {
+				width: 100%;
 				position: relative;
 				padding-bottom: 56.25%; /* Ratio 16:9 */
 				height: 0;
-				overflow: hidden;
-				width: 100%;
-				border-radius: 8px;
 				background: #000;
-				box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+				overflow: hidden;
 			}
-			.video-container iframe {
+			.hero-video iframe {
 				position: absolute;
 				top: 0;
 				left: 0;
 				width: 100%;
 				height: 100%;
 				border: 0;
+			}
+
+			/* Section des bulles */
+			.bubbles-section {
+				padding: 60px 20px;
+				text-align: center;
+				background: #1c2229;
+			}
+			.bubbles-container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				gap: 30px;
+				flex-wrap: wrap;
+				max-width: 1000px;
+				margin: 0 auto;
+			}
+			.bubble-item {
+				width: 180px;
+				height: 180px;
+				border-radius: 50%;
+				border: 3px solid #00b4d8;
+				background: rgba(30, 35, 45, 0.85);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #ffffff;
+				text-decoration: none;
+				font-size: 1.2rem;
+				font-weight: bold;
+				text-align: center;
+				padding: 15px;
+				transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+				box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+			}
+			.bubble-item:hover {
+				transform: scale(1.08);
+				border-color: #90e0ef;
+				box-shadow: 0 0 25px rgba(0, 180, 216, 0.6);
+				color: #ffffff;
+			}
+
+			@media screen and (max-width: 736px) {
+				.bubble-item {
+					width: 130px;
+					height: 130px;
+					font-size: 0.95rem;
+				}
+				.bubbles-container {
+					gap: 15px;
+				}
 			}
 		</style>
 	</head>
@@ -44,138 +88,82 @@
 		<!-- Wrapper -->
 			<div id="wrapper">
 
-				<!-- Intro -->
-					<section class="intro">
+				<!-- Top Video -->
+					<div class="hero-video">
+						<iframe 
+							src="https://www.youtube.com/embed/O8SmeeWGd3Q?si=yNpamBcvLjMK2WRD" 
+							title="Demo Reel - Samuel Guegant" 
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+							referrerpolicy="strict-origin-when-cross-origin" 
+							allowfullscreen>
+						</iframe>
+					</div>
+
+				<!-- Section Bulles -->
+					<section class="bubbles-section">
+						<div class="bubbles-container">
+							<a href="#ld" class="bubble-item">LD</a>
+							<a href="#gd-prog" class="bubble-item">GD & Prog</a>
+							<a href="#doc" class="bubble-item">Analytical Document</a>
+						</div>
+					</section>
+
+				<!-- Section À propos / Intro -->
+					<section id="first">
 						<header>
-							<h1>Samuel Guegant</h1>
-							<p>GAME DESIGNER & DÉVELOPPEUR</p>
-							<ul class="actions">
-								<li><a href="#first" class="arrow scrolly"><span class="label">Next</span></a></li>
-							</ul>
+							<h2>Samuel Guegant</h2>
+							<p>Game Designer & Développeur</p>
 						</header>
 						<div class="content">
-							<div class="video-container">
-								<iframe 
-									src="https://www.youtube.com/embed/O8SmeeWGd3Q?si=yNpamBcvLjMK2WRD" 
-									title="Demo Reel - Samuel Guegant" 
-									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-									referrerpolicy="strict-origin-when-cross-origin" 
-									allowfullscreen>
-								</iframe>
+							<p>Bienvenue sur mon portfolio ! Découvrez ici mes projets de jeux vidéo, prototypes et réalisations en game design et programmation.</p>
+						</div>
+					</section>
+
+				<!-- Section LD -->
+					<section id="ld">
+						<header>
+							<h2>Level Design</h2>
+						</header>
+						<div class="content">
+							<p>Présentation de mes projets et cartes axés sur le Level Design.</p>
+							<div class="gallery">
+								<a href="images/gallery/fulls/01.jpg" class="landscape"><img src="images/gallery/thumbs/01.jpg" alt="" /></a>
+								<a href="images/gallery/fulls/02.jpg"><img src="images/gallery/thumbs/02.jpg" alt="" /></a>
 							</div>
 						</div>
 					</section>
 
-				<!-- Section -->
-					<section id="first">
+				<!-- Section GD & Prog -->
+					<section id="gd-prog">
 						<header>
-							<h2>À propos</h2>
+							<h2>GD & Prog</h2>
 						</header>
 						<div class="content">
-							<p>Bienvenue sur mon portfolio ! Découvrez ici mes projets de jeux vidéo, prototypes et réalisations en game design et programmation.</p>
-							<span class="image main"><img src="images/pic02.jpg" alt="" /></span>
+							<p>Mes réalisations en Game Design, mécaniques de jeu et programmation/scripting.</p>
+							<div class="gallery">
+								<a href="images/gallery/fulls/03.jpg"><img src="images/gallery/thumbs/03.jpg" alt="" /></a>
+								<a href="images/gallery/fulls/04.jpg" class="landscape"><img src="images/gallery/thumbs/04.jpg" alt="" /></a>
+							</div>
 						</div>
 					</section>
 
-				<!-- Section -->
-					<section>
+				<!-- Section Analytical Document -->
+					<section id="doc">
 						<header>
-							<h2>Compétences & Outils</h2>
+							<h2>Analytical Document</h2>
 						</header>
 						<div class="content">
-							<p>Spécialisé dans la création d'expériences de jeu interactives et l'intégration technique.</p>
-							<ul class="feature-icons">
-								<li class="icon solid fa-laptop">Game Design</li>
-								<li class="icon solid fa-code">Unity / Unreal Engine</li>
-								<li class="icon solid fa-gamepad">Prototypage</li>
-								<li class="icon solid fa-cog">Level Design</li>
-								<li class="icon solid fa-bolt">Scripting & Plugins</li>
-								<li class="icon solid fa-cubes">System Design</li>
-							</ul>
+							<p>Analyses techniques, documents de design (GDD) et études de systèmes de jeu.</p>
 						</div>
 					</section>
 
-				<!-- Section -->
-					<section>
-						<header>
-							<h2>Projets Récents</h2>
-						</header>
-						<div class="content">
-							<p>Aperçu de mes dernières créations et prototypes en cours de développement.</p>
-
-							<!-- Section -->
-								<section>
-									<header>
-										<h3>Galerie de Projets</h3>
-										<p>Cliquez sur une image pour découvrir les détails de chaque projet.</p>
-									</header>
-									<div class="content">
-										<div class="gallery">
-											<a href="images/gallery/fulls/01.jpg" class="landscape"><img src="images/gallery/thumbs/01.jpg" alt="" /></a>
-											<a href="images/gallery/fulls/02.jpg"><img src="images/gallery/thumbs/02.jpg" alt="" /></a>
-											<a href="images/gallery/fulls/03.jpg"><img src="images/gallery/thumbs/03.jpg" alt="" /></a>
-											<a href="images/gallery/fulls/04.jpg" class="landscape"><img src="images/gallery/thumbs/04.jpg" alt="" /></a>
-										</div>
-									</div>
-								</section>
-
-						</div>
-					</section>
-
-				<!-- Section -->
+				<!-- Contact -->
 					<section>
 						<header>
 							<h2>Contact</h2>
 						</header>
 						<div class="content">
-							<p>Une question, un projet ou une opportunité de collaboration ? N'hésitez pas à me contacter.</p>
 							<form>
 								<div class="fields">
 									<div class="field half">
-										<input type="text" name="name" id="name" placeholder="Nom" />
-									</div>
-									<div class="field half">
-										<input type="email" name="email" id="email" placeholder="Email" />
-									</div>
-									<div class="field">
-										<textarea name="message" id="message" placeholder="Votre message" rows="7"></textarea>
-									</div>
-								</div>
-								<ul class="actions">
-									<li><input type="submit" value="Envoyer" class="button primary" /></li>
-								</ul>
-							</form>
-						</div>
-						<footer>
-							<ul class="items">
-								<li>
-									<h3>Email</h3>
-									<a href="mailto:contact@example.com">contact@example.com</a>
-								</li>
-								<li>
-									<h3>Réseaux</h3>
-									<ul class="icons">
-										<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-										<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
-										<li><a href="#" class="icon brands fa-itch-io"><span class="label">Itch.io</span></a></li>
-									</ul>
-								</li>
-							</ul>
-						</footer>
-					</section>
-
-				<!-- Copyright -->
-					<div class="copyright">&copy; Samuel Guegant. Tous droits réservés. Design : <a href="https://html5up.net">HTML5 UP</a>.</div>
-
-			</div>
-
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-
-	</body>
-</html>
+										<
