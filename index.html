@@ -1,459 +1,240 @@
-<!DOCTYPE HTML>
-<!--
-	Paradigm Shift by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Samuel Guegant - Portfolio</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<meta name="description" content="Portfolio de Samuel Guegant - Game Designer & Développeur" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<style>
-			/* Banner Top / Navigation Dynamic */
-			.top-navbar {
-				position: relative;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 90px;
-				background-color: #2ec4b6;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				padding: 0 60px;
-				z-index: 1000;
-				box-sizing: border-box;
-				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-			}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samuel Guegant Adventures</title>
+    <!-- Police manuscrite similaire au visuel -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Fredoka+One&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Curseur natif masqué pour notre personnage */
+            user-select: none;
+        }
 
-			/* État quand on scrolle vers le bas */
-			.top-navbar.scrolled {
-				position: fixed;
-				height: 65px;
-				padding: 0 30px;
-				background-color: rgba(46, 196, 182, 0.95);
-				backdrop-filter: blur(8px);
-				box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-			}
+        body {
+            background-color: #174044;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            color: #ffffff;
+            position: relative;
+        }
 
-			.nav-left {
-				display: flex;
-				align-items: center;
-				gap: 35px;
-			}
+        /* Canvas pour les particules (étincelles et effet Thanos) */
+        #effectsCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
 
-			.nav-logo {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				width: 46px;
-				height: 46px;
-				border: 3px solid #0f172a;
-				border-radius: 8px;
-				font-weight: 900;
-				color: #0f172a;
-				text-decoration: none;
-				font-size: 1.2rem;
-				background: transparent;
-				transition: transform 0.2s ease;
-			}
-			.nav-logo:hover {
-				transform: scale(1.05);
-			}
+        /* Container du Titre */
+        .title-container {
+            text-align: center;
+            position: relative;
+            z-index: 5;
+            margin-bottom: 60px;
+        }
 
-			.nav-links {
-				display: flex;
-				gap: 30px;
-			}
-			.nav-links a {
-				color: #0f172a;
-				text-decoration: none;
-				font-weight: 800;
-				font-size: 1.15rem;
-				position: relative;
-				border-bottom: none;
-			}
-			.nav-links a::after {
-				content: '';
-				position: absolute;
-				bottom: -3px;
-				left: 0;
-				width: 100%;
-				height: 3px;
-				background-color: #0f172a;
-			}
+        .main-title {
+            font-family: 'Pacifico', cursive;
+            font-size: 4.8rem;
+            color: #ffffff;
+            margin-bottom: -10px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: opacity 0.1s linear, filter 0.1s linear;
+        }
 
-			.btn-contact {
-				border: 2.5px solid #0f172a;
-				background: transparent;
-				color: #0f172a !important;
-				font-weight: 800;
-				padding: 8px 22px;
-				border-radius: 8px;
-				cursor: pointer;
-				font-size: 1.05rem;
-				text-transform: none;
-				transition: all 0.2s ease;
-			}
-			.btn-contact:hover {
-				background-color: #0f172a;
-				color: #2ec4b6 !important;
-			}
+        .subtitle {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.8rem;
+            color: #ffffff;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: opacity 0.1s linear, filter 0.1s linear;
+        }
 
-			#wrapper {
-				padding-top: 0 !important;
-			}
+        /* Menu style Title Screen */
+        .game-menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 22px;
+            z-index: 5;
+        }
 
-			/* Section Demo Reel (Pleine largeur sans bandes) */
-			.demo-reel-section {
-				width: 100%;
-				background: #111827;
-				padding: 40px 0 50px 0;
-				text-align: center;
-			}
-			.demo-reel-section h1 {
-				color: #ffffff;
-				font-size: 2.4rem;
-				font-weight: 800;
-				margin-bottom: 25px;
-				text-transform: none;
-				letter-spacing: 1px;
-			}
-			.hero-video-container {
-				width: 100%;
-				max-width: 100%;
-				margin: 0 auto;
-				position: relative;
-				aspect-ratio: 16 / 9;
-				background: #000;
-				overflow: hidden;
-				box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-			}
-			.hero-video-container iframe {
-				width: 100%;
-				height: 100%;
-				border: 0;
-			}
+        .menu-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: transform 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
+        }
 
-			/* Section des bulles */
-			.bubbles-section {
-				width: 100% !important;
-				padding: 70px 20px !important;
-				text-align: center;
-				background-color: #1c2229 !important;
-				display: block !important;
-			}
-			.bubbles-container {
-				display: flex !important;
-				flex-direction: row !important;
-				justify-content: center !important;
-				align-items: center !important;
-				gap: 50px !important;
-				max-width: 1200px;
-				margin: 0 auto !important;
-				width: 100%;
-			}
-			.bubble-item {
-				width: 210px !important;
-				height: 210px !important;
-				min-width: 210px !important;
-				min-height: 210px !important;
-				border-radius: 50% !important;
-				border: 3px solid #2ec4b6 !important;
-				background: rgba(30, 35, 45, 0.95) !important;
-				display: flex !important;
-				align-items: center !important;
-				justify-content: center !important;
-				color: #ffffff !important;
-				text-decoration: none !important;
-				font-size: 1.25rem !important;
-				font-weight: bold !important;
-				text-align: center !important;
-				padding: 20px !important;
-				transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
-				box-shadow: 0 8px 25px rgba(0,0,0,0.5) !important;
-				box-sizing: border-box !important;
-			}
-			.bubble-item:hover {
-				transform: scale(1.08) !important;
-				border-color: #80ed99 !important;
-				box-shadow: 0 0 30px rgba(46, 196, 182, 0.7) !important;
-				color: #ffffff !important;
-			}
+        .btn-projets { font-size: 2.2rem; }
+        .btn-demo { font-size: 1.6rem; }
+        .btn-about { font-size: 1.2rem; }
 
-			/* Pop-up Contact Modal */
-			.contact-modal {
-				display: none;
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				background: rgba(0, 0, 0, 0.8);
-				z-index: 2000;
-				align-items: center;
-				justify-content: center;
-				padding: 20px;
-				box-sizing: border-box;
-			}
-			.contact-modal.active {
-				display: flex;
-			}
-			.modal-content {
-				background-color: #0f172a;
-				border: 2px solid #2ec4b6;
-				border-radius: 12px;
-				width: 100%;
-				max-width: 600px;
-				padding: 35px 40px;
-				position: relative;
-				box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-				color: #ffffff;
-				text-align: left;
-			}
-			.modal-close {
-				position: absolute;
-				top: 20px;
-				right: 20px;
-				background: transparent;
-				border: none;
-				color: #ffffff;
-				font-size: 1.8rem;
-				cursor: pointer;
-				line-height: 1;
-			}
-			.modal-title {
-				text-align: center;
-				font-size: 1.8rem;
-				font-weight: bold;
-				margin-bottom: 25px;
-				color: #ffffff;
-			}
-			.modal-title span {
-				display: block;
-				font-size: 1.5rem;
-				margin-bottom: 5px;
-			}
-			.modal-form label {
-				display: block;
-				font-weight: bold;
-				margin-bottom: 8px;
-				color: #ffffff;
-				font-size: 0.95rem;
-			}
-			.modal-form input[type="text"],
-			.modal-form input[type="email"],
-			.modal-form textarea {
-				width: 100%;
-				background: #ffffff;
-				border: 1px solid #ccc;
-				border-radius: 6px;
-				padding: 12px 15px;
-				color: #111827;
-				margin-bottom: 20px;
-				font-size: 1rem;
-				box-sizing: border-box;
-			}
-			.modal-form textarea {
-				resize: vertical;
-				min-height: 120px;
-			}
-			.btn-send {
-				background: transparent;
-				border: 2px solid #ffffff;
-				color: #ffffff !important;
-				font-weight: bold;
-				padding: 10px 22px;
-				border-radius: 6px;
-				cursor: pointer;
-				font-size: 1rem;
-				display: inline-flex;
-				align-items: center;
-				gap: 8px;
-				transition: all 0.2s ease;
-			}
-			.btn-send:hover {
-				background: #ffffff;
-				color: #0f172a !important;
-			}
+        .menu-btn:hover {
+            color: #ffd700;
+            transform: scale(1.1);
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+        }
 
-			@media screen and (max-width: 768px) {
-				.top-navbar {
-					padding: 0 20px;
-					height: 75px;
-				}
-				.nav-links {
-					gap: 15px;
-				}
-				.bubbles-container {
-					flex-direction: column !important;
-					gap: 20px !important;
-				}
-			}
-		</style>
-	</head>
-	<body class="is-preload">
+        /* Curseur Personnage / Epée */
+        #customCursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            pointer-events: none;
+            z-index: 999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s ease-out;
+        }
 
-		<!-- Top Navbar -->
-		<nav class="top-navbar" id="topNavbar">
-			<div class="nav-left">
-				<a href="#" class="nav-logo" title="Retour en haut">SG</a>
-				<div class="nav-links">
-					<a href="#projects">Projects</a>
-					<a href="#about">About me</a>
-				</div>
-			</div>
-			<button class="btn-contact" id="openContactBtn">Contact Me</button>
-		</nav>
+        /* Sprite du personnage (Épée pixel art ou icône) */
+        .cursor-sprite {
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffd700"><path d="M7.1 19.8l-1.4-1.4 10.6-10.6-2.1-2.1 1.4-1.4 4.2 4.2-1.4 1.4-2.1-2.1z"/><path d="M5 20h2v2H5z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
 
-		<!-- Section Demo Reel -->
-		<section class="demo-reel-section">
-			<h1>Demo Reel</h1>
-			<div class="hero-video-container">
-				<iframe 
-					src="https://www.youtube.com/embed/O8SmeeWGd3Q?autoplay=1&mute=1&loop=1&playlist=O8SmeeWGd3Q&si=yNpamBcvLjMK2WRD" 
-					title="Demo Reel - Samuel Guegant" 
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-					referrerpolicy="strict-origin-when-cross-origin" 
-					allowfullscreen>
-				</iframe>
-			</div>
-		</section>
+        /* Animation Slash lors du clic */
+        .slash-effect {
+            position: fixed;
+            pointer-events: none;
+            z-index: 998;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid #ffffff;
+            border-top-color: #ffd700;
+            border-right-color: transparent;
+            transform: translate(-50%, -50%) rotate(-45deg) scale(0.2);
+            animation: slashAnim 0.25s ease-out forwards;
+        }
 
-		<!-- Section Bulles -->
-		<section class="bubbles-section" id="projects">
-			<div class="bubbles-container">
-				<a href="#ld" class="bubble-item">LD</a>
-				<a href="#gd-prog" class="bubble-item">GD &amp; Prog</a>
-				<a href="#doc" class="bubble-item">Analytical Document</a>
-			</div>
-		</section>
+        @keyframes slashAnim {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) rotate(-45deg) scale(0.3);
+                box-shadow: 0 0 20px #ffd700;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) rotate(135deg) scale(1.4);
+                box-shadow: 0 0 0px transparent;
+            }
+        }
+    </style>
+</head>
+<body>
 
-		<!-- Wrapper Principal -->
-		<div id="wrapper">
+    <canvas id="effectsCanvas"></canvas>
 
-			<!-- Section À propos / Intro -->
-				<section id="about">
-					<header>
-						<h2>Samuel Guegant</h2>
-						<p>Game Designer &amp; Développeur</p>
-					</header>
-					<div class="content">
-						<p>Bienvenue sur mon portfolio ! Découvrez ici mes projets de jeux vidéo, prototypes et réalisations en game design et programmation.</p>
-					</div>
-				</section>
+    <div class="title-container" id="titleContainer">
+        <h1 class="main-title" id="mainTitle">Samuel Guegant</h1>
+        <h2 class="subtitle" id="subTitle">Adventures</h2>
+    </div>
 
-			<!-- Section LD -->
-				<section id="ld">
-					<header>
-						<h2>Level Design</h2>
-					</header>
-					<div class="content">
-						<p>Présentation de mes projets et cartes axés sur le Level Design.</p>
-						<div class="gallery">
-							<a href="images/gallery/fulls/01.jpg" class="landscape"><img src="images/gallery/thumbs/01.jpg" alt="" /></a>
-							<a href="images/gallery/fulls/02.jpg"><img src="images/gallery/thumbs/02.jpg" alt="" /></a>
-						</div>
-					</div>
-				</section>
+    <nav class="game-menu">
+        <a href="#projets" class="menu-btn btn-projets">PROJETS</a>
+        <a href="#demoreel" class="menu-btn btn-demo">DEMO REEL</a>
+        <a href="#about" class="menu-btn btn-about">ABOUT ME</a>
+    </nav>
 
-			<!-- Section GD & Prog -->
-				<section id="gd-prog">
-					<header>
-						<h2>GD &amp; Prog</h2>
-					</header>
-					<div class="content">
-						<p>Mes réalisations en Game Design, mécaniques de jeu et programmation/scripting.</p>
-						<div class="gallery">
-							<a href="images/gallery/fulls/03.jpg"><img src="images/gallery/thumbs/03.jpg" alt="" /></a>
-							<a href="images/gallery/fulls/04.jpg" class="landscape"><img src="images/gallery/thumbs/04.jpg" alt="" /></a>
-						</div>
-					</div>
-				</section>
+    <!-- Curseur Personnage -->
+    <div id="customCursor">
+        <div class="cursor-sprite"></div>
+    </div>
 
-			<!-- Section Analytical Document -->
-				<section id="doc">
-					<header>
-						<h2>Analytical Document</h2>
-					</header>
-					<div class="content">
-						<p>Analyses techniques, documents de design (GDD) et études de systèmes de jeu.</p>
-					</div>
-				</section>
+    <script>
+        const canvas = document.getElementById('effectsCanvas');
+        const ctx = canvas.getContext('2d');
+        const titleContainer = document.getElementById('titleContainer');
+        const cursor = document.getElementById('customCursor');
 
-			<!-- Copyright -->
-				<div class="copyright">&copy; Samuel Guegant. Tous droits réservés. Design : <a href="https://html5up.net">HTML5 UP</a>.</div>
+        let width, height;
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
 
-		</div>
+        // --- GESTION DU CURSEUR ET DU SLASH ---
+        window.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
 
-		<!-- Pop-up Contact Modal -->
-		<div class="contact-modal" id="contactModal">
-			<div class="modal-content">
-				<button class="modal-close" id="closeContactBtn">&times;</button>
-				<div class="modal-title">
-					<span>✉</span>
-					Contact Me
-				</div>
-				<form class="modal-form" action="https://formsubmit.co/samgueg@gmx.fr" method="POST">
-					<!-- Redirection exacte vers ton site GitHub Pages après envoi -->
-					<input type="hidden" name="_next" value="https://bigbario.github.io/S.Guegant-Portfolio/">
-					<input type="hidden" name="_captcha" value="false">
+        window.addEventListener('mousedown', (e) => {
+            // Création de l'effet d'attaque Slash
+            const slash = document.createElement('div');
+            slash.className = 'slash-effect';
+            slash.style.left = e.clientX + 'px';
+            slash.style.top = e.clientY + 'px';
+            document.body.appendChild(slash);
 
-					<label for="modal-name">Your Name</label>
-					<input type="text" id="modal-name" name="name" placeholder="Enter name" required />
+            setTimeout(() => slash.remove(), 250);
 
-					<label for="modal-email">Your Email</label>
-					<input type="email" id="modal-email" name="email" placeholder="Enter email" required />
+            // Génération de petites étincelles de coup au clic
+            createImpactSparks(e.clientX, e.clientY);
+        });
 
-					<label for="modal-message">Your Message</label>
-					<textarea id="modal-message" name="message" placeholder="Enter message" required></textarea>
+        // --- SYSTEME DE PARTICULES ET ANIMATION CYCLE (7 SECONDES) ---
+        let particles = [];
 
-					<button type="submit" class="btn-send">Send Message ✉</button>
-				</form>
-			</div>
-		</div>
+        function createImpactSparks(x, y) {
+            for (let i = 0; i < 12; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    size: Math.random() * 4 + 2,
+                    color: '#ffd700',
+                    alpha: 1,
+                    decay: 0.04
+                });
+            }
+        }
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+        function createTitleGoldSparkles() {
+            const rect = titleContainer.getBoundingClientRect();
+            if (rect.width === 0) return;
+            particles.push({
+                x: rect.left + Math.random() * rect.width,
+                y: rect.top + Math.random() * rect.height,
+                vx: (Math.random() - 0.5) * 1,
+                vy: -Math.random() * 1.5 - 0.5,
+                size: Math.random() * 3 + 1,
+                color: '#fff5a5',
+                alpha: 1,
+                decay: 0.02
+            });
+        }
 
-			<script>
-				// Gestion de la modale Contact
-				const contactModal = document.getElementById('contactModal');
-				const openContactBtn = document.getElementById('openContactBtn');
-				const closeContactBtn = document.getElementById('closeContactBtn');
-
-				openContactBtn.addEventListener('click', () => {
-					contactModal.classList.add('active');
-				});
-
-				closeContactBtn.addEventListener('click', () => {
-					contactModal.classList.remove('active');
-				});
-
-				window.addEventListener('click', (e) => {
-					if (e.target === contactModal) {
-						contactModal.classList.remove('active');
-					}
-				});
-
-				// Animation dynamique de la barre de navigation au défilement
-				const navbar = document.getElementById('topNavbar');
-				window.addEventListener('scroll', () => {
-					if (window.scrollY > 80) {
-						navbar.classList.add('scrolled');
-					} else {
-						navbar.classList.remove('scrolled');
-					}
-				});
-			</script>
-
-	</body>
-</html>
+        function createThanosDust() {
+            const rect = titleContainer.getBoundingClientRect();
+            for (let i
