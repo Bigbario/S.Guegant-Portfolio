@@ -27,12 +27,12 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
-            padding: 4vh 0;
+            padding: 3vh 0;
         }
 
         /* --- CURSEUR SPRITESHEET ANIMÉ --- */
@@ -68,46 +68,46 @@
             z-index: 1;
         }
 
-        /* --- TITRE --- */
+        /* --- TITRE CORRIGÉ --- */
         .title-container {
             text-align: center;
             position: relative;
             z-index: 5;
-            margin-top: 15vh;
-            width: 90vw;
-            max-width: 1200px;
+            margin-top: 2vh;
+            width: 100vw;
+            white-space: nowrap;
         }
 
         .main-title {
             font-family: 'Pacifico', cursive;
-            font-size: 7rem;
+            font-size: 4.8rem;
             color: #ffffff;
-            margin-bottom: -150px;
+            margin-bottom: -5px;
             text-shadow: 0 0 25px rgba(180, 50, 255, 0.7), 0 5px 20px rgba(0,0,0,0.9);
             line-height: 1.1;
         }
 
         .subtitle {
             font-family: 'Pacifico', cursive;
-            font-size: 3.8rem;
+            font-size: 2.8rem;
             color: #d488ff;
             text-shadow: 0 0 20px rgba(180, 50, 255, 0.9), 0 4px 15px rgba(0,0,0,0.8);
         }
 
-        /* --- MENU HUD : RECENTRÉ AU MILIEU ET PLUS GRAND --- */
+        /* --- MENU HUD RECENTRÉ EN BAS SANS CHEVAUCHEMENT --- */
         .game-menu {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 28px;
+            gap: 20px;
             z-index: 5;
             width: 100%;
-            max-width: 800px;
+            max-width: 650px;
             position: absolute;
-            top: 58%;
+            bottom: 6vh;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
         }
 
         .menu-btn {
@@ -117,42 +117,42 @@
             color: #ffffff;
             font-family: 'Orbitron', 'Montserrat', sans-serif;
             font-weight: 800;
-            letter-spacing: 5px;
+            letter-spacing: 4px;
             text-transform: uppercase;
             text-decoration: none;
             text-align: center;
             box-shadow: 0 0 20px rgba(160, 30, 255, 0.35), inset 0 0 15px rgba(180, 50, 255, 0.25);
             transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
             clip-path: polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
-            width: 85%;
+            width: 80%;
             display: block;
         }
 
         .btn-projets {
-            font-size: 3.2rem;
-            padding: 24px 0;
+            font-size: 2.2rem;
+            padding: 16px 0;
         }
 
         .btn-demo {
-            font-size: 2.6rem;
-            padding: 20px 0;
+            font-size: 1.8rem;
+            padding: 14px 0;
         }
 
         .btn-about {
-            font-size: 2.1rem;
-            padding: 18px 0;
+            font-size: 1.5rem;
+            padding: 12px 0;
         }
 
         .menu-btn:hover {
             background: linear-gradient(135deg, rgba(170, 40, 255, 0.7), rgba(80, 10, 120, 0.9));
             border-color: #ffffff;
             color: #ffffff;
-            transform: scale(1.06) translateY(-2px);
+            transform: scale(1.05) translateY(-2px);
             box-shadow: 0 0 35px rgba(200, 80, 255, 0.85), inset 0 0 20px rgba(255, 255, 255, 0.5);
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
         }
 
-        /* --- MODAL VIDEO DEMO REEL (NETTEMENT PLUS GRANDE) --- */
+        /* --- MODAL VIDEO DEMO REEL --- */
         .video-modal-overlay {
             position: fixed;
             top: 0;
