@@ -31,28 +31,6 @@
             position: relative;
         }
 
-        /* --- CURSEUR SPRITESHEET ANIMÉ --- */
-        #customCursor {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 48px;
-            height: 48px;
-            pointer-events: none !important;
-            z-index: 100000;
-            transform: translate(-50%, -50%);
-            background-image: url('images/MouseIconIdle.png');
-            background-size: 300% 100%;
-            background-repeat: no-repeat;
-            image-rendering: pixelated;
-            animation: walkCycle 0.6s steps(3) infinite;
-        }
-
-        @keyframes walkCycle {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 150% 0%; }
-        }
-
         /* Canvas pour particules */
         #effectsCanvas {
             position: absolute;
@@ -392,19 +370,19 @@
 
         .video-container iframe { width: 100%; height: 100%; border: none; }
 
-        /* BOUTON FERMER CENTRÉ DANS LA MODALE */
+        /* BOUTON FERMER BIEN INTÉGRÉ AU CADRE */
         .close-btn {
             position: absolute;
-            top: -22px;
+            top: 15px;
             left: 50%;
             transform: translateX(-50%);
             color: #ffffff;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 800;
             background: rgba(220, 20, 60, 0.95);
             border: 2px solid #ff2a6d;
-            padding: 8px 24px;
+            padding: 8px 22px;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -416,7 +394,7 @@
         .close-btn:hover {
             background: #ff2a6d;
             box-shadow: 0 0 30px #ff2a6d;
-            transform: translateX(-50%) scale(1.08);
+            transform: translateX(-50%) scale(1.05);
         }
 
         .char-sheet-container {
@@ -427,7 +405,7 @@
             border: 2px solid rgba(190, 80, 255, 0.8);
             border-radius: 16px;
             box-shadow: 0 0 50px rgba(160, 30, 255, 0.5);
-            padding: 40px 30px 30px 30px;
+            padding: 60px 30px 30px 30px;
             position: relative;
             overflow-y: auto;
             display: flex;
@@ -441,7 +419,6 @@
             align-items: center;
             border-bottom: 2px solid rgba(190, 80, 255, 0.5);
             padding-bottom: 15px;
-            margin-top: 10px;
         }
 
         .char-title-box h2 {
@@ -561,7 +538,6 @@
 </head>
 <body>
 
-    <div id="customCursor"></div>
     <canvas id="effectsCanvas"></canvas>
 
     <div class="curtain left"></div>
@@ -697,20 +673,13 @@
     <div class="project-detail-modal" id="projectDetailModal">
         <div class="char-sheet-container" style="max-width: 700px;">
             <button class="close-btn" id="closeProjectDetailBtn">FERMER [X]</button>
-            <h2 id="modalProjectTitle" style="font-family:'Orbitron'; color:#00f0ff; margin-bottom:15px; font-size:2rem; margin-top:10px;">PROJET</h2>
+            <h2 id="modalProjectTitle" style="font-family:'Orbitron'; color:#00f0ff; margin-bottom:15px; font-size:2rem;">PROJET</h2>
             <p id="modalProjectDesc" style="color:#d1c4e9; line-height:1.7; font-size:1.1rem;"></p>
         </div>
     </div>
 
     <script>
-        // CURSEUR SUIVEUR
-        const customCursor = document.getElementById('customCursor');
-        window.addEventListener('mousemove', (e) => {
-            customCursor.style.left = e.clientX + 'px';
-            customCursor.style.top = e.clientY + 'px';
-        });
-
-        // CANVAS
+        // CANVAS PARTICULES
         const canvas = document.getElementById('effectsCanvas');
         const ctx = canvas.getContext('2d');
         let width, height;
