@@ -33,20 +33,19 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 48px;  /* Largeur d'une seule frame à l'écran */
-            height: 48px; /* Hauteur à l'écran */
+            width: 48px;  /* Taille du mage à l'écran */
+            height: 48px;
             pointer-events: none;
             z-index: 10000;
             transform: translate(-50%, -50%);
-            transition: transform 0.04s linear;
 
-            /* Spritesheet : 3 frames alignées horizontalement */
+            /* Nom exact du fichier sur ton GitHub */
             background-image: url('images/MouseIconIdle.png');
-            background-size: 300% 100%; /* 300% car il y a 3 frames */
+            background-size: 300% 100%;
             background-repeat: no-repeat;
             image-rendering: pixelated;
 
-            /* Cycle à 3 étapes pour défiler entre les 3 frames */
+            /* Animation 3 steps */
             animation: walkCycle 0.6s steps(3) infinite;
         }
 
@@ -55,7 +54,7 @@
                 background-position: 0% 0%;
             }
             100% {
-                background-position: 150% 0%; /* Fait défiler les 3 frames */
+                background-position: 200% 0%; /* Aligne parfaitement les 3 frames */
             }
         }
 
