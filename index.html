@@ -27,15 +27,14 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start; /* Gestion manuelle des marges pour un calage au pixel près */
             align-items: center;
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
-            padding: 40px 0 60px 0;
         }
 
-        /* --- CURSEUR SPRITESHEET ANIMÉ --- */
+        /* --- CURSEUR SPRITESHEET ANIMÉ (Animation originale remise) --- */
         #customCursor {
             position: fixed;
             top: 0;
@@ -51,8 +50,8 @@
             background-repeat: no-repeat;
             image-rendering: pixelated;
 
-            /* Idle ralenti à 1.2s */
-            animation: walkCycle 1.2s steps(3) infinite;
+            /* Remis comme au début */
+            animation: walkCycle 0.6s steps(3) infinite;
         }
 
         @keyframes walkCycle {
@@ -60,7 +59,7 @@
                 background-position: 0% 0%;
             }
             100% {
-                background-position: 200% 0%;
+                background-position: 150% 0%;
             }
         }
 
@@ -75,37 +74,37 @@
             z-index: 1;
         }
 
-        /* --- TITRE : Plus grand et placé tout en haut --- */
+        /* --- TITRE : Placé légèrement plus bas (cadre du haut) --- */
         .title-container {
             text-align: center;
             position: relative;
             z-index: 5;
-            margin-top: 10px;
+            margin-top: 18vh; /* Descend le titre dans la zone indiquée */
         }
 
         .main-title {
             font-family: 'Pacifico', cursive;
-            font-size: 6rem;
+            font-size: 5.5rem;
             color: #ffffff;
-            margin-bottom: -15px;
+            margin-bottom: -10px;
             text-shadow: 0 0 20px rgba(180, 50, 255, 0.6), 0 4px 15px rgba(0,0,0,0.8);
         }
 
         .subtitle {
             font-family: 'Pacifico', cursive;
-            font-size: 3.4rem;
+            font-size: 3rem;
             color: #d488ff;
             text-shadow: 0 0 15px rgba(180, 50, 255, 0.8), 0 4px 15px rgba(0,0,0,0.8);
         }
 
-        /* --- MENU STYLE HUD GAME UI : Placés bien bas --- */
+        /* --- MENU STYLE HUD : Centré verticalement dans le cadre du bas --- */
         .game-menu {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 16px;
+            gap: 18px;
             z-index: 5;
-            margin-bottom: 20px;
+            margin-top: 12vh; /* Positionne le bloc au milieu de l'écran */
         }
 
         .menu-btn {
@@ -126,17 +125,17 @@
 
         .btn-projets {
             font-size: 1.8rem;
-            padding: 14px 60px;
+            padding: 14px 65px;
         }
 
         .btn-demo {
             font-size: 1.4rem;
-            padding: 12px 50px;
+            padding: 12px 55px;
         }
 
         .btn-about {
             font-size: 1.1rem;
-            padding: 10px 40px;
+            padding: 10px 45px;
         }
 
         .menu-btn:hover {
@@ -184,13 +183,13 @@
 
     <canvas id="effectsCanvas"></canvas>
 
-    <!-- Titre haut -->
+    <!-- Titre -->
     <div class="title-container" id="titleContainer">
         <h1 class="main-title">Samuel Guegant</h1>
         <h2 class="subtitle">Adventures</h2>
     </div>
 
-    <!-- Menu bas style HUD -->
+    <!-- Menu style HUD -->
     <nav class="game-menu">
         <a href="#projets" class="menu-btn btn-projets">PROJETS</a>
         <a href="#demoreel" class="menu-btn btn-demo">DEMO REEL</a>
