@@ -32,7 +32,7 @@
             cursor: default;
         }
 
-        button, a, .project-bubble {
+        button, a, .project-bubble, .gallery-media {
             cursor: pointer;
         }
 
@@ -359,7 +359,7 @@
         .arrow-icon { font-size: 1.6rem; color: #00f0ff; }
 
         /* --- MODALES --- */
-        .video-modal-overlay, .char-sheet-modal, .project-detail-modal {
+        .video-modal-overlay, .char-sheet-modal, .project-detail-modal, .lightbox-modal {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
@@ -374,7 +374,7 @@
             transition: opacity 0.3s ease;
         }
 
-        .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active {
+        .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active {
             opacity: 1;
             pointer-events: auto;
         }
@@ -517,7 +517,7 @@
 
         .stat-row {
             display: grid;
-            grid-template-columns: 140px 1fr 30px;
+            grid-template-columns: 140px 1fr 40px;
             align-items: center;
             gap: 10px;
             margin-bottom: 12px;
@@ -527,7 +527,27 @@
         .stat-label { font-family: 'Orbitron', sans-serif; color: #e0b0ff; font-weight: 600; }
         .stat-bar-container { width: 100%; height: 10px; background: rgba(255, 255, 255, 0.1); border-radius: 5px; overflow: hidden; border: 1px solid rgba(180, 50, 255, 0.4); }
         .stat-bar-fill { height: 100%; background: linear-gradient(90deg, #8a2be2, #00f0ff); box-shadow: 0 0 10px #00f0ff; }
-        .stat-value { font-family: 'Orbitron', sans-serif; color: #00f0ff; font-weight: 700; text-align: right; }
+
+        /* --- SCORE S DORÉ OSU STYLE --- */
+        .osu-s-grade {
+            font-family: 'Montserrat', 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.6rem;
+            font-style: italic;
+            color: #fff9d0;
+            text-shadow: 
+                0 0 2px #e6a100,
+                0 0 5px #ffb700,
+                0 0 10px #ffa000,
+                2px 2px 0px #b36b00;
+            background: linear-gradient(180deg, #ffffff 0%, #ffe600 40%, #ff9900 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));
+            text-align: right;
+            display: inline-block;
+            transform: skewX(-8deg);
+        }
 
         .skills-tag-container { display: flex; flex-wrap: wrap; gap: 8px; }
         .skill-tag { background: rgba(140, 30, 255, 0.25); border: 1px solid rgba(190, 80, 255, 0.6); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; }
@@ -562,6 +582,12 @@
 
         @media (max-width: 950px) {
             .project-detail-layout { grid-template-columns: 1fr; }
+        }
+
+        .project-info-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .project-info-col h3 {
@@ -599,6 +625,37 @@
             padding: 15px;
             border-radius: 8px;
             border-left: 3px solid #d488ff;
+            margin-bottom: 20px;
+        }
+
+        /* BOUTON DE LIEN DU PROJET (Photo 3) */
+        .project-link-box {
+            margin-top: auto;
+            padding-top: 15px;
+        }
+
+        .project-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(140, 30, 255, 0.4));
+            border: 2px solid #00f0ff;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .project-link-btn:hover {
+            background: #00f0ff;
+            color: #0b021a;
+            box-shadow: 0 0 25px #00f0ff;
+            transform: translateY(-2px);
         }
 
         .project-gallery-col {
@@ -641,6 +698,34 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+            transition: border-color 0.2s ease;
+        }
+
+        .gallery-media:hover {
+            border-color: #00f0ff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+        }
+
+        .gallery-media::after {
+            content: '🔍 Clic pour agrandir';
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(10, 2, 25, 0.85);
+            color: #00f0ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .gallery-media:hover::after {
+            opacity: 1;
         }
 
         .gallery-media img {
@@ -696,6 +781,79 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 0.85rem;
             color: #d488ff;
+        }
+
+        /* --- LIGHTBOX PLEIN ÉCRAN --- */
+        .lightbox-modal {
+            z-index: 10000;
+            background: rgba(5, 1, 15, 0.96);
+        }
+
+        .lightbox-container {
+            position: relative;
+            max-width: 92vw;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-media-wrapper {
+            max-width: 85vw;
+            max-height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-media-wrapper img, .lightbox-media-wrapper video {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border: 2px solid #00f0ff;
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.4);
+        }
+
+        .lightbox-caption {
+            margin-top: 15px;
+            font-family: 'Orbitron', sans-serif;
+            color: #d488ff;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .lightbox-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(20, 5, 40, 0.8);
+            border: 2px solid #00f0ff;
+            color: #00f0ff;
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s;
+            z-index: 10001;
+        }
+
+        .lightbox-nav-btn:hover {
+            background: #00f0ff;
+            color: #0b021a;
+            box-shadow: 0 0 20px #00f0ff;
+        }
+
+        .lightbox-prev { left: -70px; }
+        .lightbox-next { right: -70px; }
+
+        @media (max-width: 768px) {
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
         }
 
         /* --- DÉCORATION HUD EN FOND --- */
@@ -837,27 +995,27 @@
                         <div class="stat-row">
                             <span class="stat-label">GAME DESIGN</span>
                             <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 95%;"></div></div>
-                            <span class="stat-value">95</span>
+                            <span class="osu-s-grade">S</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">LEVEL DESIGN</span>
                             <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 94%;"></div></div>
-                            <span class="stat-value">94</span>
+                            <span class="osu-s-grade">S</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">PROTOTYPING</span>
                             <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 93%;"></div></div>
-                            <span class="stat-value">93</span>
+                            <span class="osu-s-grade">S</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">BALANCING</span>
                             <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 95%;"></div></div>
-                            <span class="stat-value">95</span>
+                            <span class="osu-s-grade">S</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">DATA ANALYSIS</span>
                             <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 93%;"></div></div>
-                            <span class="stat-value">93</span>
+                            <span class="osu-s-grade">S</span>
                         </div>
                     </div>
 
@@ -896,11 +1054,16 @@
             
             <div class="project-detail-layout">
                 <div class="project-info-col">
-                    <h3>Compétences Clés & Rôles</h3>
-                    <div class="project-skills-list" id="modalProjectSkills"></div>
+                    <div>
+                        <h3>Compétences Clés & Rôles</h3>
+                        <div class="project-skills-list" id="modalProjectSkills"></div>
 
-                    <h3>À Propos du Projet</h3>
-                    <div class="project-overview" id="modalProjectDesc"></div>
+                        <h3>À Propos du Projet</h3>
+                        <div class="project-overview" id="modalProjectDesc"></div>
+                    </div>
+
+                    <!-- LIEN DU PROJET CONFIGURABLE (Photo 3) -->
+                    <div class="project-link-box" id="modalProjectLinkBox"></div>
                 </div>
 
                 <div class="project-gallery-col">
@@ -908,6 +1071,17 @@
                     <div id="modalProjectGallery"></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL LIGHTBOX (AFFICHER EN GRAND) -->
+    <div class="lightbox-modal" id="lightboxModal">
+        <div class="lightbox-container">
+            <button class="close-btn" id="closeLightboxBtn">FERMER [X]</button>
+            <button class="lightbox-nav-btn lightbox-prev" id="lightboxPrevBtn">&#9668;</button>
+            <div class="lightbox-media-wrapper" id="lightboxMediaWrapper"></div>
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+            <button class="lightbox-nav-btn lightbox-next" id="lightboxNextBtn">&#9658;</button>
         </div>
     </div>
 
@@ -1020,7 +1194,7 @@
             }
         }
 
-        // DATA PROJETS AVEC LES VRAIS CHEMINS DE GALERIES
+        // DATA PROJETS AVEC LIEN CONFIGURABLE PAR PROJET (link: "...")
         const domains = [
             {
                 id: 'level_design',
@@ -1030,6 +1204,8 @@
                         title: 'Tomb Raider Dungeon', 
                         img: 'images/TombRaider.png',
                         bgImg: 'images/TombRaider.png',
+                        link: 'https://drive.google.com/file/d/1V55zKcqW59M8226xS9Ou7-msZElHfr4p/view?usp=drive_link', // <-- LIEN CONFIGURABLE ICI
+                        linkLabel: '🔗 Lien de la présentation',
                         skills: ['Level Design', 'Puzzle Design', 'Documentation', 'Unreal Engine'],
                         desc: 'Conception complète d\'un donjon d\'exploration inspiré de Tomb Raider. Structuration des énigmes environnementales, balisage de l\'espace et pacing de la progression du joueur.',
                         gallery: [
@@ -1058,6 +1234,8 @@
                         title: 'Portal Level', 
                         img: 'images/PortalLD.png', 
                         bgImg: 'images/PortalLD.png',
+                        link: 'https://youtu.be/0MizN12rNUk', 
+                        linkLabel: '🔗 Lien du walkthrough',
                         skills: ['Level Design', 'Puzzle Design', 'Documentation'],
                         desc: 'Design d\'un niveau d\'énigmes basé sur les mécaniques de la physique et la spatialisation propre à Portal. Focalisation sur le guidage visuel et l\'apprentissage organique.',
                         gallery: [
@@ -1093,6 +1271,8 @@
                         title: '3D Blockout', 
                         img: 'images/LD3D Whale\'s Inside Logo.png', 
                         bgImg: 'images/LD3D Whale\'s Inside Logo.png',
+                        link: 'https://drive.google.com/file/d/1FeyCF5V0Quvk4q_Jc8o3IxaAh9ts_fmB/view?usp=drive_link',
+                        linkLabel: '🔗 Lien de la présentation',
                         skills: ['Level Design', '3D Blockout', 'Documentation', 'UEFN'],
                         desc: 'Création d\'un blockout 3D immersif à l\'intérieur d\'un organisme géant. Travail approfondi sur la verticalité, la composition de cadrage et la narration environnementale.',
                         gallery: [
@@ -1136,6 +1316,8 @@
                         title: 'Echoes of Above', 
                         img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', 
                         bgImg: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg',
+                        link: 'https://store.steampowered.com/app/2996940/Echoes_of_Above/', 
+                        linkLabel: '🎮 PAGE STEAM DE ECHOES OF ABOVE',
                         skills: ['Game Design', 'Level Design', 'Puzzle Design', 'Encounter Design', 'Integration', 'Programming', 'Management'],
                         desc: 'Jeu de puzzle / aventure disponible sur Steam. Direction créative du Level Design et conception des systèmes d\'interactions et d\'énigmes dynamiques.',
                         gallery: [
@@ -1163,6 +1345,8 @@
                         title: 'Echoes of Above', 
                         img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', 
                         bgImg: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg',
+                        link: 'https://store.steampowered.com/app/4196130/Echoes_of_Above/',
+                        linkLabel: '🎮 PAGE STEAM DE ECHOES OF ABOVE',
                         skills: ['Game Design', 'Level Design', 'Puzzle Design', 'Encounter Design', 'Integration', 'Programming', 'Management'],
                         desc: 'Projet complet développé sur Steam. Conception du système de règles, programmation C# / Unity des systèmes d\'énigmes et équilibrage global.',
                         gallery: [
@@ -1184,6 +1368,8 @@
                         title: 'The Unseelie Court', 
                         img: 'images/The UnseelieCourt.png', 
                         bgImg: 'images/The UnseelieCourt.png',
+                        link: 'https://youtu.be/hk353Cy4Huw',
+                        linkLabel: '🔗 Lien du trailer',
                         skills: ['Game Design', 'Level Design', 'Narrative Design', 'World Design'],
                         desc: 'Conception d\'un univers féérique sombre. Élaboration des mécaniques narratives à choix multiples et architecture du monde interactif.',
                         gallery: [
@@ -1202,6 +1388,8 @@
                         title: 'FlipIt', 
                         img: 'images/FlipIt.png', 
                         bgImg: 'images/FlipIt.png',
+                        link: 'https://youtu.be/M2mBmCmd5LU',
+                        linkLabel: '🔗 Lien du trailer',
                         skills: ['Game Design', 'Programming', 'Balancing', 'HUD System'],
                         desc: 'Jeu d\'action / réflexe axé sur le retournement et l\'inversion de mécaniques. Découpage UI/UX, programmation des systèmes de jeu et équilibrage des niveaux.',
                         gallery: [
@@ -1225,6 +1413,8 @@
                         title: 'RPG Maker Games', 
                         img: 'images/RPGMakerGameIcon.png', 
                         bgImg: 'images/RPGMakerGameIcon.png',
+                        link: 'https://youtu.be/MGyzw5mewII',
+                        linkLabel: '🔗 Lien Map Timelapse',
                         skills: ['Game Design', 'Level Design', 'World Design', 'Narrative Design', 'Balancing', 'Programming'],
                         desc: 'Collection de modules et plugins personnalisés JavaScript développés pour RPG Maker MV (Systèmes de QTE, menus personnalisés, mécaniques d\'esquive).',
                         gallery: [
@@ -1241,6 +1431,8 @@
                         title: 'Umamusume Report', 
                         img: 'images/PSP_MGD1_GUEGANT_Samuel.png', 
                         bgImg: 'images/PSP_MGD1_GUEGANT_Samuel.png',
+                        link: 'https://drive.google.com/file/d/142Bo8KmuRKsVmvbRfkzBk8Fqt3H_CRQc/view?usp=drive_link',
+                        linkLabel: '🔗 Lien de la présentation',
                         skills: ['UX Research', 'Gameplay Analysis', 'Marketing Analysis', 'Video Game Market Analysis', 'Documentation'],
                         desc: 'Analyse approfondie de la boucle de gameplay, du modèle économique Gacha et des facteurs de succès UX/UI de la franchise Umamusume sur le marché asiatique et mondial.',
                         gallery: [
@@ -1276,6 +1468,8 @@
                         title: 'Video games and discriminations', 
                         img: 'images/VideoGameDiscriminations.png', 
                         bgImg: 'images/VideoGameDiscriminations.png',
+                        link: 'https://drive.google.com/file/d/14bj6jAMrinySHySFcSqiLS5RP1qkgDPM/view?usp=drive_link',
+                        linkLabel: '🔗 Lien de la présentation',
                         skills: ['Inclusivity', 'Socio-economic analysis', 'Video Game Market Analysis', 'Documentation'],
                         desc: 'Dossier de recherche analysant la représentation des minorités, la lutte contre la toxicité et l\'accessibilité numérique dans l\'industrie du jeu vidéo moderne.',
                         gallery: [
@@ -1297,6 +1491,8 @@
                         title: 'Finance & Pop-culture', 
                         img: 'images/Finance&Popculture.png', 
                         bgImg: 'images/Finance&Popculture.png',
+                        link: 'https://drive.google.com/file/d/1YknOTUFpXb5flVicM9pgICdqsBZNieY8/view?usp=drive_link',
+                        linkLabel: '🔗 Lien de la présentation',
                         skills: ['UX Research', 'Benchmarking', 'Game Design Analysis', 'Documentation'],
                         desc: 'Étude comparative sur la manière dont les mécaniques financières réelles (bourse, rareté, marchés) sont ludifiées dans les univers de la pop-culture.',
                         gallery: [
@@ -1313,6 +1509,8 @@
                         title: 'Données et Gouvernance', 
                         img: 'images/MemoireIcon.png', 
                         bgImg: 'images/MemoireIcon.png',
+                        link: 'https://drive.google.com/file/d/1WTZZiGQ0-saKYMVp91Jca3hyTSW2l52K/view?usp=sharing',
+                        linkLabel: '🔗 Lien de la présentation',
                         skills: ['Territorial Management analysis', 'Data market analysis', 'New technology', 'Research Paper'],
                         desc: 'Mémoire universitaire d\'analyse socio-politique et technique sur l\'utilisation des données publiques, les marchés de la data et les enjeux de gouvernance numérique.',
                         gallery: [
@@ -1445,9 +1643,11 @@
         const modalProjectTitle = document.getElementById('modalProjectTitle');
         const modalProjectSkills = document.getElementById('modalProjectSkills');
         const modalProjectDesc = document.getElementById('modalProjectDesc');
+        const modalProjectLinkBox = document.getElementById('modalProjectLinkBox');
         const modalProjectGallery = document.getElementById('modalProjectGallery');
 
         let currentGalleryIndex = 0;
+        let currentProjectGalleryData = [];
 
         function openProjectDetail(project) {
             modalProjectTitle.textContent = project.title;
@@ -1463,8 +1663,22 @@
             }
 
             modalProjectDesc.textContent = project.desc || 'Aucune description disponible pour ce projet.';
+
+            // GESTION DU LIEN CLIQUABLE EN BAS À GAUCHE
+            modalProjectLinkBox.innerHTML = '';
+            if (project.link && project.link.trim() !== '') {
+                const linkBtn = document.createElement('a');
+                linkBtn.href = project.link;
+                linkBtn.target = '_blank';
+                linkBtn.rel = 'noopener noreferrer';
+                linkBtn.className = 'project-link-btn';
+                linkBtn.innerHTML = project.linkLabel || '🔗 CONSULTER LE LIEN DU PROJET';
+                modalProjectLinkBox.appendChild(linkBtn);
+            }
+
             modalProjectGallery.innerHTML = '';
             currentGalleryIndex = 0;
+            currentProjectGalleryData = project.gallery || [];
 
             if (project.gallery && project.gallery.length > 0) {
                 const carouselContainer = document.createElement('div');
@@ -1487,11 +1701,20 @@
                         : `<img src="${item.img}" alt="${project.title}" onerror="this.src='https://via.placeholder.com/400x220/1a0033/00f0ff?text=Aper%C3%A7u'">`;
 
                     gItem.innerHTML = `
-                        <div class="gallery-media">
+                        <div class="gallery-media" data-index="${idx}">
                             ${mediaHTML}
                         </div>
                         <div class="gallery-caption">${item.caption || ''}</div>
                     `;
+
+                    // Événement Clic pour ouvrir la Lightbox Plein Écran
+                    const mediaBox = gItem.querySelector('.gallery-media');
+                    mediaBox.addEventListener('click', (e) => {
+                        // Empêcher l'ouverture si clic sur contrôle vidéo
+                        if (e.target.tagName === 'VIDEO') return;
+                        openLightbox(idx);
+                    });
+
                     itemsWrapper.appendChild(gItem);
                 });
 
@@ -1538,20 +1761,75 @@
 
         closeProjectDetailBtn.addEventListener('click', () => projectDetailModal.classList.remove('active'));
 
-        [videoModal, charSheetModal, projectDetailModal].forEach(modal => {
+        // GESTION DE LA LIGHTBOX PLEIN ÉCRAN
+        const lightboxModal = document.getElementById('lightboxModal');
+        const closeLightboxBtn = document.getElementById('closeLightboxBtn');
+        const lightboxMediaWrapper = document.getElementById('lightboxMediaWrapper');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+        const lightboxPrevBtn = document.getElementById('lightboxPrevBtn');
+        const lightboxNextBtn = document.getElementById('lightboxNextBtn');
+        let lightboxIndex = 0;
+
+        function openLightbox(index) {
+            lightboxIndex = index;
+            updateLightboxContent();
+            lightboxModal.classList.add('active');
+        }
+
+        function updateLightboxContent() {
+            if (!currentProjectGalleryData || currentProjectGalleryData.length === 0) return;
+            const item = currentProjectGalleryData[lightboxIndex];
+            const isVideo = item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm');
+
+            lightboxMediaWrapper.innerHTML = isVideo
+                ? `<video controls autoplay loop style="max-width:85vw; max-height:80vh;">
+                     <source src="${item.img}" type="video/mp4">
+                   </video>`
+                : `<img src="${item.img}" alt="Plein écran" style="max-width:85vw; max-height:80vh; object-fit:contain;">`;
+
+            lightboxCaption.textContent = item.caption ? `${item.caption} (${lightboxIndex + 1}/${currentProjectGalleryData.length})` : `Aperçu (${lightboxIndex + 1}/${currentProjectGalleryData.length})`;
+        }
+
+        function closeLightbox() {
+            lightboxModal.classList.remove('active');
+            lightboxMediaWrapper.innerHTML = '';
+        }
+
+        closeLightboxBtn.addEventListener('click', closeLightbox);
+        lightboxPrevBtn.addEventListener('click', () => {
+            lightboxIndex = (lightboxIndex - 1 + currentProjectGalleryData.length) % currentProjectGalleryData.length;
+            updateLightboxContent();
+        });
+        lightboxNextBtn.addEventListener('click', () => {
+            lightboxIndex = (lightboxIndex + 1) % currentProjectGalleryData.length;
+            updateLightboxContent();
+        });
+
+        [videoModal, charSheetModal, projectDetailModal, lightboxModal].forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     modal.classList.remove('active');
                     if (modal === videoModal) closeVideo();
+                    if (modal === lightboxModal) closeLightbox();
                 }
             });
         });
 
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                if (videoModal.classList.contains('active')) closeVideo();
-                if (charSheetModal.classList.contains('active')) closeCharSheet();
-                if (projectDetailModal.classList.contains('active')) projectDetailModal.classList.remove('active');
+                if (lightboxModal.classList.contains('active')) closeLightbox();
+                else if (videoModal.classList.contains('active')) closeVideo();
+                else if (charSheetModal.classList.contains('active')) closeCharSheet();
+                else if (projectDetailModal.classList.contains('active')) projectDetailModal.classList.remove('active');
+            }
+            if (lightboxModal.classList.contains('active')) {
+                if (e.key === 'ArrowLeft') {
+                    lightboxIndex = (lightboxIndex - 1 + currentProjectGalleryData.length) % currentProjectGalleryData.length;
+                    updateLightboxContent();
+                } else if (e.key === 'ArrowRight') {
+                    lightboxIndex = (lightboxIndex + 1) % currentProjectGalleryData.length;
+                    updateLightboxContent();
+                }
             }
         });
 
