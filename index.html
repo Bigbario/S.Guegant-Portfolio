@@ -607,14 +607,28 @@
             gap: 20px;
         }
 
+        /* --- CARROUSEL DANS LA MODALE --- */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .gallery-item {
+            display: none;
+            width: 100%;
             background: rgba(30, 8, 60, 0.6);
             border: 1px solid rgba(180, 50, 255, 0.4);
             border-radius: 10px;
             padding: 12px;
-            display: flex;
             flex-direction: column;
             gap: 10px;
+        }
+
+        .gallery-item.active {
+            display: flex;
         }
 
         .gallery-media {
@@ -631,7 +645,7 @@
 
         .gallery-media img {
             max-width: 100%;
-            max-height: 400px;
+            max-height: 380px;
             width: auto;
             height: auto;
             object-fit: contain;
@@ -640,7 +654,7 @@
 
         .gallery-media video {
             width: 100%;
-            max-height: 400px;
+            max-height: 380px;
             border-radius: 4px;
             outline: none;
         }
@@ -649,7 +663,66 @@
             font-size: 0.88rem;
             color: #e0b0ff;
             line-height: 1.4;
+            text-align: center;
         }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .carousel-btn {
+            background: rgba(140, 30, 255, 0.3);
+            border: 1px solid #00f0ff;
+            color: #00f0ff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .carousel-btn:hover {
+            background: #00f0ff;
+            color: #0b021a;
+            box-shadow: 0 0 15px #00f0ff;
+        }
+
+        .carousel-counter {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: #d488ff;
+        }
+
+        /* --- DÉCORATION HUD EN FOND --- */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hud-corner {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 2px solid rgba(0, 240, 255, 0.3);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hud-corner.top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+        .hud-corner.top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+        .hud-corner.bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+        .hud-corner.bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
 
         /* EFFET SLASH AU CLIC */
         .slash-effect {
@@ -673,6 +746,13 @@
     </style>
 </head>
 <body>
+
+    <!-- Éléments HUD de décoration -->
+    <div class="bg-grid"></div>
+    <div class="hud-corner top-left"></div>
+    <div class="hud-corner top-right"></div>
+    <div class="hud-corner bottom-left"></div>
+    <div class="hud-corner bottom-right"></div>
 
     <!-- Curseur Personnage Animé -->
     <div id="custom-cursor"></div>
@@ -825,7 +905,7 @@
 
                 <div class="project-gallery-col">
                     <h3 style="font-family:'Orbitron'; color:#00f0ff; font-size:1.1rem; text-transform:uppercase;">Galerie & Aperçus</h3>
-                    <div id="modalProjectGallery" style="display:flex; flex-direction:column; gap:15px;"></div>
+                    <div id="modalProjectGallery"></div>
                 </div>
             </div>
         </div>
@@ -1367,6 +1447,8 @@
         const modalProjectDesc = document.getElementById('modalProjectDesc');
         const modalProjectGallery = document.getElementById('modalProjectGallery');
 
+        let currentGalleryIndex = 0;
+
         function openProjectDetail(project) {
             modalProjectTitle.textContent = project.title;
             
@@ -1381,12 +1463,19 @@
             }
 
             modalProjectDesc.textContent = project.desc || 'Aucune description disponible pour ce projet.';
-
             modalProjectGallery.innerHTML = '';
+            currentGalleryIndex = 0;
+
             if (project.gallery && project.gallery.length > 0) {
-                project.gallery.forEach(item => {
+                const carouselContainer = document.createElement('div');
+                carouselContainer.className = 'carousel-container';
+
+                const itemsWrapper = document.createElement('div');
+                itemsWrapper.style.width = '100%';
+
+                project.gallery.forEach((item, idx) => {
                     const gItem = document.createElement('div');
-                    gItem.className = 'gallery-item';
+                    gItem.className = `gallery-item ${idx === 0 ? 'active' : ''}`;
                     
                     const isVideo = item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm');
                     
@@ -1403,8 +1492,43 @@
                         </div>
                         <div class="gallery-caption">${item.caption || ''}</div>
                     `;
-                    modalProjectGallery.appendChild(gItem);
+                    itemsWrapper.appendChild(gItem);
                 });
+
+                carouselContainer.appendChild(itemsWrapper);
+
+                if (project.gallery.length > 1) {
+                    const controls = document.createElement('div');
+                    controls.className = 'carousel-controls';
+                    controls.innerHTML = `
+                        <button class="carousel-btn" id="prevMediaBtn">&#9668; Précédent</button>
+                        <span class="carousel-counter" id="carouselCounter">1 / ${project.gallery.length}</span>
+                        <button class="carousel-btn" id="nextMediaBtn">Suivant &#9658;</button>
+                    `;
+                    carouselContainer.appendChild(controls);
+                }
+
+                modalProjectGallery.appendChild(carouselContainer);
+
+                if (project.gallery.length > 1) {
+                    const items = itemsWrapper.querySelectorAll('.gallery-item');
+                    const counter = document.getElementById('carouselCounter');
+
+                    const updateCarousel = (newIndex) => {
+                        items[currentGalleryIndex].classList.remove('active');
+                        
+                        const video = items[currentGalleryIndex].querySelector('video');
+                        if (video) video.pause();
+
+                        currentGalleryIndex = (newIndex + items.length) % items.length;
+                        items[currentGalleryIndex].classList.add('active');
+                        counter.textContent = `${currentGalleryIndex + 1} / ${items.length}`;
+                    };
+
+                    document.getElementById('prevMediaBtn').addEventListener('click', () => updateCarousel(currentGalleryIndex - 1));
+                    document.getElementById('nextMediaBtn').addEventListener('click', () => updateCarousel(currentGalleryIndex + 1));
+                }
+
             } else {
                 modalProjectGallery.innerHTML = '<div style="color:#a0a0a0; font-size:0.9rem;">Aucun visuel supplémentaire pour le moment.</div>';
             }
