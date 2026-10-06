@@ -10,74 +10,91 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<meta name="description" content="Portfolio de Samuel Guegant - Game Designer & Développeur" />
-		<meta name="keywords" content="" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<style>
-			/* Navbar Fixe */
+			/* Banner Top / Navigation Dynamic */
 			.top-navbar {
-				position: fixed;
+				position: relative;
 				top: 0;
 				left: 0;
 				width: 100%;
-				height: 70px;
+				height: 90px;
 				background-color: #2ec4b6;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				padding: 0 40px;
+				padding: 0 60px;
 				z-index: 1000;
-				box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 				box-sizing: border-box;
+				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 			}
+
+			/* État quand on scrolle vers le bas */
+			.top-navbar.scrolled {
+				position: fixed;
+				height: 65px;
+				padding: 0 30px;
+				background-color: rgba(46, 196, 182, 0.95);
+				backdrop-filter: blur(8px);
+				box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+			}
+
 			.nav-left {
 				display: flex;
 				align-items: center;
-				gap: 30px;
+				gap: 35px;
 			}
+
 			.nav-logo {
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				width: 42px;
-				height: 42px;
-				border: 2px solid #0f172a;
+				width: 46px;
+				height: 46px;
+				border: 3px solid #0f172a;
 				border-radius: 8px;
 				font-weight: 900;
 				color: #0f172a;
 				text-decoration: none;
-				font-size: 1.1rem;
+				font-size: 1.2rem;
 				background: transparent;
+				transition: transform 0.2s ease;
 			}
+			.nav-logo:hover {
+				transform: scale(1.05);
+			}
+
 			.nav-links {
 				display: flex;
-				gap: 25px;
+				gap: 30px;
 			}
 			.nav-links a {
 				color: #0f172a;
 				text-decoration: none;
 				font-weight: 800;
-				font-size: 1.1rem;
+				font-size: 1.15rem;
 				position: relative;
 				border-bottom: none;
 			}
 			.nav-links a::after {
 				content: '';
 				position: absolute;
-				bottom: -4px;
+				bottom: -3px;
 				left: 0;
 				width: 100%;
 				height: 3px;
 				background-color: #0f172a;
 			}
+
 			.btn-contact {
-				border: 2px solid #0f172a;
+				border: 2.5px solid #0f172a;
 				background: transparent;
 				color: #0f172a !important;
 				font-weight: 800;
-				padding: 8px 20px;
+				padding: 8px 22px;
 				border-radius: 8px;
 				cursor: pointer;
-				font-size: 1rem;
+				font-size: 1.05rem;
 				text-transform: none;
 				transition: all 0.2s ease;
 			}
@@ -86,15 +103,11 @@
 				color: #2ec4b6 !important;
 			}
 
-			/* Marge supérieure pour compenser la navbar */
-			body {
-				padding-top: 70px !important;
-			}
 			#wrapper {
 				padding-top: 0 !important;
 			}
 
-			/* Section Demo Reel */
+			/* Section Demo Reel (Taille intermédiaire) */
 			.demo-reel-section {
 				width: 100%;
 				background: #111827;
@@ -103,17 +116,18 @@
 			}
 			.demo-reel-section h1 {
 				color: #ffffff;
-				font-size: 2.5rem;
+				font-size: 2.4rem;
 				font-weight: 800;
 				margin-bottom: 30px;
 				text-transform: none;
 				letter-spacing: 1px;
 			}
 			.hero-video-container {
-				max-width: 850px;
+				max-width: 1100px;
+				width: 90%;
 				margin: 0 auto;
 				position: relative;
-				padding-bottom: 47.8%; /* Ratio 16:9 adapté pour 850px */
+				padding-bottom: 50.625%; /* Ratio 16:9 ajusté */
 				height: 0;
 				background: #000;
 				border-radius: 12px;
@@ -132,7 +146,7 @@
 			/* Section des bulles */
 			.bubbles-section {
 				width: 100% !important;
-				padding: 60px 20px !important;
+				padding: 70px 20px !important;
 				text-align: center;
 				background-color: #1c2229 !important;
 				display: block !important;
@@ -148,10 +162,10 @@
 				width: 100%;
 			}
 			.bubble-item {
-				width: 200px !important;
-				height: 200px !important;
-				min-width: 200px !important;
-				min-height: 200px !important;
+				width: 210px !important;
+				height: 210px !important;
+				min-width: 210px !important;
+				min-height: 210px !important;
 				border-radius: 50% !important;
 				border: 3px solid #2ec4b6 !important;
 				background: rgba(30, 35, 45, 0.95) !important;
@@ -175,7 +189,7 @@
 				color: #ffffff !important;
 			}
 
-			/* Modal Contact */
+			/* Pop-up Contact Modal */
 			.contact-modal {
 				display: none;
 				position: fixed;
@@ -183,7 +197,7 @@
 				left: 0;
 				width: 100%;
 				height: 100%;
-				background: rgba(0, 0, 0, 0.75);
+				background: rgba(0, 0, 0, 0.8);
 				z-index: 2000;
 				align-items: center;
 				justify-content: center;
@@ -198,7 +212,7 @@
 				border: 2px solid #2ec4b6;
 				border-radius: 12px;
 				width: 100%;
-				max-width: 650px;
+				max-width: 600px;
 				padding: 35px 40px;
 				position: relative;
 				box-shadow: 0 20px 50px rgba(0,0,0,0.8);
@@ -273,7 +287,8 @@
 
 			@media screen and (max-width: 768px) {
 				.top-navbar {
-					padding: 0 15px;
+					padding: 0 20px;
+					height: 75px;
 				}
 				.nav-links {
 					gap: 15px;
@@ -288,7 +303,7 @@
 	<body class="is-preload">
 
 		<!-- Top Navbar -->
-		<nav class="top-navbar">
+		<nav class="top-navbar" id="topNavbar">
 			<div class="nav-left">
 				<a href="#" class="nav-logo" title="Retour en haut">SG</a>
 				<div class="nav-links">
@@ -299,7 +314,7 @@
 			<button class="btn-contact" id="openContactBtn">Contact Me</button>
 		</nav>
 
-		<!-- Section Demo Reel (Vidéo taille réduite) -->
+		<!-- Section Demo Reel -->
 		<section class="demo-reel-section">
 			<h1>Demo Reel</h1>
 			<div class="hero-video-container">
@@ -387,7 +402,9 @@
 					<span>✉</span>
 					Contact Me
 				</div>
-				<form class="modal-form" action="https://formspree.io/f/samgueg@gmx.fr" method="POST">
+				<form class="modal-form" action="https://formsubmit.co/samgueg@gmx.fr" method="POST">
+					<input type="hidden" name="_captcha" value="false">
+
 					<label for="modal-name">Your Name</label>
 					<input type="text" id="modal-name" name="name" placeholder="Enter name" required />
 
@@ -427,6 +444,16 @@
 				window.addEventListener('click', (e) => {
 					if (e.target === contactModal) {
 						contactModal.classList.remove('active');
+					}
+				});
+
+				// Animation dynamique de la barre de navigation au défilement
+				const navbar = document.getElementById('topNavbar');
+				window.addEventListener('scroll', () => {
+					if (window.scrollY > 80) {
+						navbar.classList.add('scrolled');
+					} else {
+						navbar.classList.remove('scrolled');
 					}
 				});
 			</script>
