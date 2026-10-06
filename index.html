@@ -379,7 +379,7 @@
             box-shadow: 0 0 10px #39ff14;
         }
 
-        /* Attributs & Barres de Stats (Alignement corrigé via GRID) */
+        /* Attributs & Barres de Stats */
         .stat-row {
             display: grid;
             grid-template-columns: 140px 1fr 30px;
@@ -507,7 +507,7 @@
     <div class="video-modal-overlay" id="videoModal">
         <div class="video-container">
             <button class="close-btn" id="closeVideoBtn">FERMER [X]</button>
-            <iframe id="youtubeIframe" src="https://www.youtube.com/embed/O8SmeeWGd3Q?enablejsapi=1" title="Demo Reel Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe id="youtubeIframe" src="https://www.youtube.com/embed/3UwbJ8Q1MwU?enablejsapi=1" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -772,7 +772,7 @@
         const closeVideoBtn = document.getElementById('closeVideoBtn');
         const youtubeIframe = document.getElementById('youtubeIframe');
 
-        const baseUrl = "https://www.youtube.com/embed/O8SmeeWGd3Q";
+        const baseUrl = "https://www.youtube.com/embed/3UwbJ8Q1MwU";
 
         demoReelBtn.addEventListener('click', (e) => {
             e.preventDefault();
