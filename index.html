@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Samuel Guegant Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@600;700;900&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
+    <title>Samuel Guegant - Portfolio Game Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@600;700;800;900&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,7 +15,6 @@
         }
 
         body {
-            /* Fond HUD Sci-Fi / Fantasy Néon Violet */
             background-color: #0b021a;
             background-image: 
                 radial-gradient(circle at center, rgba(140, 30, 255, 0.25) 0%, rgba(10, 2, 25, 0.95) 75%),
@@ -76,6 +75,7 @@
             margin-bottom: 4vh;
             width: 100vw;
             white-space: nowrap;
+            transition: opacity 0.5s ease;
         }
 
         .main-title {
@@ -105,6 +105,7 @@
             width: 90%;
             max-width: 750px;
             margin-bottom: 2vh;
+            transition: opacity 0.5s ease;
         }
 
         .menu-btn {
@@ -147,6 +148,259 @@
             transform: scale(1.05) translateY(-2px);
             box-shadow: 0 0 35px rgba(200, 80, 255, 0.85), inset 0 0 20px rgba(255, 255, 255, 0.5);
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+        }
+
+        /* --- RIDEAU / PORTE BLINDÉE CYBER --- */
+        .curtain-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 8000;
+            display: flex;
+        }
+
+        .curtain-panel {
+            width: 50vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #090214, #1b0733);
+            border-right: 3px solid #00f0ff;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9), 0 0 30px #00f0ff;
+            transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
+            position: relative;
+        }
+
+        .curtain-panel.right {
+            border-right: none;
+            border-left: 3px solid #00f0ff;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9), 0 0 30px #00f0ff;
+        }
+
+        .curtain-container.closed .curtain-panel.left {
+            transform: translateX(0);
+        }
+
+        .curtain-container.closed .curtain-panel.right {
+            transform: translateX(0);
+        }
+
+        .curtain-container.open .curtain-panel.left {
+            transform: translateX(-100%);
+        }
+
+        .curtain-container.open .curtain-panel.right {
+            transform: translateX(100%);
+        }
+
+        /* --- HUB PROJETS / SCÈNE DE JEU EN CÔNE --- */
+        #projectsHub {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            background: radial-gradient(circle at center, rgba(30, 8, 60, 0.8) 0%, rgba(5, 1, 15, 0.98) 85%);
+        }
+
+        #projectsHub.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Titre Supérieur Domaine */
+        .hub-header {
+            margin-top: 25px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .domain-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 25px rgba(0, 240, 255, 0.8), 0 0 50px rgba(180, 50, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        /* Cône de Perspective & Murs de Côté */
+        .cone-corridor {
+            position: relative;
+            width: 100vw;
+            height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Panneaux obliques sur les côtés */
+        .side-wall {
+            position: absolute;
+            top: -10%;
+            width: 32vw;
+            height: 120%;
+            background: linear-gradient(135deg, rgba(20, 5, 40, 0.92), rgba(10, 2, 25, 0.98));
+            border: 2px solid rgba(0, 240, 255, 0.4);
+            box-shadow: 0 0 30px rgba(180, 50, 255, 0.3);
+            z-index: 5;
+            transition: all 0.4s ease;
+        }
+
+        .side-wall.left {
+            left: -5vw;
+            transform: rotate(12deg) skewY(-8deg);
+            border-right: 3px solid #00f0ff;
+            clip-path: polygon(0 0, 100% 15%, 85% 85%, 0 100%);
+        }
+
+        .side-wall.right {
+            right: -5vw;
+            transform: rotate(-12deg) skewY(8deg);
+            border-left: 3px solid #00f0ff;
+            clip-path: polygon(15% 15%, 100% 0, 100% 100%, 15% 85%);
+        }
+
+        /* Conteneur des 4 Bulles Projets au Centre */
+        .projects-grid-container {
+            position: relative;
+            width: 600px;
+            height: 500px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            align-items: center;
+            justify-items: center;
+            z-index: 10;
+            transition: transform 0.4s ease, opacity 0.3s ease;
+        }
+
+        /* Positionnement spécifique en Losange/Cône */
+        .bubble-slot-1 { grid-column: 2; grid-row: 1; } /* Haut */
+        .bubble-slot-2 { grid-column: 3; grid-row: 2; } /* Droite */
+        .bubble-slot-3 { grid-column: 2; grid-row: 3; } /* Bas */
+        .bubble-slot-4 { grid-column: 1; grid-row: 2; } /* Gauche */
+
+        .project-bubble {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: rgba(30, 10, 55, 0.85);
+            border: 3px solid #00f0ff;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.4), inset 0 0 20px rgba(180, 50, 255, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 12px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        .project-bubble::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(11,2,26,0.2) 0%, rgba(11,2,26,0.8) 100%);
+            z-index: 1;
+        }
+
+        .project-bubble-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-bubble h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px #00f0ff;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .project-bubble p {
+            font-size: 0.7rem;
+            color: #d488ff;
+            font-weight: 700;
+        }
+
+        .project-bubble:hover {
+            transform: scale(1.18);
+            border-color: #ffffff;
+            box-shadow: 0 0 45px rgba(0, 240, 255, 0.9), inset 0 0 30px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Navigation en bas du Hub */
+        .hub-footer-nav {
+            width: 100%;
+            padding: 0 40px 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .nav-arrow-btn {
+            background: linear-gradient(135deg, rgba(20, 5, 40, 0.85), rgba(80, 20, 140, 0.85));
+            border: 2px solid #00f0ff;
+            border-radius: 12px;
+            padding: 14px 28px;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            transition: all 0.25s ease;
+        }
+
+        .nav-arrow-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.4), rgba(140, 30, 255, 0.8));
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
+            color: #ffffff;
+        }
+
+        .nav-arrow-icon {
+            font-size: 1.6rem;
+            color: #00f0ff;
+        }
+
+        .btn-back-menu {
+            background: rgba(140, 30, 255, 0.2);
+            border: 1px solid rgba(190, 80, 255, 0.6);
+            color: #d488ff;
+            font-family: 'Orbitron', sans-serif;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            transition: all 0.2s;
+        }
+
+        .btn-back-menu:hover {
+            background: rgba(180, 50, 255, 0.6);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(180, 50, 255, 0.8);
         }
 
         /* --- MODAL VIDEO DEMO REEL --- */
@@ -265,7 +519,6 @@
             transform: scale(1);
         }
 
-        /* Header de la fiche */
         .char-header {
             display: flex;
             justify-content: space-between;
@@ -300,7 +553,6 @@
             text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
         }
 
-        /* Grille principale inspirée de la fiche */
         .char-grid {
             display: grid;
             grid-template-columns: 280px 1fr 1fr;
@@ -313,7 +565,6 @@
             }
         }
 
-        /* Module Cadre Cyber */
         .cyber-card {
             background: rgba(35, 12, 65, 0.6);
             border: 1px solid rgba(180, 50, 255, 0.4);
@@ -336,7 +587,6 @@
             gap: 8px;
         }
 
-        /* Photo Avatar Cyber */
         .avatar-box {
             display: flex;
             flex-direction: column;
@@ -379,7 +629,6 @@
             box-shadow: 0 0 10px #39ff14;
         }
 
-        /* Attributs & Barres de Stats */
         .stat-row {
             display: grid;
             grid-template-columns: 140px 1fr 30px;
@@ -418,7 +667,6 @@
             text-align: right;
         }
 
-        /* Tags de Compétences */
         .skills-tag-container {
             display: flex;
             flex-wrap: wrap;
@@ -443,7 +691,6 @@
             box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
-        /* Background & Textes */
         .bio-text {
             font-size: 0.9rem;
             line-height: 1.6;
@@ -458,6 +705,42 @@
             color: #00f0ff;
             font-weight: 700;
             text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+        }
+
+        /* --- MODAL DETAIL PROJET --- */
+        .project-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(10, 2, 25, 0.94);
+            backdrop-filter: blur(14px);
+            z-index: 9600;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-modal.active {
+            opacity: 1; pointer-events: auto;
+        }
+
+        .project-modal-container {
+            width: 80vw; max-width: 900px;
+            background: rgba(25, 8, 48, 0.95);
+            border: 2px solid #00f0ff;
+            border-radius: 14px;
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.5);
+            padding: 30px; position: relative;
+            color: #fff;
+        }
+
+        .project-modal-container h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem; color: #00f0ff;
+            margin-bottom: 15px;
+        }
+
+        .project-modal-container p {
+            line-height: 1.7; color: #d1c4e9; margin-bottom: 15px;
         }
 
         /* Slash / Magie au clic */
@@ -503,11 +786,71 @@
     </div>
 
     <!-- Menu style HUD -->
-    <nav class="game-menu">
-        <a href="#projets" class="menu-btn btn-projets">PROJETS</a>
+    <nav class="game-menu" id="mainMenu">
+        <a href="#projets" class="menu-btn btn-projets" id="projetsBtn">PROJETS</a>
         <a href="#demoreel" class="menu-btn btn-demo" id="demoReelBtn">DEMO REEL</a>
         <a href="#about" class="menu-btn btn-about" id="aboutBtn">ABOUT ME</a>
     </nav>
+
+    <!-- Rideaux Cyber pour Transition -->
+    <div class="curtain-container open" id="curtainContainer">
+        <div class="curtain-panel left"></div>
+        <div class="curtain-panel right"></div>
+    </div>
+
+    <!-- SCÈNE EN CÔNE DE PROJETS (HUB / GAME LOBBY) -->
+    <section id="projectsHub">
+        <div class="hub-header">
+            <h2 class="domain-title" id="domainTitle">GD & PROG</h2>
+        </div>
+
+        <div class="cone-corridor">
+            <!-- Murs de perspective -->
+            <div class="side-wall left"></div>
+            <div class="side-wall right"></div>
+
+            <!-- Grille des 4 bulles centrales -->
+            <div class="projects-grid-container" id="projectsGrid">
+                <div class="project-bubble bubble-slot-1" id="bubble1">
+                    <div class="project-bubble-content">
+                        <h4 id="b1-title">Projet 1</h4>
+                        <p id="b1-tag">Description</p>
+                    </div>
+                </div>
+                <div class="project-bubble bubble-slot-2" id="bubble2">
+                    <div class="project-bubble-content">
+                        <h4 id="b2-title">Projet 2</h4>
+                        <p id="b2-tag">Description</p>
+                    </div>
+                </div>
+                <div class="project-bubble bubble-slot-3" id="bubble3">
+                    <div class="project-bubble-content">
+                        <h4 id="b3-title">Projet 3</h4>
+                        <p id="b3-tag">Description</p>
+                    </div>
+                </div>
+                <div class="project-bubble bubble-slot-4" id="bubble4">
+                    <div class="project-bubble-content">
+                        <h4 id="b4-title">Projet 4</h4>
+                        <p id="b4-tag">Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation en bas du corridor -->
+        <div class="hub-footer-nav">
+            <button class="nav-arrow-btn" id="navLeftBtn">
+                <span class="nav-arrow-icon">&larr;</span> <span id="navLeftText">Vers Level Design</span>
+            </button>
+
+            <button class="btn-back-menu" id="backToMenuBtn">RETOUR MENU</button>
+
+            <button class="nav-arrow-btn" id="navRightBtn">
+                <span id="navRightText">Vers Documents</span> <span class="nav-arrow-icon">&rarr;</span>
+            </button>
+        </div>
+    </section>
 
     <!-- Modal lecteur vidéo Démo Reel -->
     <div class="video-modal-overlay" id="videoModal">
@@ -525,7 +868,7 @@
             <div class="char-header">
                 <div class="char-title-box">
                     <h2>SAMUEL GUEGANT</h2>
-                    <span>Âge: #27 ans // GAME DESIGNER & PROTOTYPER</span>
+                    <span>Âge: 27 ans // GAME DESIGNER & PROTOTYPER</span>
                 </div>
                 <div class="char-class-badge">GAME DESIGNER</div>
             </div>
@@ -603,9 +946,18 @@
         </div>
     </div>
 
+    <!-- MODAL DETAIL D'UN PROJET -->
+    <div class="project-modal" id="projectModal">
+        <div class="project-modal-container">
+            <button class="close-btn" id="closeProjectModalBtn">FERMER [X]</button>
+            <h2 id="modalProjectTitle">Titre du Projet</h2>
+            <p id="modalProjectDesc">Description détaillée du projet...</p>
+        </div>
+    </div>
+
     <script>
         // -------------------------------------------------------------------------
-        // GESTION DU CURSEUR SUIVEUR
+        // 1. GESTION DU CURSEUR SUIVEUR & CANVAS PARTICULES
         // -------------------------------------------------------------------------
         const customCursor = document.getElementById('customCursor');
 
@@ -626,9 +978,6 @@
         window.addEventListener('resize', resize);
         resize();
 
-        // -------------------------------------------------------------------------
-        // 1. PARTICULES DE FOND VIOLETTES / LUMINEUSES
-        // -------------------------------------------------------------------------
         const bgParticles = [];
         const BG_PARTICLE_COUNT = 45;
 
@@ -672,7 +1021,213 @@
         }
 
         // -------------------------------------------------------------------------
-        // 2. ANIMATION TITRE & THANOS DUST
+        // 2. DONNÉES DES PROJETS PAR DOMAINE
+        // -------------------------------------------------------------------------
+        const domainsData = {
+            'level_design': {
+                title: 'LEVEL DESIGN',
+                leftNav: { domain: 'documents', label: 'Vers Documents' },
+                rightNav: { domain: 'gd_prog', label: 'Vers GD & Prog' },
+                projects: [
+                    { title: 'Infiltration Map', tag: 'UE5 Blockout', desc: 'Conception d’une carte d’infiltration 3D sur Unreal Engine 5 axée sur la verticalité et le choke points design.' },
+                    { title: 'Boss Arena LD', tag: 'Combat Flow', desc: 'Design d’une arène de boss dynamique avec éléments destructibles et phases environnementales.' },
+                    { title: 'Dungeon Crawler', tag: 'Pacing & Flow', desc: 'Niveau d’exploration sous-terraine axé sur l’apprentissage progressif des mécaniques de puzzle.' },
+                    { title: 'Cyberpunk Hub', tag: 'Environmental Storytelling', desc: 'Création d’un quartier urbain futuriste riche en détails narratifs passifs et indices visuels.' }
+                ]
+            },
+            'gd_prog': {
+                title: 'GD & PROG',
+                leftNav: { domain: 'level_design', label: 'Vers Level Design' },
+                rightNav: { domain: 'documents', label: 'Vers Documents' },
+                projects: [
+                    { title: 'Echoes of Above', tag: 'Gameplay System', desc: 'Prototypage complet des mécaniques de combat, d’inventaire et du comportement de l’IA en C# / Unity.' },
+                    { title: 'RPG Maker Plugin', tag: 'JS Architecture', desc: 'Développement d’un plugin personnalisé sous JS pour refondre le système de combat et d’économie.' },
+                    { title: 'Tactical System', tag: 'Grid & Balancing', desc: 'Système de jeu tactique au tour par tour incluant algorithme de pathfinding A* et gestion de portée.' },
+                    { title: 'Skill Tree Tool', tag: 'UI & Data Design', desc: 'Outil dynamique d’arbre de compétences lisant directement des données configurées sous Google Sheets.' }
+                ]
+            },
+            'documents': {
+                title: 'DOCUMENTS',
+                leftNav: { domain: 'gd_prog', label: 'Vers GD & Prog' },
+                rightNav: { domain: 'level_design', label: 'Vers Level Design' },
+                projects: [
+                    { title: 'GDD Complete', tag: 'Design Doc', desc: 'Document de game design synthétique de 40 pages détaillant mécaniques, loop et directions artistiques.' },
+                    { title: 'System Analysis', tag: 'UX & Balancing', desc: 'Analyse approfondie des boucles d’engagement et d’équilibrage économique sur des titres phares.' },
+                    { title: 'Level Design Pitch', tag: 'Worldbuilding', desc: 'Dossier de pitch créatif et moodboards pour un projet de jeu d’aventure narratif.' },
+                    { title: 'Data Sheets', tag: 'Game Economy', desc: 'Tableau d’équilibrage complet sous Excel/Google Sheets simulant les courbes de progression du joueur.' }
+                ]
+            }
+        };
+
+        let currentDomainKey = 'gd_prog';
+
+        // -------------------------------------------------------------------------
+        // 3. LOGIQUE D'AFFICHAGE DU CORRIDOR & NAVIGATION
+        // -------------------------------------------------------------------------
+        const domainTitle = document.getElementById('domainTitle');
+        const projectsGrid = document.getElementById('projectsGrid');
+        const navLeftBtn = document.getElementById('navLeftBtn');
+        const navRightBtn = document.getElementById('navRightBtn');
+        const navLeftText = document.getElementById('navLeftText');
+        const navRightText = document.getElementById('navRightText');
+
+        function updateDomainView(key) {
+            currentDomainKey = key;
+            const data = domainsData[key];
+
+            // Animation de fondu des bulles
+            projectsGrid.style.opacity = 0;
+            projectsGrid.style.transform = 'scale(0.85)';
+
+            setTimeout(() => {
+                domainTitle.innerText = data.title;
+                navLeftText.innerText = data.leftNav.label;
+                navRightText.innerText = data.rightNav.label;
+
+                // Mise à jour des 4 bulles
+                for (let i = 0; i < 4; i++) {
+                    const proj = data.projects[i];
+                    document.getElementById(`b${i+1}-title`).innerText = proj.title;
+                    document.getElementById(`b${i+1}-tag`).innerText = proj.tag;
+
+                    // Attribuer l'événement de clic pour le modal projet
+                    const bubbleEl = document.getElementById(`bubble${i+1}`);
+                    bubbleEl.onclick = () => openProjectModal(proj);
+                }
+
+                projectsGrid.style.opacity = 1;
+                projectsGrid.style.transform = 'scale(1)';
+            }, 250);
+        }
+
+        navLeftBtn.addEventListener('click', () => {
+            const nextKey = domainsData[currentDomainKey].leftNav.domain;
+            updateDomainView(nextKey);
+        });
+
+        navRightBtn.addEventListener('click', () => {
+            const nextKey = domainsData[currentDomainKey].rightNav.domain;
+            updateDomainView(nextKey);
+        });
+
+        // -------------------------------------------------------------------------
+        // 4. TRANSITIONS RIDEAUX CYBER & OUVERTURE DU HUB
+        // -------------------------------------------------------------------------
+        const projetsBtn = document.getElementById('projetsBtn');
+        const curtainContainer = document.getElementById('curtainContainer');
+        const projectsHub = document.getElementById('projectsHub');
+        const mainMenu = document.getElementById('mainMenu');
+        const backToMenuBtn = document.getElementById('backToMenuBtn');
+
+        projetsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Fermer les rideaux
+            curtainContainer.classList.remove('open');
+            curtainContainer.classList.add('closed');
+
+            setTimeout(() => {
+                // Cacher menu & titre principal, ouvrir le Hub
+                mainMenu.style.opacity = 0;
+                titleContainer.style.opacity = 0;
+                mainMenu.style.pointerEvents = 'none';
+                titleContainer.style.pointerEvents = 'none';
+
+                projectsHub.classList.add('active');
+                updateDomainView('gd_prog');
+
+                // Rouvrir les rideaux sur la nouvelle scène
+                curtainContainer.classList.remove('closed');
+                curtainContainer.classList.add('open');
+            }, 700);
+        });
+
+        backToMenuBtn.addEventListener('click', () => {
+            curtainContainer.classList.remove('open');
+            curtainContainer.classList.add('closed');
+
+            setTimeout(() => {
+                projectsHub.classList.remove('active');
+                mainMenu.style.opacity = 1;
+                titleContainer.style.opacity = 1;
+                mainMenu.style.pointerEvents = 'auto';
+                titleContainer.style.pointerEvents = 'auto';
+
+                curtainContainer.classList.remove('closed');
+                curtainContainer.classList.add('open');
+            }, 700);
+        });
+
+        // -------------------------------------------------------------------------
+        // 5. MODALS (DETAIL PROJET, DEMO REEL & ABOUT ME)
+        // -------------------------------------------------------------------------
+        const projectModal = document.getElementById('projectModal');
+        const modalProjectTitle = document.getElementById('modalProjectTitle');
+        const modalProjectDesc = document.getElementById('modalProjectDesc');
+        const closeProjectModalBtn = document.getElementById('closeProjectModalBtn');
+
+        function openProjectModal(proj) {
+            modalProjectTitle.innerText = proj.title;
+            modalProjectDesc.innerText = proj.desc;
+            projectModal.classList.add('active');
+        }
+
+        closeProjectModalBtn.addEventListener('click', () => {
+            projectModal.classList.remove('active');
+        });
+
+        // Demo Reel Youtube
+        const demoReelBtn = document.getElementById('demoReelBtn');
+        const videoModal = document.getElementById('videoModal');
+        const closeVideoBtn = document.getElementById('closeVideoBtn');
+        const youtubeIframe = document.getElementById('youtubeIframe');
+        const baseUrl = "https://www.youtube.com/embed/3UwbJ8Q1MwU";
+
+        demoReelBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            youtubeIframe.src = baseUrl + "?autoplay=1&enablejsapi=1";
+            videoModal.classList.add('active');
+        });
+
+        function closeVideo() {
+            videoModal.classList.remove('active');
+            youtubeIframe.src = baseUrl + "?enablejsapi=1";
+        }
+        closeVideoBtn.addEventListener('click', closeVideo);
+
+        // About Me / Char Sheet
+        const aboutBtn = document.getElementById('aboutBtn');
+        const charSheetModal = document.getElementById('charSheetModal');
+        const closeCharSheetBtn = document.getElementById('closeCharSheetBtn');
+
+        aboutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            charSheetModal.classList.add('active');
+        });
+        closeCharSheetBtn.addEventListener('click', () => {
+            charSheetModal.classList.remove('active');
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (videoModal.classList.contains('active')) closeVideo();
+                if (charSheetModal.classList.contains('active')) charSheetModal.classList.remove('active');
+                if (projectModal.classList.contains('active')) projectModal.classList.remove('active');
+            }
+        });
+
+        // Effet Slash au clic
+        window.addEventListener('mousedown', (e) => {
+            const slash = document.createElement('div');
+            slash.className = 'slash-effect';
+            slash.style.left = e.clientX + 'px';
+            slash.style.top = e.clientY + 'px';
+            document.body.appendChild(slash);
+
+            setTimeout(() => slash.remove(), 220);
+        });
+
+        // -------------------------------------------------------------------------
+        // 6. ANIMATION DE DISPARITION DU TITRE ET DUST
         // -------------------------------------------------------------------------
         let titleState = 'fade_in';
         let titleTimer = 0;
@@ -681,7 +1236,6 @@
 
         function spawnTitleDust(intensity) {
             const rect = titleContainer.getBoundingClientRect();
-            
             const rx = (Math.random() - 0.5) * (rect.width || 600);
             const ry = (Math.random() - 0.5) * (rect.height || 150);
 
@@ -717,135 +1271,32 @@
         }
 
         function updateTitleAnimation() {
-            titleTimer++;
+            if (projectsHub.classList.contains('active')) return;
 
+            titleTimer++;
             switch (titleState) {
                 case 'fade_in':
                     titleOpacity += 4;
-                    if (titleOpacity >= 255) {
-                        titleOpacity = 255;
-                        titleState = 'hold';
-                        titleTimer = 0;
-                    }
+                    if (titleOpacity >= 255) { titleOpacity = 255; titleState = 'hold'; titleTimer = 0; }
                     break;
-
                 case 'hold':
-                    if (titleTimer > 250) {
-                        if (Math.random() < 0.6) {
-                            spawnTitleDust(1);
-                        }
-                    }
-                    if (titleTimer >= 350) {
-                        titleState = 'disintegrate';
-                        titleTimer = 0;
-                    }
+                    if (titleTimer > 250 && Math.random() < 0.6) spawnTitleDust(1);
+                    if (titleTimer >= 350) { titleState = 'disintegrate'; titleTimer = 0; }
                     break;
-
                 case 'disintegrate':
                     titleOpacity -= 4;
-
-                    if (titleOpacity > 0) {
-                        for (let i = 0; i < 5; i++) {
-                            spawnTitleDust(2);
-                        }
-                    }
-
-                    if (titleOpacity <= 0) {
-                        titleOpacity = 0;
-                        titleState = 'wait';
-                        titleTimer = 0;
-                    }
+                    if (titleOpacity > 0) { for (let i = 0; i < 5; i++) spawnTitleDust(2); }
+                    if (titleOpacity <= 0) { titleOpacity = 0; titleState = 'wait'; titleTimer = 0; }
                     break;
-
                 case 'wait':
-                    if (titleTimer >= 150) {
-                        titleState = 'fade_in';
-                        titleTimer = 0;
-                    }
+                    if (titleTimer >= 150) { titleState = 'fade_in'; titleTimer = 0; }
                     break;
             }
-
             titleContainer.style.opacity = (titleOpacity / 255).toFixed(2);
             updateDustParticles();
         }
 
-        // -------------------------------------------------------------------------
-        // 3. MODAL YOUTUBE DEMO REEL
-        // -------------------------------------------------------------------------
-        const demoReelBtn = document.getElementById('demoReelBtn');
-        const videoModal = document.getElementById('videoModal');
-        const closeVideoBtn = document.getElementById('closeVideoBtn');
-        const youtubeIframe = document.getElementById('youtubeIframe');
-
-        const baseUrl = "https://www.youtube.com/embed/3UwbJ8Q1MwU";
-
-        demoReelBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            youtubeIframe.src = baseUrl + "?autoplay=1&enablejsapi=1";
-            videoModal.classList.add('active');
-        });
-
-        function closeVideo() {
-            videoModal.classList.remove('active');
-            youtubeIframe.src = baseUrl + "?enablejsapi=1";
-        }
-
-        closeVideoBtn.addEventListener('click', closeVideo);
-
-        videoModal.addEventListener('click', (e) => {
-            if (e.target === videoModal) {
-                closeVideo();
-            }
-        });
-
-        // -------------------------------------------------------------------------
-        // 4. MODAL FICHE DE PERSONNAGE (ABOUT ME)
-        // -------------------------------------------------------------------------
-        const aboutBtn = document.getElementById('aboutBtn');
-        const charSheetModal = document.getElementById('charSheetModal');
-        const closeCharSheetBtn = document.getElementById('closeCharSheetBtn');
-
-        aboutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            charSheetModal.classList.add('active');
-        });
-
-        function closeCharSheet() {
-            charSheetModal.classList.remove('active');
-        }
-
-        closeCharSheetBtn.addEventListener('click', closeCharSheet);
-
-        charSheetModal.addEventListener('click', (e) => {
-            if (e.target === charSheetModal) {
-                closeCharSheet();
-            }
-        });
-
-        // Touche Échap globale pour fermer les modales
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                if (videoModal.classList.contains('active')) closeVideo();
-                if (charSheetModal.classList.contains('active')) closeCharSheet();
-            }
-        });
-
-        // -------------------------------------------------------------------------
-        // 5. SLASH AU CLIC SOURIS
-        // -------------------------------------------------------------------------
-        window.addEventListener('mousedown', (e) => {
-            const slash = document.createElement('div');
-            slash.className = 'slash-effect';
-            slash.style.left = e.clientX + 'px';
-            slash.style.top = e.clientY + 'px';
-            document.body.appendChild(slash);
-
-            setTimeout(() => slash.remove(), 220);
-        });
-
-        // -------------------------------------------------------------------------
-        // 6. BOUCLE PRINCIPALE
-        // -------------------------------------------------------------------------
+        // Boucle d'animation principale
         let frameCount = 0;
         function loop() {
             frameCount++;
