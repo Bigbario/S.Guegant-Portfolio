@@ -11,6 +11,8 @@
             padding: 0;
             box-sizing: border-box;
             user-select: none;
+            /* Masque le curseur par défaut partout pour utiliser notre curseur JS */
+            cursor: none !important;
         }
 
         body {
@@ -25,14 +27,37 @@
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
-            
-            /* Curseur personnalisé basé sur ton dossier GitHub */
-            cursor: url('images/MouseIcon.png'), auto;
         }
 
-        /* Application du curseur sur tous les éléments interactifs */
-        a, button, .menu-btn {
-            cursor: url('images/MouseIcon.png'), pointer !important;
+        /* --- CURSEUR JS PERSONNALISÉ AVEC ANIMATION IDLE --- */
+        #customCursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 48px;
+            height: 48px;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%); /* Centre le sprite sous le pointeur */
+            transition: transform 0.05s ease-out; /* Suivi fluide */
+        }
+
+        #customCursor img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            image-rendering: pixelated; /* Préserve le pixel art net */
+            animation: idleBobbing 1.8s ease-in-out infinite;
+        }
+
+        /* Animation Idle : effet de flottement / respiration */
+        @keyframes idleBobbing {
+            0%, 100% {
+                transform: translateY(0px) scale(1, 1);
+            }
+            50% {
+                transform: translateY(-6px) scale(1.05, 0.95);
+            }
         }
 
         /* Canvas pour les particules et la poussière du Titre */
@@ -106,7 +131,7 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(212, 136, 0, 0.6);
         }
 
-        /* Slash d'épée au clic */
+        /* Slash d'épée / Magie au clic */
         .slash-effect {
             position: fixed;
             pointer-events: none;
@@ -137,6 +162,11 @@
 </head>
 <body>
 
+    <!-- Élément du curseur animé -->
+    <div id="customCursor">
+        <img src="images/MouseIcon.png" alt="Cursor">
+    </div>
+
     <canvas id="effectsCanvas"></canvas>
 
     <div class="title-container" id="titleContainer">
@@ -151,6 +181,16 @@
     </nav>
 
     <script>
+        // -------------------------------------------------------------------------
+        // GESTION DU CURSEUR SUIVEUR + IDLE
+        // -------------------------------------------------------------------------
+        const customCursor = document.getElementById('customCursor');
+
+        window.addEventListener('mousemove', (e) => {
+            customCursor.style.left = e.clientX + 'px';
+            customCursor.style.top = e.clientY + 'px';
+        });
+
         const canvas = document.getElementById('effectsCanvas');
         const ctx = canvas.getContext('2d');
         const titleContainer = document.getElementById('titleContainer');
