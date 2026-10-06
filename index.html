@@ -27,12 +27,12 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Espace le titre vers le haut et le menu vers le bas */
+            justify-content: space-between;
             align-items: center;
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
-            padding: 60px 0;
+            padding: 40px 0 60px 0;
         }
 
         /* --- CURSEUR SPRITESHEET ANIMÉ --- */
@@ -51,7 +51,7 @@
             background-repeat: no-repeat;
             image-rendering: pixelated;
 
-            /* Ralenti à 1.2s pour une animation plus douce */
+            /* Idle ralenti à 1.2s */
             animation: walkCycle 1.2s steps(3) infinite;
         }
 
@@ -75,17 +75,17 @@
             z-index: 1;
         }
 
-        /* --- TITRE : Plus grand et remonté --- */
+        /* --- TITRE : Plus grand et placé tout en haut --- */
         .title-container {
             text-align: center;
             position: relative;
             z-index: 5;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .main-title {
             font-family: 'Pacifico', cursive;
-            font-size: 6.2rem; /* Plus grand */
+            font-size: 6rem;
             color: #ffffff;
             margin-bottom: -15px;
             text-shadow: 0 0 20px rgba(180, 50, 255, 0.6), 0 4px 15px rgba(0,0,0,0.8);
@@ -93,12 +93,12 @@
 
         .subtitle {
             font-family: 'Pacifico', cursive;
-            font-size: 3.5rem;
+            font-size: 3.4rem;
             color: #d488ff;
             text-shadow: 0 0 15px rgba(180, 50, 255, 0.8), 0 4px 15px rgba(0,0,0,0.8);
         }
 
-        /* --- MENU STYLE HUD GAME UI : Placés plus bas --- */
+        /* --- MENU STYLE HUD GAME UI : Placés bien bas --- */
         .game-menu {
             display: flex;
             flex-direction: column;
@@ -121,7 +121,7 @@
             text-align: center;
             box-shadow: 0 0 12px rgba(160, 30, 255, 0.3), inset 0 0 10px rgba(180, 50, 255, 0.2);
             transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
-            clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); /* Forme biseautée HUD */
+            clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
         }
 
         .btn-projets {
