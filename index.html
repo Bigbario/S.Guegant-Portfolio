@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Samuel Guegant Adventures</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@700;900&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,17 +15,24 @@
         }
 
         body {
-            background-color: #174044;
+            /* Fond HUD Sci-Fi / Fantasy Néon Violet */
+            background-color: #0b021a;
+            background-image: 
+                radial-gradient(circle at center, rgba(140, 30, 255, 0.25) 0%, rgba(10, 2, 25, 0.95) 75%),
+                linear-gradient(to right, rgba(180, 50, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(180, 50, 255, 0.08) 1px, transparent 1px);
+            background-size: 100% 100%, 45px 45px, 45px 45px;
             height: 100vh;
             width: 100vw;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between; /* Espace le titre vers le haut et le menu vers le bas */
             align-items: center;
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
+            padding: 60px 0;
         }
 
         /* --- CURSEUR SPRITESHEET ANIMÉ --- */
@@ -33,20 +40,19 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 48px;  /* Taille du mage à l'écran */
+            width: 48px;
             height: 48px;
             pointer-events: none;
             z-index: 10000;
             transform: translate(-50%, -50%);
 
-            /* Nom exact du fichier sur ton GitHub */
             background-image: url('images/MouseIconIdle.png');
             background-size: 300% 100%;
             background-repeat: no-repeat;
             image-rendering: pixelated;
 
-            /* Animation 3 steps */
-            animation: walkCycle 0.6s steps(3) infinite;
+            /* Ralenti à 1.2s pour une animation plus douce */
+            animation: walkCycle 1.2s steps(3) infinite;
         }
 
         @keyframes walkCycle {
@@ -54,11 +60,11 @@
                 background-position: 0% 0%;
             }
             100% {
-                background-position: 200% 0%; /* Aligne parfaitement les 3 frames */
+                background-position: 200% 0%;
             }
         }
 
-        /* Canvas pour particules et Thanos dust */
+        /* Canvas pour particules */
         #effectsCanvas {
             position: absolute;
             top: 0;
@@ -66,70 +72,83 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 10;
+            z-index: 1;
         }
 
-        /* Conteneur du Titre */
+        /* --- TITRE : Plus grand et remonté --- */
         .title-container {
             text-align: center;
             position: relative;
             z-index: 5;
-            margin-bottom: 50px;
-            min-height: 150px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            margin-top: 20px;
         }
 
         .main-title {
             font-family: 'Pacifico', cursive;
-            font-size: 4.8rem;
+            font-size: 6.2rem; /* Plus grand */
             color: #ffffff;
-            margin-bottom: -10px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            margin-bottom: -15px;
+            text-shadow: 0 0 20px rgba(180, 50, 255, 0.6), 0 4px 15px rgba(0,0,0,0.8);
         }
 
         .subtitle {
             font-family: 'Pacifico', cursive;
-            font-size: 2.8rem;
-            color: #ffffff;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            font-size: 3.5rem;
+            color: #d488ff;
+            text-shadow: 0 0 15px rgba(180, 50, 255, 0.8), 0 4px 15px rgba(0,0,0,0.8);
         }
 
-        /* Menu style Title Screen */
+        /* --- MENU STYLE HUD GAME UI : Placés plus bas --- */
         .game-menu {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
             z-index: 5;
+            margin-bottom: 20px;
         }
 
         .menu-btn {
-            background: none;
-            border: none;
+            background: linear-gradient(135deg, rgba(120, 20, 180, 0.4), rgba(40, 5, 60, 0.7));
+            border: 1.5px solid rgba(190, 80, 255, 0.6);
+            border-radius: 6px;
             color: #ffffff;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            letter-spacing: 2px;
+            font-family: 'Orbitron', 'Montserrat', sans-serif;
+            font-weight: 700;
+            letter-spacing: 3px;
             text-transform: uppercase;
             text-decoration: none;
-            opacity: 0.7;
-            transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease, text-shadow 0.25s ease;
+            text-align: center;
+            box-shadow: 0 0 12px rgba(160, 30, 255, 0.3), inset 0 0 10px rgba(180, 50, 255, 0.2);
+            transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+            clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%); /* Forme biseautée HUD */
         }
 
-        .btn-projets { font-size: 2.2rem; }
-        .btn-demo { font-size: 1.6rem; }
-        .btn-about { font-size: 1.2rem; }
+        .btn-projets {
+            font-size: 1.8rem;
+            padding: 14px 60px;
+        }
+
+        .btn-demo {
+            font-size: 1.4rem;
+            padding: 12px 50px;
+        }
+
+        .btn-about {
+            font-size: 1.1rem;
+            padding: 10px 40px;
+        }
 
         .menu-btn:hover {
-            opacity: 1;
-            transform: scale(1.18);
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(212, 136, 0, 0.6);
+            background: linear-gradient(135deg, rgba(170, 40, 255, 0.7), rgba(80, 10, 120, 0.9));
+            border-color: #ffffff;
+            color: #ffffff;
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 0 25px rgba(200, 80, 255, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
         }
 
-        /* Slash d'épée / Magie au clic */
+        /* Slash / Magie au clic */
         .slash-effect {
             position: fixed;
             pointer-events: none;
@@ -138,7 +157,7 @@
             height: 70px;
             border-radius: 50%;
             border: 4px solid #ffffff;
-            border-top-color: #ffd700;
+            border-top-color: #d488ff;
             border-right-color: transparent;
             transform: translate(-50%, -50%) rotate(-45deg) scale(0.2);
             animation: slashAnim 0.22s ease-out forwards;
@@ -148,7 +167,7 @@
             0% {
                 opacity: 1;
                 transform: translate(-50%, -50%) rotate(-45deg) scale(0.3);
-                box-shadow: 0 0 15px #ffd700;
+                box-shadow: 0 0 15px #d488ff;
             }
             100% {
                 opacity: 0;
@@ -160,16 +179,18 @@
 </head>
 <body>
 
-    <!-- Curseur suiveur géré en background-image -->
+    <!-- Curseur suiveur -->
     <div id="customCursor"></div>
 
     <canvas id="effectsCanvas"></canvas>
 
+    <!-- Titre haut -->
     <div class="title-container" id="titleContainer">
         <h1 class="main-title">Samuel Guegant</h1>
         <h2 class="subtitle">Adventures</h2>
     </div>
 
+    <!-- Menu bas style HUD -->
     <nav class="game-menu">
         <a href="#projets" class="menu-btn btn-projets">PROJETS</a>
         <a href="#demoreel" class="menu-btn btn-demo">DEMO REEL</a>
@@ -200,10 +221,10 @@
         resize();
 
         // -------------------------------------------------------------------------
-        // 1. PARTICULES DE FOND AMBIANTES
+        // 1. PARTICULES DE FOND VIOLETTES / LUMINEUSES
         // -------------------------------------------------------------------------
         const bgParticles = [];
-        const BG_PARTICLE_COUNT = 35;
+        const BG_PARTICLE_COUNT = 40;
 
         for (let i = 0; i < BG_PARTICLE_COUNT; i++) {
             bgParticles.push({
@@ -214,7 +235,7 @@
                 opacity: Math.random() * 0.7 + 0.2,
                 baseOpacity: Math.random() * 0.7 + 0.2,
                 pulseSpeed: 0.01 + Math.random() * 0.02,
-                size: Math.random() * 4 + 2
+                size: Math.random() * 3 + 1.5
             });
         }
 
@@ -233,8 +254,8 @@
                 ctx.globalAlpha = Math.max(0, p.opacity);
                 
                 const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-                grad.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-                grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                grad.addColorStop(0, 'rgba(220, 160, 255, 0.9)');
+                grad.addColorStop(1, 'rgba(140, 30, 255, 0)');
                 
                 ctx.fillStyle = grad;
                 ctx.beginPath();
@@ -279,7 +300,7 @@
 
                 ctx.save();
                 ctx.globalAlpha = Math.max(0, p.opacity / 255);
-                ctx.fillStyle = 'rgba(255, 215, 0, 0.85)';
+                ctx.fillStyle = 'rgba(212, 136, 255, 0.85)';
                 ctx.fillRect(p.x, p.y, p.size, p.size);
                 ctx.restore();
 
