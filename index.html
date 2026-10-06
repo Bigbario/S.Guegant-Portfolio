@@ -11,7 +11,6 @@
             padding: 0;
             box-sizing: border-box;
             user-select: none;
-            /* Masque le curseur par défaut partout pour utiliser notre curseur JS */
             cursor: none !important;
         }
 
@@ -29,38 +28,38 @@
             position: relative;
         }
 
-        /* --- CURSEUR JS PERSONNALISÉ AVEC ANIMATION IDLE --- */
+        /* --- CURSEUR SPRITESHEET ANIMÉ --- */
         #customCursor {
             position: fixed;
             top: 0;
             left: 0;
-            width: 48px;
-            height: 48px;
+            width: 48px;  /* Largeur d'une seule frame à l'écran */
+            height: 48px; /* Hauteur à l'écran */
             pointer-events: none;
             z-index: 10000;
-            transform: translate(-50%, -50%); /* Centre le sprite sous le pointeur */
-            transition: transform 0.05s ease-out; /* Suivi fluide */
+            transform: translate(-50%, -50%);
+            transition: transform 0.04s linear;
+
+            /* Spritesheet : 3 frames alignées horizontalement */
+            background-image: url('images/MouseIconIdle.png');
+            background-size: 300% 100%; /* 300% car il y a 3 frames */
+            background-repeat: no-repeat;
+            image-rendering: pixelated;
+
+            /* Cycle à 3 étapes pour défiler entre les 3 frames */
+            animation: walkCycle 0.6s steps(3) infinite;
         }
 
-        #customCursor img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            image-rendering: pixelated; /* Préserve le pixel art net */
-            animation: idleBobbing 1.8s ease-in-out infinite;
-        }
-
-        /* Animation Idle : effet de flottement / respiration */
-        @keyframes idleBobbing {
-            0%, 100% {
-                transform: translateY(0px) scale(1, 1);
+        @keyframes walkCycle {
+            0% {
+                background-position: 0% 0%;
             }
-            50% {
-                transform: translateY(-6px) scale(1.05, 0.95);
+            100% {
+                background-position: 150% 0%; /* Fait défiler les 3 frames */
             }
         }
 
-        /* Canvas pour les particules et la poussière du Titre */
+        /* Canvas pour particules et Thanos dust */
         #effectsCanvas {
             position: absolute;
             top: 0;
@@ -162,10 +161,8 @@
 </head>
 <body>
 
-    <!-- Élément du curseur animé -->
-    <div id="customCursor">
-        <img src="images/MouseIcon.png" alt="Cursor">
-    </div>
+    <!-- Curseur suiveur géré en background-image -->
+    <div id="customCursor"></div>
 
     <canvas id="effectsCanvas"></canvas>
 
@@ -182,7 +179,7 @@
 
     <script>
         // -------------------------------------------------------------------------
-        // GESTION DU CURSEUR SUIVEUR + IDLE
+        // GESTION DU CURSEUR SUIVEUR
         // -------------------------------------------------------------------------
         const customCursor = document.getElementById('customCursor');
 
