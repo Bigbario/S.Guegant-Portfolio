@@ -107,37 +107,32 @@
 				padding-top: 0 !important;
 			}
 
-			/* Section Demo Reel (Taille intermédiaire) */
+			/* Section Demo Reel (Pleine largeur sans bandes) */
 			.demo-reel-section {
 				width: 100%;
 				background: #111827;
-				padding: 50px 20px 60px 20px;
+				padding: 40px 0 50px 0;
 				text-align: center;
 			}
 			.demo-reel-section h1 {
 				color: #ffffff;
 				font-size: 2.4rem;
 				font-weight: 800;
-				margin-bottom: 30px;
+				margin-bottom: 25px;
 				text-transform: none;
 				letter-spacing: 1px;
 			}
 			.hero-video-container {
-				max-width: 1100px;
-				width: 90%;
+				width: 100%;
+				max-width: 100%;
 				margin: 0 auto;
 				position: relative;
-				padding-bottom: 50.625%; /* Ratio 16:9 ajusté */
-				height: 0;
+				aspect-ratio: 16 / 9;
 				background: #000;
-				border-radius: 12px;
 				overflow: hidden;
 				box-shadow: 0 15px 35px rgba(0,0,0,0.6);
 			}
 			.hero-video-container iframe {
-				position: absolute;
-				top: 0;
-				left: 0;
 				width: 100%;
 				height: 100%;
 				border: 0;
@@ -403,6 +398,8 @@
 					Contact Me
 				</div>
 				<form class="modal-form" action="https://formsubmit.co/samgueg@gmx.fr" method="POST">
+					<!-- Redirection exacte vers ton site GitHub Pages après envoi -->
+					<input type="hidden" name="_next" value="https://bigbario.github.io/S.Guegant-Portfolio/">
 					<input type="hidden" name="_captcha" value="false">
 
 					<label for="modal-name">Your Name</label>
