@@ -26,19 +26,16 @@
             color: #ffffff;
             position: relative;
             
-            /* --- CURSEUR PERSONNALISÉ VIA GITHUB ---
-               Remplace 'assets/images/cursor.png' par le chemin exact sur ton GitHub 
-               Exemple : url('images/sprite-perso.png'), auto;
-            */
-            cursor: url('assets/images/cursor.png'), auto;
+            /* Curseur personnalisé basé sur ton dossier GitHub */
+            cursor: url('images/MouseIcon.png'), auto;
         }
 
-        /* Les liens et boutons conservent aussi ton curseur personnalisé */
-        a, button {
-            cursor: url('assets/images/cursor.png'), pointer !important;
+        /* Application du curseur sur tous les éléments interactifs */
+        a, button, .menu-btn {
+            cursor: url('images/MouseIcon.png'), pointer !important;
         }
 
-        /* Canvas unique pour particules et Thanos dust */
+        /* Canvas pour les particules et la poussière du Titre */
         #effectsCanvas {
             position: absolute;
             top: 0;
@@ -222,7 +219,6 @@
         function spawnTitleDust(intensity) {
             const rect = titleContainer.getBoundingClientRect();
             
-            // Calcul position relative au titre
             const rx = (Math.random() - 0.5) * (rect.width || 400);
             const ry = (Math.random() - 0.5) * (rect.height || 100);
 
