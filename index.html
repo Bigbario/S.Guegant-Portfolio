@@ -10,7 +10,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none; /* Masque le curseur par défaut de l'OS */
         }
 
         body {
@@ -30,21 +29,27 @@
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
+            cursor: default;
         }
 
-        /* --- CURSEUR PERSONNAGE IDLE --- */
+        button, a, .project-bubble {
+            cursor: pointer;
+        }
+
+        /* --- CURSEUR PERSONNAGE --- */
         #custom-cursor {
             position: fixed;
             top: 0;
             left: 0;
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             background-image: url('assets/cursors/character-idle.gif');
             background-size: contain;
             background-repeat: no-repeat;
             pointer-events: none;
             z-index: 999999;
             transform: translate(-50%, -50%);
+            display: block;
         }
 
         /* Canvas pour particules */
@@ -182,7 +187,6 @@
             pointer-events: auto;
         }
 
-        /* FOND D'ÉCRAN APERÇU SURVOL BULLE */
         .stage-bg-preview {
             position: absolute;
             top: 0;
@@ -192,8 +196,8 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            filter: blur(4px) brightness(0.35);
-            transition: opacity 0.5s ease-in-out;
+            filter: blur(5px) brightness(0.3);
+            transition: opacity 0.4s ease-in-out;
             z-index: 1;
             pointer-events: none;
         }
@@ -250,11 +254,6 @@
             z-index: 5;
         }
 
-        /* SUPPRESSION BORDURES/PAROIS DIAGONALES */
-        .cone-wall-left, .cone-wall-right {
-            display: none !important;
-        }
-
         .projects-grid {
             position: relative;
             z-index: 5;
@@ -305,11 +304,11 @@
             position: relative;
             z-index: 2;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
             text-align: center;
             padding: 6px 10px;
-            background: rgba(10, 2, 25, 0.85);
+            background: rgba(10, 2, 25, 0.88);
             border-radius: 12px;
             border: 1px solid rgba(0, 240, 255, 0.5);
             text-shadow: 0 0 8px #00f0ff;
@@ -382,7 +381,7 @@
 
         .video-container {
             width: 88vw;
-            max-width: 1500px;
+            max-width: 1400px;
             aspect-ratio: 16 / 9;
             background: #000;
             border: 3px solid rgba(190, 80, 255, 0.9);
@@ -537,12 +536,12 @@
         .bio-text p { margin-bottom: 10px; }
         .bio-text strong { color: #00f0ff; }
 
-        /* --- MODALE DETAIL PROJET --- */
+        /* --- MODALE DETAIL PROJET & TAILLE D'IMAGES CORRIGÉE --- */
         .project-modal-container {
-            width: 92vw;
-            max-width: 1300px;
-            max-height: 88vh;
-            background: rgba(18, 5, 35, 0.95);
+            width: 90vw;
+            max-width: 1200px;
+            max-height: 85vh;
+            background: rgba(18, 5, 35, 0.96);
             border: 2px solid rgba(0, 240, 255, 0.8);
             border-radius: 16px;
             box-shadow: 0 0 50px rgba(0, 240, 255, 0.3);
@@ -618,19 +617,26 @@
             gap: 10px;
         }
 
+        /* FIXE TAILLE MAX DES IMAGES */
         .gallery-media {
             width: 100%;
+            height: 220px;
+            max-height: 220px;
             border-radius: 6px;
             overflow: hidden;
             border: 1px solid rgba(0, 240, 255, 0.4);
-            max-height: 250px;
             background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .gallery-media img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
             display: block;
         }
 
@@ -663,7 +669,7 @@
 </head>
 <body>
 
-    <!-- Curseur Personnage Animé (Idle) -->
+    <!-- Curseur Personnage Animé -->
     <div id="custom-cursor"></div>
 
     <canvas id="effectsCanvas"></canvas>
@@ -804,7 +810,6 @@
             <h2 id="modalProjectTitle" style="font-family:'Orbitron'; color:#00f0ff; font-size:2.2rem; border-bottom: 2px solid rgba(0,240,255,0.4); padding-bottom:10px;">PROJET</h2>
             
             <div class="project-detail-layout">
-                <!-- COLONNE GAUCHE : INFOS & DESCRIPTIONS -->
                 <div class="project-info-col">
                     <h3>Compétences Clés & Rôles</h3>
                     <div class="project-skills-list" id="modalProjectSkills"></div>
@@ -813,7 +818,6 @@
                     <div class="project-overview" id="modalProjectDesc"></div>
                 </div>
 
-                <!-- COLONNE DROITE : GALERIE D'IMAGES / MÉDIAS -->
                 <div class="project-gallery-col">
                     <h3 style="font-family:'Orbitron'; color:#00f0ff; font-size:1.1rem; text-transform:uppercase;">Galerie & Aperçus</h3>
                     <div id="modalProjectGallery" style="display:flex; flex-direction:column; gap:15px;"></div>
@@ -823,7 +827,7 @@
     </div>
 
     <script>
-        // --- SUIVI DU CURSEUR PERSONNAGE IDLE ---
+        // SUIVI DU CURSEUR
         const customCursor = document.getElementById('custom-cursor');
         if (customCursor) {
             window.addEventListener('mousemove', (e) => {
@@ -878,7 +882,7 @@
             }
         }
 
-        // ANIMATION TITRE / THANOS DUST
+        // ANIMATION TITRE
         const titleContainer = document.getElementById('titleContainer');
         let titleState = 'fade_in';
         let titleTimer = 0;
@@ -931,7 +935,7 @@
             }
         }
 
-        // DONNÉES ET GESTION DES PROJETS AVEC MAPPING D'IMAGES DE FOND
+        // DATA PROJETS
         const domains = [
             {
                 id: 'level_design',
@@ -1096,7 +1100,6 @@
             prevDomainLabel.textContent = `Vers ${domains[prevIndex].title}`;
             nextDomainLabel.textContent = `Vers ${domains[nextIndex].title}`;
 
-            // Réinitialisation fond survol
             stageBgPreview.classList.remove('active');
 
             projectsGrid.style.opacity = 0;
@@ -1107,7 +1110,6 @@
                     bubble.className = 'project-bubble';
                     bubble.innerHTML = `<img src="${p.img}" alt="${p.title}" onerror="this.src='https://via.placeholder.com/170/1a0033/00f0ff?text=${encodeURIComponent(p.title)}'"><div class="bubble-title">${p.title}</div>`;
                     
-                    // Événements survol pour le changement de fond dynamique
                     bubble.addEventListener('mouseenter', () => {
                         const bgToApply = p.bgImg || p.img;
                         if (bgToApply) {
@@ -1119,7 +1121,6 @@
                         stageBgPreview.classList.remove('active');
                     });
 
-                    // Clic détail
                     bubble.addEventListener('click', () => openProjectDetail(p));
                     projectsGrid.appendChild(bubble);
                 });
@@ -1127,7 +1128,6 @@
             }, 200);
         }
 
-        // TRANSITIONS RIDEAUX ET MASQUAGE DU MENU
         openProjectsBtn.addEventListener('click', () => {
             document.body.classList.add('curtains-closed');
             setTimeout(() => {
@@ -1185,7 +1185,6 @@
         function closeCharSheet() { charSheetModal.classList.remove('active'); }
         closeCharSheetBtn.addEventListener('click', closeCharSheet);
 
-        // MODALE DETAIL PROJET
         const projectDetailModal = document.getElementById('projectDetailModal');
         const closeProjectDetailBtn = document.getElementById('closeProjectDetailBtn');
         const modalProjectTitle = document.getElementById('modalProjectTitle');
