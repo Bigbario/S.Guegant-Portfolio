@@ -27,12 +27,11 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
-            padding: 3vh 0;
         }
 
         /* --- CURSEUR SPRITESHEET ANIMÉ --- */
@@ -68,46 +67,44 @@
             z-index: 1;
         }
 
-        /* --- TITRE CORRIGÉ --- */
+        /* --- TITRE REPLACÉ ET AGRANDI --- */
         .title-container {
             text-align: center;
             position: relative;
             z-index: 5;
             margin-top: 2vh;
+            margin-bottom: 5vh;
             width: 100vw;
             white-space: nowrap;
         }
 
         .main-title {
             font-family: 'Pacifico', cursive;
-            font-size: 4.8rem;
+            font-size: 6rem;
             color: #ffffff;
-            margin-bottom: -5px;
-            text-shadow: 0 0 25px rgba(180, 50, 255, 0.7), 0 5px 20px rgba(0,0,0,0.9);
+            margin-bottom: -10px;
+            text-shadow: 0 0 30px rgba(180, 50, 255, 0.8), 0 5px 25px rgba(0,0,0,0.9);
             line-height: 1.1;
         }
 
         .subtitle {
             font-family: 'Pacifico', cursive;
-            font-size: 2.8rem;
+            font-size: 3.6rem;
             color: #d488ff;
-            text-shadow: 0 0 20px rgba(180, 50, 255, 0.9), 0 4px 15px rgba(0,0,0,0.8);
+            text-shadow: 0 0 25px rgba(180, 50, 255, 0.9), 0 4px 18px rgba(0,0,0,0.8);
         }
 
-        /* --- MENU HUD RECENTRÉ EN BAS SANS CHEVAUCHEMENT --- */
+        /* --- MENU HUD REMONTÉ ET ÉLARGIE (Photo 2) --- */
         .game-menu {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 22px;
             z-index: 5;
-            width: 100%;
-            max-width: 650px;
-            position: absolute;
-            bottom: 6vh;
-            left: 50%;
-            transform: translateX(-50%);
+            width: 90%;
+            max-width: 750px;
+            margin-bottom: 4vh;
         }
 
         .menu-btn {
@@ -124,23 +121,23 @@
             box-shadow: 0 0 20px rgba(160, 30, 255, 0.35), inset 0 0 15px rgba(180, 50, 255, 0.25);
             transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
             clip-path: polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
-            width: 80%;
+            width: 100%;
             display: block;
         }
 
         .btn-projets {
-            font-size: 2.2rem;
-            padding: 16px 0;
+            font-size: 2.5rem;
+            padding: 20px 0;
         }
 
         .btn-demo {
-            font-size: 1.8rem;
-            padding: 14px 0;
+            font-size: 2.1rem;
+            padding: 18px 0;
         }
 
         .btn-about {
-            font-size: 1.5rem;
-            padding: 12px 0;
+            font-size: 1.8rem;
+            padding: 16px 0;
         }
 
         .menu-btn:hover {
@@ -152,14 +149,14 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
         }
 
-        /* --- MODAL VIDEO DEMO REEL --- */
+        /* --- MODAL VIDEO DEMO REEL OPTIMISÉE (16:9 Sans Bandes Noires) --- */
         .video-modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(11, 2, 26, 0.9);
+            background: rgba(11, 2, 26, 0.92);
             backdrop-filter: blur(12px);
             z-index: 9000;
             display: flex;
@@ -167,7 +164,7 @@
             align-items: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.3s ease;
         }
 
         .video-modal-overlay.active {
@@ -176,16 +173,16 @@
         }
 
         .video-container {
-            width: 90vw;
-            height: 85vh;
-            max-width: 1600px;
+            width: 88vw;
+            max-width: 1500px;
+            aspect-ratio: 16 / 9;
             background: #000;
             border: 3px solid rgba(190, 80, 255, 0.9);
             border-radius: 14px;
             box-shadow: 0 0 60px rgba(180, 50, 255, 0.8);
             position: relative;
-            transform: scale(0.1);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.85);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -204,14 +201,14 @@
 
         .close-btn {
             position: absolute;
-            top: -50px;
+            top: -55px;
             right: 0;
             color: #ffffff;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.3rem;
-            background: rgba(140, 30, 255, 0.6);
+            font-size: 1.2rem;
+            background: rgba(140, 30, 255, 0.7);
             border: 1px solid rgba(190, 80, 255, 0.9);
-            padding: 8px 20px;
+            padding: 8px 22px;
             border-radius: 6px;
             transition: all 0.2s;
             z-index: 9001;
@@ -276,7 +273,7 @@
     <div class="video-modal-overlay" id="videoModal">
         <div class="video-container">
             <button class="close-btn" id="closeVideoBtn">FERMER [X]</button>
-            <iframe id="youtubeIframe" src="" title="Demo Reel Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe id="youtubeIframe" src="https://www.youtube.com/embed/O8SmeeWGd3Q?enablejsapi=1" title="Demo Reel Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -447,26 +444,24 @@
         }
 
         // -------------------------------------------------------------------------
-        // 3. MODAL YOUTUBE DEMO REEL
+        // 3. MODAL YOUTUBE DEMO REEL (CHARGEMENT ET LECTURE OPTIMISÉS)
         // -------------------------------------------------------------------------
         const demoReelBtn = document.getElementById('demoReelBtn');
         const videoModal = document.getElementById('videoModal');
         const closeVideoBtn = document.getElementById('closeVideoBtn');
         const youtubeIframe = document.getElementById('youtubeIframe');
 
-        const videoUrl = "https://www.youtube.com/embed/O8SmeeWGd3Q?autoplay=1";
+        const baseUrl = "https://www.youtube.com/embed/O8SmeeWGd3Q";
 
         demoReelBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            youtubeIframe.src = videoUrl;
+            youtubeIframe.src = baseUrl + "?autoplay=1&enablejsapi=1";
             videoModal.classList.add('active');
         });
 
         function closeVideo() {
             videoModal.classList.remove('active');
-            setTimeout(() => {
-                youtubeIframe.src = "";
-            }, 400);
+            youtubeIframe.src = baseUrl + "?enablejsapi=1";
         }
 
         closeVideoBtn.addEventListener('click', closeVideo);
