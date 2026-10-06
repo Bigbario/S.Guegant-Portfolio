@@ -13,22 +13,114 @@
 		<meta name="keywords" content="" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<style>
-			/* Annuler les marges et l'affichage grid par défaut sur les conteneurs du haut */
+			/* Navbar Fixe */
+			.top-navbar {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 70px;
+				background-color: #2ec4b6;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 40px;
+				z-index: 1000;
+				box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+				box-sizing: border-box;
+			}
+			.nav-left {
+				display: flex;
+				align-items: center;
+				gap: 30px;
+			}
+			.nav-logo {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 42px;
+				height: 42px;
+				border: 2px solid #0f172a;
+				border-radius: 8px;
+				font-weight: 900;
+				color: #0f172a;
+				text-decoration: none;
+				font-size: 1.1rem;
+				background: transparent;
+			}
+			.nav-links {
+				display: flex;
+				gap: 25px;
+			}
+			.nav-links a {
+				color: #0f172a;
+				text-decoration: none;
+				font-weight: 800;
+				font-size: 1.1rem;
+				position: relative;
+				border-bottom: none;
+			}
+			.nav-links a::after {
+				content: '';
+				position: absolute;
+				bottom: -4px;
+				left: 0;
+				width: 100%;
+				height: 3px;
+				background-color: #0f172a;
+			}
+			.btn-contact {
+				border: 2px solid #0f172a;
+				background: transparent;
+				color: #0f172a !important;
+				font-weight: 800;
+				padding: 8px 20px;
+				border-radius: 8px;
+				cursor: pointer;
+				font-size: 1rem;
+				text-transform: none;
+				transition: all 0.2s ease;
+			}
+			.btn-contact:hover {
+				background-color: #0f172a;
+				color: #2ec4b6 !important;
+			}
+
+			/* Marge supérieure pour compenser la navbar */
+			body {
+				padding-top: 70px !important;
+			}
 			#wrapper {
 				padding-top: 0 !important;
 			}
 
-			/* Vidéo en haut grand format */
-			.hero-video {
-				width: 100% !important;
+			/* Section Demo Reel */
+			.demo-reel-section {
+				width: 100%;
+				background: #111827;
+				padding: 50px 20px 60px 20px;
+				text-align: center;
+			}
+			.demo-reel-section h1 {
+				color: #ffffff;
+				font-size: 2.5rem;
+				font-weight: 800;
+				margin-bottom: 30px;
+				text-transform: none;
+				letter-spacing: 1px;
+			}
+			.hero-video-container {
+				max-width: 850px;
+				margin: 0 auto;
 				position: relative;
-				padding-bottom: 56.25%; /* Ratio 16:9 */
+				padding-bottom: 47.8%; /* Ratio 16:9 adapté pour 850px */
 				height: 0;
 				background: #000;
+				border-radius: 12px;
 				overflow: hidden;
-				display: block !important;
+				box-shadow: 0 15px 35px rgba(0,0,0,0.6);
 			}
-			.hero-video iframe {
+			.hero-video-container iframe {
 				position: absolute;
 				top: 0;
 				left: 0;
@@ -37,15 +129,13 @@
 				border: 0;
 			}
 
-			/* Section des bulles grands formats centrées */
+			/* Section des bulles */
 			.bubbles-section {
 				width: 100% !important;
-				max-width: 100% !important;
-				padding: 80px 20px !important;
+				padding: 60px 20px !important;
 				text-align: center;
 				background-color: #1c2229 !important;
 				display: block !important;
-				clear: both;
 			}
 			.bubbles-container {
 				display: flex !important;
@@ -58,19 +148,19 @@
 				width: 100%;
 			}
 			.bubble-item {
-				width: 220px !important;
-				height: 220px !important;
-				min-width: 220px !important;
-				min-height: 220px !important;
+				width: 200px !important;
+				height: 200px !important;
+				min-width: 200px !important;
+				min-height: 200px !important;
 				border-radius: 50% !important;
-				border: 3px solid #00b4d8 !important;
+				border: 3px solid #2ec4b6 !important;
 				background: rgba(30, 35, 45, 0.95) !important;
 				display: flex !important;
 				align-items: center !important;
 				justify-content: center !important;
 				color: #ffffff !important;
 				text-decoration: none !important;
-				font-size: 1.3rem !important;
+				font-size: 1.25rem !important;
 				font-weight: bold !important;
 				text-align: center !important;
 				padding: 20px !important;
@@ -80,53 +170,151 @@
 			}
 			.bubble-item:hover {
 				transform: scale(1.08) !important;
-				border-color: #90e0ef !important;
-				box-shadow: 0 0 30px rgba(0, 180, 216, 0.7) !important;
+				border-color: #80ed99 !important;
+				box-shadow: 0 0 30px rgba(46, 196, 182, 0.7) !important;
 				color: #ffffff !important;
 			}
 
-			@media screen and (max-width: 980px) {
-				.bubble-item {
-					width: 160px !important;
-					height: 160px !important;
-					min-width: 160px !important;
-					min-height: 160px !important;
-					font-size: 1.05rem !important;
-				}
-				.bubbles-container {
-					gap: 25px !important;
-				}
+			/* Modal Contact */
+			.contact-modal {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.75);
+				z-index: 2000;
+				align-items: center;
+				justify-content: center;
+				padding: 20px;
+				box-sizing: border-box;
+			}
+			.contact-modal.active {
+				display: flex;
+			}
+			.modal-content {
+				background-color: #0f172a;
+				border: 2px solid #2ec4b6;
+				border-radius: 12px;
+				width: 100%;
+				max-width: 650px;
+				padding: 35px 40px;
+				position: relative;
+				box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+				color: #ffffff;
+				text-align: left;
+			}
+			.modal-close {
+				position: absolute;
+				top: 20px;
+				right: 20px;
+				background: transparent;
+				border: none;
+				color: #ffffff;
+				font-size: 1.8rem;
+				cursor: pointer;
+				line-height: 1;
+			}
+			.modal-title {
+				text-align: center;
+				font-size: 1.8rem;
+				font-weight: bold;
+				margin-bottom: 25px;
+				color: #ffffff;
+			}
+			.modal-title span {
+				display: block;
+				font-size: 1.5rem;
+				margin-bottom: 5px;
+			}
+			.modal-form label {
+				display: block;
+				font-weight: bold;
+				margin-bottom: 8px;
+				color: #ffffff;
+				font-size: 0.95rem;
+			}
+			.modal-form input[type="text"],
+			.modal-form input[type="email"],
+			.modal-form textarea {
+				width: 100%;
+				background: #ffffff;
+				border: 1px solid #ccc;
+				border-radius: 6px;
+				padding: 12px 15px;
+				color: #111827;
+				margin-bottom: 20px;
+				font-size: 1rem;
+				box-sizing: border-box;
+			}
+			.modal-form textarea {
+				resize: vertical;
+				min-height: 120px;
+			}
+			.btn-send {
+				background: transparent;
+				border: 2px solid #ffffff;
+				color: #ffffff !important;
+				font-weight: bold;
+				padding: 10px 22px;
+				border-radius: 6px;
+				cursor: pointer;
+				font-size: 1rem;
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				transition: all 0.2s ease;
+			}
+			.btn-send:hover {
+				background: #ffffff;
+				color: #0f172a !important;
 			}
 
-			@media screen and (max-width: 640px) {
+			@media screen and (max-width: 768px) {
+				.top-navbar {
+					padding: 0 15px;
+				}
+				.nav-links {
+					gap: 15px;
+				}
 				.bubbles-container {
 					flex-direction: column !important;
 					gap: 20px !important;
-				}
-				.bubble-item {
-					width: 180px !important;
-					height: 180px !important;
-					min-width: 180px !important;
-					min-height: 180px !important;
 				}
 			}
 		</style>
 	</head>
 	<body class="is-preload">
 
-		<!-- Top Video -->
-		<div class="hero-video">
-			<iframe 
-				src="https://www.youtube.com/embed/O8SmeeWGd3Q?autoplay=1&mute=1&loop=1&playlist=O8SmeeWGd3Q&si=yNpamBcvLjMK2WRD" 
-				title="Demo Reel - Samuel Guegant" 
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-				referrerpolicy="strict-origin-when-cross-origin" 
-				allowfullscreen>
-			</iframe>
-		</div>
+		<!-- Top Navbar -->
+		<nav class="top-navbar">
+			<div class="nav-left">
+				<a href="#" class="nav-logo" title="Retour en haut">SG</a>
+				<div class="nav-links">
+					<a href="#projects">Projects</a>
+					<a href="#about">About me</a>
+				</div>
+			</div>
+			<button class="btn-contact" id="openContactBtn">Contact Me</button>
+		</nav>
+
+		<!-- Section Demo Reel (Vidéo taille réduite) -->
+		<section class="demo-reel-section">
+			<h1>Demo Reel</h1>
+			<div class="hero-video-container">
+				<iframe 
+					src="https://www.youtube.com/embed/O8SmeeWGd3Q?autoplay=1&mute=1&loop=1&playlist=O8SmeeWGd3Q&si=yNpamBcvLjMK2WRD" 
+					title="Demo Reel - Samuel Guegant" 
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+					referrerpolicy="strict-origin-when-cross-origin" 
+					allowfullscreen>
+				</iframe>
+			</div>
+		</section>
 
 		<!-- Section Bulles -->
-		<section class="bubbles-section">
+		<section class="bubbles-section" id="projects">
 			<div class="bubbles-container">
 				<a href="#ld" class="bubble-item">LD</a>
 				<a href="#gd-prog" class="bubble-item">GD &amp; Prog</a>
@@ -134,51 +322,114 @@
 			</div>
 		</section>
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+		<!-- Wrapper Principal -->
+		<div id="wrapper">
 
-				<!-- Section À propos / Intro -->
-					<section id="first">
-						<header>
-							<h2>Samuel Guegant</h2>
-							<p>Game Designer &amp; Développeur</p>
-						</header>
-						<div class="content">
-							<p>Bienvenue sur mon portfolio ! Découvrez ici mes projets de jeux vidéo, prototypes et réalisations en game design et programmation.</p>
+			<!-- Section À propos / Intro -->
+				<section id="about">
+					<header>
+						<h2>Samuel Guegant</h2>
+						<p>Game Designer &amp; Développeur</p>
+					</header>
+					<div class="content">
+						<p>Bienvenue sur mon portfolio ! Découvrez ici mes projets de jeux vidéo, prototypes et réalisations en game design et programmation.</p>
+					</div>
+				</section>
+
+			<!-- Section LD -->
+				<section id="ld">
+					<header>
+						<h2>Level Design</h2>
+					</header>
+					<div class="content">
+						<p>Présentation de mes projets et cartes axés sur le Level Design.</p>
+						<div class="gallery">
+							<a href="images/gallery/fulls/01.jpg" class="landscape"><img src="images/gallery/thumbs/01.jpg" alt="" /></a>
+							<a href="images/gallery/fulls/02.jpg"><img src="images/gallery/thumbs/02.jpg" alt="" /></a>
 						</div>
-					</section>
+					</div>
+				</section>
 
-				<!-- Section LD -->
-					<section id="ld">
-						<header>
-							<h2>Level Design</h2>
-						</header>
-						<div class="content">
-							<p>Présentation de mes projets et cartes axés sur le Level Design.</p>
-							<div class="gallery">
-								<a href="images/gallery/fulls/01.jpg" class="landscape"><img src="images/gallery/thumbs/01.jpg" alt="" /></a>
-								<a href="images/gallery/fulls/02.jpg"><img src="images/gallery/thumbs/02.jpg" alt="" /></a>
-							</div>
+			<!-- Section GD & Prog -->
+				<section id="gd-prog">
+					<header>
+						<h2>GD &amp; Prog</h2>
+					</header>
+					<div class="content">
+						<p>Mes réalisations en Game Design, mécaniques de jeu et programmation/scripting.</p>
+						<div class="gallery">
+							<a href="images/gallery/fulls/03.jpg"><img src="images/gallery/thumbs/03.jpg" alt="" /></a>
+							<a href="images/gallery/fulls/04.jpg" class="landscape"><img src="images/gallery/thumbs/04.jpg" alt="" /></a>
 						</div>
-					</section>
+					</div>
+				</section>
 
-				<!-- Section GD & Prog -->
-					<section id="gd-prog">
-						<header>
-							<h2>GD &amp; Prog</h2>
-						</header>
-						<div class="content">
-							<p>Mes réalisations en Game Design, mécaniques de jeu et programmation/scripting.</p>
-							<div class="gallery">
-								<a href="images/gallery/fulls/03.jpg"><img src="images/gallery/thumbs/03.jpg" alt="" /></a>
-								<a href="images/gallery/fulls/04.jpg" class="landscape"><img src="images/gallery/thumbs/04.jpg" alt="" /></a>
-							</div>
-						</div>
-					</section>
+			<!-- Section Analytical Document -->
+				<section id="doc">
+					<header>
+						<h2>Analytical Document</h2>
+					</header>
+					<div class="content">
+						<p>Analyses techniques, documents de design (GDD) et études de systèmes de jeu.</p>
+					</div>
+				</section>
 
-				<!-- Section Analytical Document -->
-					<section id="doc">
-						<header>
-							<h2>Analytical Document</h2>
-						</header>
-						<div class="content">
+			<!-- Copyright -->
+				<div class="copyright">&copy; Samuel Guegant. Tous droits réservés. Design : <a href="https://html5up.net">HTML5 UP</a>.</div>
+
+		</div>
+
+		<!-- Pop-up Contact Modal -->
+		<div class="contact-modal" id="contactModal">
+			<div class="modal-content">
+				<button class="modal-close" id="closeContactBtn">&times;</button>
+				<div class="modal-title">
+					<span>✉</span>
+					Contact Me
+				</div>
+				<form class="modal-form" action="https://formspree.io/f/samgueg@gmx.fr" method="POST">
+					<label for="modal-name">Your Name</label>
+					<input type="text" id="modal-name" name="name" placeholder="Enter name" required />
+
+					<label for="modal-email">Your Email</label>
+					<input type="email" id="modal-email" name="email" placeholder="Enter email" required />
+
+					<label for="modal-message">Your Message</label>
+					<textarea id="modal-message" name="message" placeholder="Enter message" required></textarea>
+
+					<button type="submit" class="btn-send">Send Message ✉</button>
+				</form>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+			<script>
+				// Gestion de la modale Contact
+				const contactModal = document.getElementById('contactModal');
+				const openContactBtn = document.getElementById('openContactBtn');
+				const closeContactBtn = document.getElementById('closeContactBtn');
+
+				openContactBtn.addEventListener('click', () => {
+					contactModal.classList.add('active');
+				});
+
+				closeContactBtn.addEventListener('click', () => {
+					contactModal.classList.remove('active');
+				});
+
+				window.addEventListener('click', (e) => {
+					if (e.target === contactModal) {
+						contactModal.classList.remove('active');
+					}
+				});
+			</script>
+
+	</body>
+</html>
