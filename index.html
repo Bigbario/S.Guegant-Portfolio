@@ -536,7 +536,7 @@
         .bio-text p { margin-bottom: 10px; }
         .bio-text strong { color: #00f0ff; }
 
-        /* --- MODALE DETAIL PROJET & TAILLE D'IMAGES CORRIGÉE --- */
+        /* --- MODALE DETAIL PROJET --- */
         .project-modal-container {
             width: 90vw;
             max-width: 1200px;
@@ -617,7 +617,6 @@
             gap: 10px;
         }
 
-        /* FIXE TAILLE MAX DES IMAGES */
         .gallery-media {
             width: 100%;
             height: 220px;
@@ -935,7 +934,7 @@
             }
         }
 
-        // DATA PROJETS
+        // DATA PROJETS AVEC LIENS D'IMAGES GALLERIES
         const domains = [
             {
                 id: 'level_design',
@@ -948,7 +947,7 @@
                         skills: ['Level Design', 'Puzzle Design', 'Documentation', 'Unreal Engine'],
                         desc: 'Conception complète d\'un donjon d\'exploration inspiré de Tomb Raider. Structuration des énigmes environnementales, balisage de l\'espace et pacing de la progression du joueur.',
                         gallery: [
-                            { img: 'images/TombRaider.png', caption: 'Aperçu de la salle des énigmes principale.' }
+                            { img: 'Galleries/Tomb Raider/votre_image.png', caption: 'Aperçu de la salle des énigmes principale.' }
                         ]
                     },
                     { 
@@ -958,7 +957,7 @@
                         skills: ['Level Design', 'Puzzle Design', 'Documentation'],
                         desc: 'Design d\'un niveau d\'énigmes basé sur les mécaniques de la physique et la spatialisation propre à Portal. Focalisation sur le guidage visuel et l\'apprentissage organique.',
                         gallery: [
-                            { img: 'images/PortalLD.png', caption: 'Vue du parcours d\'initiation et des mécaniques de téléportation.' }
+                            { img: 'Galleries/Portal/votre_image.png', caption: 'Vue du parcours d\'initiation et des mécaniques de téléportation.' }
                         ]
                     },
                     { 
@@ -968,7 +967,7 @@
                         skills: ['Level Design', '3D Blockout', 'Documentation', 'UEFN'],
                         desc: 'Création d\'un blockout 3D immersif à l\'intérieur d\'un organisme géant. Travail approfondi sur la verticalité, la composition de cadrage et la narration environnementale.',
                         gallery: [
-                            { img: 'images/LD3D Whale\'s Inside Logo.png', caption: 'Blockout structural de la zone interne.' }
+                            { img: 'Galleries/LD3D Whale Thematic/votre_image.png', caption: 'Blockout structural de la zone interne.' }
                         ]
                     },
                     { 
@@ -978,7 +977,7 @@
                         skills: ['Game Design', 'Level Design', 'Puzzle Design', 'Encounter Design', 'Integration', 'Programming', 'Management'],
                         desc: 'Jeu de puzzle / aventure disponible sur Steam. Direction créative du Level Design et conception des systèmes d\'interactions et d\'énigmes dynamiques.',
                         gallery: [
-                            { img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', caption: 'Affiche promotionnelle et aperçu de la direction artistique.' }
+                            { img: 'Galleries/Echoes of Above/votre_image.jpg', caption: 'Affiche promotionnelle et aperçu de la direction artistique.' }
                         ]
                     }
                 ]
@@ -994,7 +993,7 @@
                         skills: ['Game Design', 'Level Design', 'Puzzle Design', 'Encounter Design', 'Integration', 'Programming', 'Management'],
                         desc: 'Projet complet développé sur Steam. Conception du système de règles, programmation C# / Unity des systèmes d\'énigmes et équilibrage global.',
                         gallery: [
-                            { img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', caption: 'Illustration principale d\'Echoes of Above.' }
+                            { img: 'Galleries/Echoes of Above/votre_image.jpg', caption: 'Illustration principale d\'Echoes of Above.' }
                         ]
                     },
                     { 
@@ -1004,7 +1003,7 @@
                         skills: ['Game Design', 'Level Design', 'Narrative Design', 'World Design'],
                         desc: 'Conception d\'un univers féérique sombre. Élaboration des mécaniques narratives à choix multiples et architecture du monde interactif.',
                         gallery: [
-                            { img: 'images/The UnseelieCourt.png', caption: 'Concept et ambiances visuelles du projet.' }
+                            { img: 'Galleries/Unseelie Court/votre_image.png', caption: 'Concept et ambiances visuelles du projet.' }
                         ]
                     },
                     { 
@@ -1014,7 +1013,7 @@
                         skills: ['Game Design', 'Programming', 'Balancing', 'HUD System'],
                         desc: 'Jeu d\'action / réflexe axé sur le retournement et l\'inversion de mécaniques. Découpage UI/UX, programmation des systèmes de jeu et équilibrage des niveaux.',
                         gallery: [
-                            { img: 'images/FlipIt.png', caption: 'Interface utilisateur HUD et gameplay en action.' }
+                            { img: 'Galleries/FlipIt_Screenshots/votre_image.png', caption: 'Interface utilisateur HUD et gameplay en action.' }
                         ]
                     },
                     { 
@@ -1024,7 +1023,7 @@
                         skills: ['Game Design', 'Level Design', 'World Design', 'Narrative Design', 'Balancing', 'Programming'],
                         desc: 'Collection de modules et plugins personnalisés JavaScript développés pour RPG Maker MV (Systèmes de QTE, menus personnalisés, mécaniques d\'esquive).',
                         gallery: [
-                            { img: 'images/RPGMakerGameIcon.png', caption: 'Aperçu du système de plugins et UI personnalisés.' }
+                            { img: 'Galleries/Rpg Maker/votre_image.png', caption: 'Aperçu du système de plugins et UI personnalisés.' }
                         ]
                     }
                 ]
@@ -1040,7 +1039,7 @@
                         skills: ['UX Research', 'Gameplay Analysis', 'Marketing Analysis', 'Video Game Market Analysis', 'Documentation'],
                         desc: 'Analyse approfondie de la boucle de gameplay, du modèle économique Gacha et des facteurs de succès UX/UI de la franchise Umamusume sur le marché asiatique et mondial.',
                         gallery: [
-                            { img: 'images/PSP_MGD1_GUEGANT_Samuel.png', caption: 'Extrait du rapport d\'analyse Game Design & Marché.' }
+                            { img: 'Galleries/Umamusume/votre_image.png', caption: 'Extrait du rapport d\'analyse Game Design & Marché.' }
                         ]
                     },
                     { 
@@ -1050,7 +1049,7 @@
                         skills: ['Inclusivity', 'Socio-economic analysis', 'Video Game Market Analysis', 'Documentation'],
                         desc: 'Dossier de recherche analysant la représentation des minorités, la lutte contre la toxicité et l\'accessibilité numérique dans l\'industrie du jeu vidéo moderne.',
                         gallery: [
-                            { img: 'images/VideoGameDiscriminations.png', caption: 'Couverture et données statistiques de l\'étude.' }
+                            { img: 'Galleries/VideoGameDiscriminations/votre_image.png', caption: 'Couverture et données statistiques de l\'étude.' }
                         ]
                     },
                     { 
@@ -1060,7 +1059,7 @@
                         skills: ['UX Research', 'Benchmarking', 'Game Design Analysis', 'Documentation'],
                         desc: 'Étude comparative sur la manière dont les mécaniques financières réelles (bourse, rareté, marchés) sont ludifiées dans les univers de la pop-culture.',
                         gallery: [
-                            { img: 'images/Finance&Popculture.png', caption: 'Schémas comparatifs et analyse des boucles économiques.' }
+                            { img: 'Galleries/Finance/votre_image.png', caption: 'Schémas comparatifs et analyse des boucles économiques.' }
                         ]
                     },
                     { 
@@ -1070,7 +1069,7 @@
                         skills: ['Territorial Management analysis', 'Data market analysis', 'New technology', 'Research Paper'],
                         desc: 'Mémoire universitaire d\'analyse socio-politique et technique sur l\'utilisation des données publiques, les marchés de la data et les enjeux de gouvernance numérique.',
                         gallery: [
-                            { img: 'images/MemoireIcon.png', caption: 'Aperçu de la synthèse du mémoire de recherche.' }
+                            { img: 'Galleries/Mémoire/votre_image.png', caption: 'Aperçu de la synthèse du mémoire de recherche.' }
                         ]
                     }
                 ]
