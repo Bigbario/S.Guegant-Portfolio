@@ -27,12 +27,12 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
-            padding: 6vh 0 8vh 0;
+            padding: 4vh 0 4vh 0;
         }
 
         /* --- CURSEUR SPRITESHEET ANIMÉ --- */
@@ -68,12 +68,12 @@
             z-index: 1;
         }
 
-        /* --- TITRE : Agrandit et remonté dans le cadre haut --- */
+        /* --- TITRE --- */
         .title-container {
             text-align: center;
             position: relative;
             z-index: 5;
-            margin-top: 2vh;
+            margin-top: 1vh;
             width: 90vw;
             max-width: 1200px;
         }
@@ -94,16 +94,18 @@
             text-shadow: 0 0 20px rgba(180, 50, 255, 0.9), 0 4px 15px rgba(0,0,0,0.8);
         }
 
-        /* --- MENU HUD : Agrandit et positionné dans le cadre bas --- */
+        /* --- MENU HUD : Centré et agrandi --- */
         .game-menu {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 22px;
+            justify-content: center;
+            gap: 26px;
             z-index: 5;
-            margin-bottom: 2vh;
             width: 100%;
-            max-width: 650px;
+            max-width: 750px;
+            flex-grow: 1;
+            margin-bottom: 6vh;
         }
 
         .menu-btn {
@@ -120,23 +122,23 @@
             box-shadow: 0 0 15px rgba(160, 30, 255, 0.3), inset 0 0 12px rgba(180, 50, 255, 0.2);
             transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
             clip-path: polygon(15px 0, 100% 0, calc(100% - 15px) 100%, 0 100%);
-            width: 80%;
+            width: 88%;
             display: block;
         }
 
         .btn-projets {
+            font-size: 2.6rem;
+            padding: 22px 0;
+        }
+
+        .btn-demo {
             font-size: 2.2rem;
             padding: 18px 0;
         }
 
-        .btn-demo {
+        .btn-about {
             font-size: 1.8rem;
             padding: 16px 0;
-        }
-
-        .btn-about {
-            font-size: 1.4rem;
-            padding: 14px 0;
         }
 
         .menu-btn:hover {
@@ -148,15 +150,15 @@
             text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
         }
 
-        /* --- MODAL VIDEO DEMO REEL --- */
+        /* --- MODAL VIDEO DEMO REEL (AGRANDIE) --- */
         .video-modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(11, 2, 26, 0.85);
-            backdrop-filter: blur(8px);
+            background: rgba(11, 2, 26, 0.88);
+            backdrop-filter: blur(10px);
             z-index: 9000;
             display: flex;
             justify-content: center;
@@ -172,13 +174,13 @@
         }
 
         .video-container {
-            width: 85vw;
-            max-width: 1200px;
+            width: 94vw;
+            max-width: 1600px;
             aspect-ratio: 16 / 9;
             background: #000;
             border: 2px solid rgba(190, 80, 255, 0.8);
             border-radius: 12px;
-            box-shadow: 0 0 40px rgba(180, 50, 255, 0.6);
+            box-shadow: 0 0 50px rgba(180, 50, 255, 0.7);
             position: relative;
             transform: scale(0.1);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
