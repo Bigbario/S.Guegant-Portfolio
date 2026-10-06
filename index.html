@@ -10,6 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: none; /* Masque le curseur par défaut de l'OS */
         }
 
         body {
@@ -29,6 +30,21 @@
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
+        }
+
+        /* --- CURSEUR PERSONNAGE IDLE --- */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 48px;
+            height: 48px;
+            background-image: url('assets/cursors/character-idle.gif');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
         }
 
         /* Canvas pour particules */
@@ -110,7 +126,6 @@
             clip-path: polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
             width: 100%;
             display: block;
-            cursor: pointer;
         }
 
         .btn-projets { font-size: 2.5rem; padding: 20px 0; }
@@ -213,7 +228,6 @@
             padding: 10px 24px;
             border-radius: 8px;
             font-weight: 700;
-            cursor: pointer;
             transition: all 0.2s;
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
         }
@@ -236,20 +250,10 @@
             z-index: 5;
         }
 
+        /* SUPPRESSION BORDURES/PAROIS DIAGONALES */
         .cone-wall-left, .cone-wall-right {
-            position: absolute;
-            top: -10%;
-            width: 35%;
-            height: 120%;
-            background: linear-gradient(to bottom, rgba(20, 5, 45, 0.85), rgba(8, 2, 20, 0.95));
-            border: 2px solid rgba(180, 50, 255, 0.5);
-            box-shadow: 0 0 30px rgba(140, 30, 255, 0.4);
-            z-index: 2;
-            pointer-events: none;
+            display: none !important;
         }
-
-        .cone-wall-left { left: -5%; transform: rotate(-12deg); border-right: 4px solid #00f0ff; }
-        .cone-wall-right { right: -5%; transform: rotate(12deg); border-left: 4px solid #00f0ff; }
 
         .projects-grid {
             position: relative;
@@ -276,7 +280,6 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -342,7 +345,6 @@
             color: #ffffff;
             font-family: 'Orbitron', sans-serif;
             font-size: 1.1rem;
-            cursor: pointer;
             transition: all 0.25s;
             box-shadow: 0 0 20px rgba(180, 50, 255, 0.3);
         }
@@ -405,7 +407,6 @@
             border: 2px solid #ff2a6d;
             padding: 8px 22px;
             border-radius: 20px;
-            cursor: pointer;
             transition: all 0.2s ease;
             z-index: 999;
             box-shadow: 0 0 20px rgba(255, 42, 109, 0.8);
@@ -536,7 +537,7 @@
         .bio-text p { margin-bottom: 10px; }
         .bio-text strong { color: #00f0ff; }
 
-        /* --- NOUVELLE MODALE PROJET (LAYOUT 2 COLONNES) --- */
+        /* --- MODALE DETAIL PROJET --- */
         .project-modal-container {
             width: 92vw;
             max-width: 1300px;
@@ -662,6 +663,9 @@
 </head>
 <body>
 
+    <!-- Curseur Personnage Animé (Idle) -->
+    <div id="custom-cursor"></div>
+
     <canvas id="effectsCanvas"></canvas>
 
     <div class="curtain left"></div>
@@ -689,8 +693,6 @@
         </div>
 
         <div class="cone-viewport">
-            <div class="cone-wall-left"></div>
-            <div class="cone-wall-right"></div>
             <div class="projects-grid" id="projectsGrid"></div>
         </div>
 
@@ -795,7 +797,7 @@
         </div>
     </div>
 
-    <!-- MODAL DETAIL PROJET RENOVELÉE -->
+    <!-- MODAL DETAIL PROJET -->
     <div class="project-detail-modal" id="projectDetailModal">
         <div class="project-modal-container">
             <button class="close-btn" id="closeProjectDetailBtn">FERMER [X]</button>
@@ -821,6 +823,15 @@
     </div>
 
     <script>
+        // --- SUIVI DU CURSEUR PERSONNAGE IDLE ---
+        const customCursor = document.getElementById('custom-cursor');
+        if (customCursor) {
+            window.addEventListener('mousemove', (e) => {
+                customCursor.style.left = `${e.clientX}px`;
+                customCursor.style.top = `${e.clientY}px`;
+            });
+        }
+
         // CANVAS PARTICULES
         const canvas = document.getElementById('effectsCanvas');
         const ctx = canvas.getContext('2d');
@@ -920,7 +931,7 @@
             }
         }
 
-        // DONNÉES ET GESTION DES PROJETS AVEC IMAGES DÉDIÉES ET MÉTADONNÉES DÉTAILLÉES
+        // DONNÉES ET GESTION DES PROJETS AVEC MAPPING D'IMAGES DE FOND
         const domains = [
             {
                 id: 'level_design',
@@ -928,7 +939,8 @@
                 projects: [
                     { 
                         title: 'Tomb Raider Dungeon', 
-                        img: 'images/TombRaider.png', 
+                        img: 'images/TombRaider.png',
+                        bgImg: 'images/TombRaider.png',
                         skills: ['Level Design', 'Puzzle Design', 'Documentation', 'Unreal Engine'],
                         desc: 'Conception complète d\'un donjon d\'exploration inspiré de Tomb Raider. Structuration des énigmes environnementales, balisage de l\'espace et pacing de la progression du joueur.',
                         gallery: [
@@ -938,6 +950,7 @@
                     { 
                         title: 'Portal Level', 
                         img: 'images/PortalLD.png', 
+                        bgImg: 'images/PortalLD.png',
                         skills: ['Level Design', 'Puzzle Design', 'Documentation'],
                         desc: 'Design d\'un niveau d\'énigmes basé sur les mécaniques de la physique et la spatialisation propre à Portal. Focalisation sur le guidage visuel et l\'apprentissage organique.',
                         gallery: [
@@ -947,6 +960,7 @@
                     { 
                         title: '3D Blockout', 
                         img: 'images/LD3D Whale\'s Inside Logo.png', 
+                        bgImg: 'images/LD3D Whale\'s Inside Logo.png',
                         skills: ['Level Design', '3D Blockout', 'Documentation', 'UEFN'],
                         desc: 'Création d\'un blockout 3D immersif à l\'intérieur d\'un organisme géant. Travail approfondi sur la verticalité, la composition de cadrage et la narration environnementale.',
                         gallery: [
@@ -956,6 +970,7 @@
                     { 
                         title: 'Echoes of Above', 
                         img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', 
+                        bgImg: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg',
                         skills: ['Game Design', 'Level Design', 'Puzzle Design', 'Encounter Design', 'Integration', 'Programming', 'Management'],
                         desc: 'Jeu de puzzle / aventure disponible sur Steam. Direction créative du Level Design et conception des systèmes d\'interactions et d\'énigmes dynamiques.',
                         gallery: [
@@ -971,6 +986,7 @@
                     { 
                         title: 'Echoes of Above', 
                         img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', 
+                        bgImg: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg',
                         skills: ['Game Design', 'Level Design', 'Puzzle Design', 'Encounter Design', 'Integration', 'Programming', 'Management'],
                         desc: 'Projet complet développé sur Steam. Conception du système de règles, programmation C# / Unity des systèmes d\'énigmes et équilibrage global.',
                         gallery: [
@@ -980,6 +996,7 @@
                     { 
                         title: 'The Unseelie Court', 
                         img: 'images/The UnseelieCourt.png', 
+                        bgImg: 'images/The UnseelieCourt.png',
                         skills: ['Game Design', 'Level Design', 'Narrative Design', 'World Design'],
                         desc: 'Conception d\'un univers féérique sombre. Élaboration des mécaniques narratives à choix multiples et architecture du monde interactif.',
                         gallery: [
@@ -989,6 +1006,7 @@
                     { 
                         title: 'FlipIt', 
                         img: 'images/FlipIt.png', 
+                        bgImg: 'images/FlipIt.png',
                         skills: ['Game Design', 'Programming', 'Balancing', 'HUD System'],
                         desc: 'Jeu d\'action / réflexe axé sur le retournement et l\'inversion de mécaniques. Découpage UI/UX, programmation des systèmes de jeu et équilibrage des niveaux.',
                         gallery: [
@@ -998,6 +1016,7 @@
                     { 
                         title: 'RPG Maker Games', 
                         img: 'images/RPGMakerGameIcon.png', 
+                        bgImg: 'images/RPGMakerGameIcon.png',
                         skills: ['Game Design', 'Level Design', 'World Design', 'Narrative Design', 'Balancing', 'Programming'],
                         desc: 'Collection de modules et plugins personnalisés JavaScript développés pour RPG Maker MV (Systèmes de QTE, menus personnalisés, mécaniques d\'esquive).',
                         gallery: [
@@ -1013,6 +1032,7 @@
                     { 
                         title: 'Umamusume Report', 
                         img: 'images/PSP_MGD1_GUEGANT_Samuel.png', 
+                        bgImg: 'images/PSP_MGD1_GUEGANT_Samuel.png',
                         skills: ['UX Research', 'Gameplay Analysis', 'Marketing Analysis', 'Video Game Market Analysis', 'Documentation'],
                         desc: 'Analyse approfondie de la boucle de gameplay, du modèle économique Gacha et des facteurs de succès UX/UI de la franchise Umamusume sur le marché asiatique et mondial.',
                         gallery: [
@@ -1022,6 +1042,7 @@
                     { 
                         title: 'Video games and discriminations', 
                         img: 'images/VideoGameDiscriminations.png', 
+                        bgImg: 'images/VideoGameDiscriminations.png',
                         skills: ['Inclusivity', 'Socio-economic analysis', 'Video Game Market Analysis', 'Documentation'],
                         desc: 'Dossier de recherche analysant la représentation des minorités, la lutte contre la toxicité et l\'accessibilité numérique dans l\'industrie du jeu vidéo moderne.',
                         gallery: [
@@ -1031,6 +1052,7 @@
                     { 
                         title: 'Finance & Pop-culture', 
                         img: 'images/Finance&Popculture.png', 
+                        bgImg: 'images/Finance&Popculture.png',
                         skills: ['UX Research', 'Benchmarking', 'Game Design Analysis', 'Documentation'],
                         desc: 'Étude comparative sur la manière dont les mécaniques financières réelles (bourse, rareté, marchés) sont ludifiées dans les univers de la pop-culture.',
                         gallery: [
@@ -1040,6 +1062,7 @@
                     { 
                         title: 'Données et Gouvernance', 
                         img: 'images/MemoireIcon.png', 
+                        bgImg: 'images/MemoireIcon.png',
                         skills: ['Territorial Management analysis', 'Data market analysis', 'New technology', 'Research Paper'],
                         desc: 'Mémoire universitaire d\'analyse socio-politique et technique sur l\'utilisation des données publiques, les marchés de la data et les enjeux de gouvernance numérique.',
                         gallery: [
@@ -1084,16 +1107,19 @@
                     bubble.className = 'project-bubble';
                     bubble.innerHTML = `<img src="${p.img}" alt="${p.title}" onerror="this.src='https://via.placeholder.com/170/1a0033/00f0ff?text=${encodeURIComponent(p.title)}'"><div class="bubble-title">${p.title}</div>`;
                     
-                    // Événements survol pour afficher l'image en grand en background
+                    // Événements survol pour le changement de fond dynamique
                     bubble.addEventListener('mouseenter', () => {
-                        stageBgPreview.style.backgroundImage = `url('${p.img}')`;
-                        stageBgPreview.classList.add('active');
+                        const bgToApply = p.bgImg || p.img;
+                        if (bgToApply) {
+                            stageBgPreview.style.backgroundImage = `url('${bgToApply}')`;
+                            stageBgPreview.classList.add('active');
+                        }
                     });
                     bubble.addEventListener('mouseleave', () => {
                         stageBgPreview.classList.remove('active');
                     });
 
-                    // Événement clic pour ouvrir les détails
+                    // Clic détail
                     bubble.addEventListener('click', () => openProjectDetail(p));
                     projectsGrid.appendChild(bubble);
                 });
@@ -1159,7 +1185,7 @@
         function closeCharSheet() { charSheetModal.classList.remove('active'); }
         closeCharSheetBtn.addEventListener('click', closeCharSheet);
 
-        // MODALE PROJET ENRICHIE
+        // MODALE DETAIL PROJET
         const projectDetailModal = document.getElementById('projectDetailModal');
         const closeProjectDetailBtn = document.getElementById('closeProjectDetailBtn');
         const modalProjectTitle = document.getElementById('modalProjectTitle');
@@ -1170,7 +1196,6 @@
         function openProjectDetail(project) {
             modalProjectTitle.textContent = project.title;
             
-            // Affichage des compétences sous forme de badges
             modalProjectSkills.innerHTML = '';
             if (project.skills) {
                 project.skills.forEach(s => {
@@ -1181,10 +1206,8 @@
                 });
             }
 
-            // Description générale du projet
             modalProjectDesc.textContent = project.desc || 'Aucune description disponible pour ce projet.';
 
-            // Galerie d'images / vidéos à droite
             modalProjectGallery.innerHTML = '';
             if (project.gallery && project.gallery.length > 0) {
                 project.gallery.forEach(item => {
@@ -1192,7 +1215,7 @@
                     gItem.className = 'gallery-item';
                     gItem.innerHTML = `
                         <div class="gallery-media">
-                            <img src="${item.img}" alt="${project.title}" onerror="this.src='https://via.placeholder.com/400x220/1a0033/00f0ff?text=Aperçu'">
+                            <img src="${item.img}" alt="${project.title}" onerror="this.src='https://via.placeholder.com/400x220/1a0033/00f0ff?text=Aper%C3%A7u'">
                         </div>
                         <div class="gallery-caption">${item.caption || ''}</div>
                     `;
