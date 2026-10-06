@@ -619,8 +619,7 @@
 
         .gallery-media {
             width: 100%;
-            height: 220px;
-            max-height: 220px;
+            min-height: 180px;
             border-radius: 6px;
             overflow: hidden;
             border: 1px solid rgba(0, 240, 255, 0.4);
@@ -632,11 +631,18 @@
 
         .gallery-media img {
             max-width: 100%;
-            max-height: 100%;
+            max-height: 400px;
             width: auto;
             height: auto;
             object-fit: contain;
             display: block;
+        }
+
+        .gallery-media video {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 4px;
+            outline: none;
         }
 
         .gallery-caption {
@@ -1381,9 +1387,19 @@
                 project.gallery.forEach(item => {
                     const gItem = document.createElement('div');
                     gItem.className = 'gallery-item';
+                    
+                    const isVideo = item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm');
+                    
+                    const mediaHTML = isVideo 
+                        ? `<video controls preload="metadata">
+                             <source src="${item.img}" type="video/mp4">
+                             Votre navigateur ne prend pas en charge la lecture vidéo.
+                           </video>`
+                        : `<img src="${item.img}" alt="${project.title}" onerror="this.src='https://via.placeholder.com/400x220/1a0033/00f0ff?text=Aper%C3%A7u'">`;
+
                     gItem.innerHTML = `
                         <div class="gallery-media">
-                            <img src="${item.img}" alt="${project.title}" onerror="this.src='https://via.placeholder.com/400x220/1a0033/00f0ff?text=Aper%C3%A7u'">
+                            ${mediaHTML}
                         </div>
                         <div class="gallery-caption">${item.caption || ''}</div>
                     `;
