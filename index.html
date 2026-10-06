@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Samuel Guegant - Portfolio Game Design</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@600;700;800;900&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
+    <title>Samuel Guegant Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@600;700;900&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
-            cursor: none !important;
         }
 
         body {
+            /* Fond HUD Sci-Fi / Fantasy Néon Violet */
             background-color: #0b021a;
             background-image: 
                 radial-gradient(circle at center, rgba(140, 30, 255, 0.25) 0%, rgba(10, 2, 25, 0.95) 75%),
@@ -33,21 +32,22 @@
             position: relative;
         }
 
-        /* --- CURSEUR SPRITESHEET ANIMÉ --- */
+        /* --- CURSEUR SUR-MESURE --- */
         #customCursor {
             position: fixed;
             top: 0;
             left: 0;
             width: 48px;
             height: 48px;
-            pointer-events: none;
-            z-index: 10000;
+            pointer-events: none !important;
+            z-index: 99999;
             transform: translate(-50%, -50%);
             background-image: url('images/MouseIconIdle.png');
             background-size: 300% 100%;
             background-repeat: no-repeat;
             image-rendering: pixelated;
             animation: walkCycle 0.6s steps(3) infinite;
+            display: block;
         }
 
         @keyframes walkCycle {
@@ -66,7 +66,7 @@
             z-index: 1;
         }
 
-        /* --- TITRE REHAUSSÉ ET AGRANDI --- */
+        /* --- ACCUEIL --- */
         .title-container {
             text-align: center;
             position: relative;
@@ -94,7 +94,7 @@
             text-shadow: 0 0 28px rgba(180, 50, 255, 0.9), 0 4px 18px rgba(0,0,0,0.8);
         }
 
-        /* --- MENU HUD RECENTRÉ EN BAS --- */
+        /* --- MENU MAIN HUD --- */
         .game-menu {
             display: flex;
             flex-direction: column;
@@ -105,7 +105,6 @@
             width: 90%;
             max-width: 750px;
             margin-bottom: 2vh;
-            transition: opacity 0.5s ease;
         }
 
         .menu-btn {
@@ -124,22 +123,12 @@
             clip-path: polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
             width: 100%;
             display: block;
+            cursor: pointer;
         }
 
-        .btn-projets {
-            font-size: 2.5rem;
-            padding: 20px 0;
-        }
-
-        .btn-demo {
-            font-size: 2.1rem;
-            padding: 18px 0;
-        }
-
-        .btn-about {
-            font-size: 1.8rem;
-            padding: 16px 0;
-        }
+        .btn-projets { font-size: 2.5rem; padding: 20px 0; }
+        .btn-demo { font-size: 2.1rem; padding: 18px 0; }
+        .btn-about { font-size: 1.8rem; padding: 16px 0; }
 
         .menu-btn:hover {
             background: linear-gradient(135deg, rgba(170, 40, 255, 0.7), rgba(80, 10, 120, 0.9));
@@ -150,52 +139,8 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
         }
 
-        /* --- RIDEAU / PORTE BLINDÉE CYBER --- */
-        .curtain-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 8000;
-            display: flex;
-        }
-
-        .curtain-panel {
-            width: 50vw;
-            height: 100vh;
-            background: linear-gradient(135deg, #090214, #1b0733);
-            border-right: 3px solid #00f0ff;
-            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9), 0 0 30px #00f0ff;
-            transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
-            position: relative;
-        }
-
-        .curtain-panel.right {
-            border-right: none;
-            border-left: 3px solid #00f0ff;
-            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.9), 0 0 30px #00f0ff;
-        }
-
-        .curtain-container.closed .curtain-panel.left {
-            transform: translateX(0);
-        }
-
-        .curtain-container.closed .curtain-panel.right {
-            transform: translateX(0);
-        }
-
-        .curtain-container.open .curtain-panel.left {
-            transform: translateX(-100%);
-        }
-
-        .curtain-container.open .curtain-panel.right {
-            transform: translateX(100%);
-        }
-
-        /* --- HUB PROJETS / SCÈNE DE JEU EN CÔNE --- */
-        #projectsHub {
+        /* --- SCÈNE DES PROJETS EN CÔNE --- */
+        #projectsStage {
             position: fixed;
             top: 0;
             left: 0;
@@ -209,208 +154,231 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.5s ease;
-            background: radial-gradient(circle at center, rgba(30, 8, 60, 0.8) 0%, rgba(5, 1, 15, 0.98) 85%);
+            padding: 30px 50px;
         }
 
-        #projectsHub.active {
+        #projectsStage.active {
             opacity: 1;
             pointer-events: auto;
         }
 
-        /* Titre Supérieur Domaine */
-        .hub-header {
-            margin-top: 25px;
-            text-align: center;
-            z-index: 10;
-        }
-
-        .domain-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 0 0 25px rgba(0, 240, 255, 0.8), 0 0 50px rgba(180, 50, 255, 0.6);
-            transition: all 0.3s ease;
-        }
-
-        /* Cône de Perspective & Murs de Côté */
-        .cone-corridor {
-            position: relative;
-            width: 100vw;
-            height: 70vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        /* Panneaux obliques sur les côtés */
-        .side-wall {
-            position: absolute;
-            top: -10%;
-            width: 32vw;
-            height: 120%;
-            background: linear-gradient(135deg, rgba(20, 5, 40, 0.92), rgba(10, 2, 25, 0.98));
-            border: 2px solid rgba(0, 240, 255, 0.4);
-            box-shadow: 0 0 30px rgba(180, 50, 255, 0.3);
-            z-index: 5;
-            transition: all 0.4s ease;
-        }
-
-        .side-wall.left {
-            left: -5vw;
-            transform: rotate(12deg) skewY(-8deg);
+        /* RIDEAUX DE TRANSITION */
+        .curtain {
+            position: fixed;
+            top: 0;
+            width: 50vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #15002b, #050010);
             border-right: 3px solid #00f0ff;
-            clip-path: polygon(0 0, 100% 15%, 85% 85%, 0 100%);
+            z-index: 200;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+            pointer-events: none;
         }
+        .curtain.left { left: 0; transform: translateX(-100%); border-right: 3px solid #d488ff; }
+        .curtain.right { right: 0; transform: translateX(100%); border-left: 3px solid #d488ff; }
 
-        .side-wall.right {
-            right: -5vw;
-            transform: rotate(-12deg) skewY(8deg);
-            border-left: 3px solid #00f0ff;
-            clip-path: polygon(15% 15%, 100% 0, 100% 100%, 15% 85%);
-        }
+        body.curtains-closed .curtain.left { transform: translateX(0); }
+        body.curtains-closed .curtain.right { transform: translateX(0); }
 
-        /* Conteneur des 4 Bulles Projets au Centre */
-        .projects-grid-container {
-            position: relative;
-            width: 600px;
-            height: 500px;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 1fr 1fr 1fr;
-            align-items: center;
-            justify-items: center;
-            z-index: 10;
-            transition: transform 0.4s ease, opacity 0.3s ease;
-        }
-
-        /* Positionnement spécifique en Losange/Cône */
-        .bubble-slot-1 { grid-column: 2; grid-row: 1; } /* Haut */
-        .bubble-slot-2 { grid-column: 3; grid-row: 2; } /* Droite */
-        .bubble-slot-3 { grid-column: 2; grid-row: 3; } /* Bas */
-        .bubble-slot-4 { grid-column: 1; grid-row: 2; } /* Gauche */
-
-        .project-bubble {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            background: rgba(30, 10, 55, 0.85);
-            border: 3px solid #00f0ff;
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.4), inset 0 0 20px rgba(180, 50, 255, 0.5);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 12px;
-            position: relative;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background-size: cover;
-            background-position: center;
-            overflow: hidden;
-        }
-
-        .project-bubble::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(11,2,26,0.2) 0%, rgba(11,2,26,0.8) 100%);
-            z-index: 1;
-        }
-
-        .project-bubble-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .project-bubble h4 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.95rem;
-            color: #ffffff;
-            text-shadow: 0 0 10px #00f0ff;
-            line-height: 1.2;
-            margin-bottom: 4px;
-        }
-
-        .project-bubble p {
-            font-size: 0.7rem;
-            color: #d488ff;
-            font-weight: 700;
-        }
-
-        .project-bubble:hover {
-            transform: scale(1.18);
-            border-color: #ffffff;
-            box-shadow: 0 0 45px rgba(0, 240, 255, 0.9), inset 0 0 30px rgba(255, 255, 255, 0.7);
-        }
-
-        /* Navigation en bas du Hub */
-        .hub-footer-nav {
+        /* HEADER DE LA SCÈNE */
+        .stage-header {
             width: 100%;
-            padding: 0 40px 30px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 10;
         }
 
-        .nav-arrow-btn {
-            background: linear-gradient(135deg, rgba(20, 5, 40, 0.85), rgba(80, 20, 140, 0.85));
+        .domain-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.2rem;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+            letter-spacing: 3px;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .back-menu-btn {
+            background: rgba(140, 30, 255, 0.3);
             border: 2px solid #00f0ff;
+            color: #00f0ff;
+            font-family: 'Orbitron', sans-serif;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .back-menu-btn:hover {
+            background: #00f0ff;
+            color: #0b021a;
+            box-shadow: 0 0 25px #00f0ff;
+        }
+
+        /* CONE PERSPECTIVE & CONTAINER */
+        .cone-viewport {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 65vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Parois latérales formant le cône */
+        .cone-wall-left, .cone-wall-right {
+            position: absolute;
+            top: -10%;
+            width: 35%;
+            height: 120%;
+            background: linear-gradient(to bottom, rgba(20, 5, 45, 0.85), rgba(8, 2, 20, 0.95));
+            border: 2px solid rgba(180, 50, 255, 0.5);
+            box-shadow: 0 0 30px rgba(140, 30, 255, 0.4);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .cone-wall-left {
+            left: -5%;
+            transform: rotate(-12deg);
+            border-right: 4px solid #00f0ff;
+        }
+
+        .cone-wall-right {
+            right: -5%;
+            transform: rotate(12deg);
+            border-left: 4px solid #00f0ff;
+        }
+
+        /* GRILLE DES 4 BULLES DE PROJETS */
+        .projects-grid {
+            position: relative;
+            z-index: 5;
+            width: 600px;
+            height: 450px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 20px;
+            justify-items: center;
+            align-items: center;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+        }
+
+        /* POSITIONNEMENT LOSANGE DU CÔNE */
+        .project-bubble {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(30, 10, 60, 0.8);
+            border: 3px solid #00f0ff;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .project-bubble:nth-child(1) { grid-column: 1 / span 2; grid-row: 1; transform: translateY(-10px); } /* Haut */
+        .project-bubble:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; transform: translateX(40px); } /* Droite */
+        .project-bubble:nth-child(3) { grid-column: 1 / span 2; grid-row: 2; transform: translateY(10px); } /* Bas */
+        .project-bubble:nth-child(4) { grid-column: 1; grid-row: 1 / span 2; transform: translateX(-40px); } /* Gauche */
+
+        .project-bubble img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.65;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .project-bubble .bubble-title {
+            position: relative;
+            z-index: 2;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-align: center;
+            padding: 5px 10px;
+            background: rgba(10, 2, 25, 0.75);
             border-radius: 12px;
-            padding: 14px 28px;
+            border: 1px solid rgba(0, 240, 255, 0.5);
+            text-shadow: 0 0 8px #00f0ff;
+        }
+
+        .project-bubble:hover {
+            transform: scale(1.15) !important;
+            border-color: #ffffff;
+            box-shadow: 0 0 40px #00f0ff, inset 0 0 20px rgba(255, 255, 255, 0.8);
+            z-index: 10;
+        }
+
+        .project-bubble:hover img {
+            opacity: 0.9;
+            transform: scale(1.1);
+        }
+
+        /* NAVIGATION LATÉRALE EN BAS */
+        .stage-nav-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            padding: 0 40px;
+        }
+
+        .nav-arrow-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(30, 8, 60, 0.7);
+            border: 2px solid rgba(190, 80, 255, 0.7);
+            padding: 12px 28px;
+            border-radius: 50px;
             color: #ffffff;
             font-family: 'Orbitron', sans-serif;
             font-size: 1.1rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
-            transition: all 0.25s ease;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 0 20px rgba(180, 50, 255, 0.3);
         }
 
         .nav-arrow-btn:hover {
-            background: linear-gradient(135deg, rgba(0, 240, 255, 0.4), rgba(140, 30, 255, 0.8));
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
-            color: #ffffff;
+            background: rgba(180, 50, 255, 0.8);
+            border-color: #00f0ff;
+            color: #00f0ff;
+            box-shadow: 0 0 30px #00f0ff;
+            transform: translateY(-3px);
         }
 
-        .nav-arrow-icon {
+        .arrow-icon {
             font-size: 1.6rem;
             color: #00f0ff;
         }
 
-        .btn-back-menu {
-            background: rgba(140, 30, 255, 0.2);
-            border: 1px solid rgba(190, 80, 255, 0.6);
-            color: #d488ff;
-            font-family: 'Orbitron', sans-serif;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            letter-spacing: 2px;
-            transition: all 0.2s;
-        }
-
-        .btn-back-menu:hover {
-            background: rgba(180, 50, 255, 0.6);
-            color: #fff;
-            box-shadow: 0 0 20px rgba(180, 50, 255, 0.8);
-        }
-
-        /* --- MODAL VIDEO DEMO REEL --- */
-        .video-modal-overlay {
+        /* --- MODALES & OVERLAYS --- */
+        .video-modal-overlay, .char-sheet-modal, .project-detail-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(11, 2, 26, 0.92);
+            background: rgba(10, 2, 25, 0.92);
             backdrop-filter: blur(12px);
             z-index: 9000;
             display: flex;
@@ -421,30 +389,21 @@
             transition: opacity 0.3s ease;
         }
 
-        .video-modal-overlay.active {
+        .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active {
             opacity: 1;
             pointer-events: auto;
         }
 
         .video-container {
             width: 88vw;
-            max-width: 1500px;
+            max-width: 1400px;
             aspect-ratio: 16 / 9;
             background: #000;
             border: 3px solid rgba(190, 80, 255, 0.9);
             border-radius: 14px;
             box-shadow: 0 0 60px rgba(180, 50, 255, 0.8);
             position: relative;
-            transform: scale(0.85);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .video-modal-overlay.active .video-container {
-            transform: scale(1);
         }
 
         .video-container iframe {
@@ -455,68 +414,42 @@
 
         .close-btn {
             position: absolute;
-            top: -55px;
-            right: 0;
+            top: 15px;
+            right: 20px;
             color: #ffffff;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            background: rgba(140, 30, 255, 0.7);
-            border: 1px solid rgba(190, 80, 255, 0.9);
-            padding: 8px 22px;
+            font-size: 1.1rem;
+            background: rgba(220, 20, 60, 0.8);
+            border: 2px solid #ff2a6d;
+            padding: 8px 20px;
             border-radius: 6px;
+            cursor: pointer;
             transition: all 0.2s;
             z-index: 9001;
+            box-shadow: 0 0 15px rgba(255, 42, 109, 0.6);
         }
 
         .close-btn:hover {
-            background: rgba(180, 50, 255, 0.9);
-            color: #fff;
-            box-shadow: 0 0 20px rgba(220, 160, 255, 0.9);
+            background: #ff2a6d;
+            box-shadow: 0 0 25px #ff2a6d;
+            transform: scale(1.05);
         }
 
-        /* --- FICHE DE PERSONNAGE CYBERPUNK / ABOUT ME --- */
-        .char-sheet-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(10, 2, 25, 0.92);
-            backdrop-filter: blur(14px);
-            z-index: 9500;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.35s ease;
-        }
-
-        .char-sheet-modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
+        /* MODALE ABOUT ME / CHAR SHEET */
         .char-sheet-container {
             width: 90vw;
-            max-width: 1200px;
-            max-height: 90vh;
-            background: rgba(22, 8, 42, 0.85);
+            max-width: 1100px;
+            max-height: 88vh;
+            background: rgba(22, 8, 42, 0.92);
             border: 2px solid rgba(190, 80, 255, 0.8);
             border-radius: 16px;
-            box-shadow: 0 0 50px rgba(160, 30, 255, 0.5), inset 0 0 30px rgba(180, 50, 255, 0.15);
+            box-shadow: 0 0 50px rgba(160, 30, 255, 0.5);
             padding: 30px;
             position: relative;
             overflow-y: auto;
-            transform: scale(0.9);
-            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             flex-direction: column;
             gap: 20px;
-        }
-
-        .char-sheet-modal.active .char-sheet-container {
-            transform: scale(1);
         }
 
         .char-header {
@@ -532,37 +465,18 @@
             font-size: 2.2rem;
             color: #ffffff;
             letter-spacing: 3px;
-            text-shadow: 0 0 15px rgba(200, 80, 255, 0.8);
         }
 
         .char-title-box span {
             font-family: 'Orbitron', sans-serif;
             color: #00f0ff;
             font-size: 1rem;
-            letter-spacing: 2px;
-        }
-
-        .char-class-badge {
-            background: rgba(0, 240, 255, 0.15);
-            border: 1px solid #00f0ff;
-            padding: 8px 18px;
-            border-radius: 8px;
-            color: #00f0ff;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
         }
 
         .char-grid {
             display: grid;
-            grid-template-columns: 280px 1fr 1fr;
+            grid-template-columns: 260px 1fr 1fr;
             gap: 20px;
-        }
-
-        @media (max-width: 900px) {
-            .char-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         .cyber-card {
@@ -570,8 +484,6 @@
             border: 1px solid rgba(180, 50, 255, 0.4);
             border-radius: 10px;
             padding: 18px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            position: relative;
         }
 
         .cyber-card h3 {
@@ -579,288 +491,119 @@
             font-size: 1.1rem;
             color: #d488ff;
             margin-bottom: 12px;
-            letter-spacing: 1.5px;
             border-bottom: 1px solid rgba(180, 50, 255, 0.3);
             padding-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .avatar-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
         }
 
         .avatar-frame {
             width: 100%;
-            height: 280px;
+            height: 260px;
             border: 2px solid #00f0ff;
             border-radius: 10px;
             overflow: hidden;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
             background: #000;
         }
 
-        .avatar-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: contrast(1.05) brightness(0.98);
-        }
-
-        .status-pill {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            color: #39ff14;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background: #39ff14;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #39ff14;
-        }
+        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
 
         .stat-row {
             display: grid;
-            grid-template-columns: 140px 1fr 30px;
+            grid-template-columns: 130px 1fr 30px;
             align-items: center;
             gap: 10px;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-        }
-
-        .stat-label {
-            font-family: 'Orbitron', sans-serif;
-            color: #e0b0ff;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .stat-bar-container {
-            width: 100%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            overflow: hidden;
-            border: 1px solid rgba(180, 50, 255, 0.4);
-        }
-
-        .stat-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #8a2be2, #00f0ff);
-            box-shadow: 0 0 10px #00f0ff;
-        }
-
-        .stat-value {
-            font-family: 'Orbitron', sans-serif;
-            color: #00f0ff;
-            font-weight: 700;
-            text-align: right;
-        }
-
-        .skills-tag-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 5px;
-        }
-
-        .skill-tag {
-            background: rgba(140, 30, 255, 0.25);
-            border: 1px solid rgba(190, 80, 255, 0.6);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            color: #ffffff;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .skill-tag:hover {
-            border-color: #00f0ff;
-            color: #00f0ff;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
-        }
-
-        .bio-text {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #d1c4e9;
-        }
-
-        .bio-text p {
             margin-bottom: 10px;
+            font-size: 0.85rem;
         }
 
-        .bio-text strong {
-            color: #00f0ff;
-            font-weight: 700;
-            text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
-        }
+        .stat-label { font-family: 'Orbitron', sans-serif; color: #e0b0ff; }
+        .stat-bar-container { width: 100%; height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; }
+        .stat-bar-fill { height: 100%; background: linear-gradient(90deg, #8a2be2, #00f0ff); }
+        .stat-value { font-family: 'Orbitron', sans-serif; color: #00f0ff; font-weight: 700; text-align: right; }
 
-        /* --- MODAL DETAIL PROJET --- */
-        .project-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(10, 2, 25, 0.94);
-            backdrop-filter: blur(14px);
-            z-index: 9600;
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
+        .bio-text { font-size: 0.9rem; line-height: 1.6; color: #d1c4e9; }
+        .bio-text strong { color: #00f0ff; }
 
-        .project-modal.active {
-            opacity: 1; pointer-events: auto;
-        }
-
-        .project-modal-container {
-            width: 80vw; max-width: 900px;
-            background: rgba(25, 8, 48, 0.95);
-            border: 2px solid #00f0ff;
-            border-radius: 14px;
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.5);
-            padding: 30px; position: relative;
-            color: #fff;
-        }
-
-        .project-modal-container h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem; color: #00f0ff;
-            margin-bottom: 15px;
-        }
-
-        .project-modal-container p {
-            line-height: 1.7; color: #d1c4e9; margin-bottom: 15px;
-        }
-
-        /* Slash / Magie au clic */
+        /* EFFET SLASH SOURIS */
         .slash-effect {
             position: fixed;
             pointer-events: none;
-            z-index: 9999;
-            width: 70px;
-            height: 70px;
+            z-index: 99999;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            border: 4px solid #ffffff;
-            border-top-color: #d488ff;
-            border-right-color: transparent;
+            border: 3px solid #ffffff;
+            border-top-color: #00f0ff;
             transform: translate(-50%, -50%) rotate(-45deg) scale(0.2);
-            animation: slashAnim 0.22s ease-out forwards;
+            animation: slashAnim 0.2s ease-out forwards;
         }
 
         @keyframes slashAnim {
-            0% {
-                opacity: 1;
-                transform: translate(-50%, -50%) rotate(-45deg) scale(0.3);
-                box-shadow: 0 0 15px #d488ff;
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -50%) rotate(135deg) scale(1.3);
-                box-shadow: 0 0 0px transparent;
-            }
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.3); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
         }
     </style>
 </head>
-<body>
+<body class="curtains-closed">
 
-    <!-- Curseur suiveur -->
+    <!-- CURSEUR CUSTOM -->
     <div id="customCursor"></div>
 
     <canvas id="effectsCanvas"></canvas>
 
-    <!-- Titre -->
+    <!-- RIDEAUX D'OUVERTURE DE LA SCÈNE -->
+    <div class="curtain left"></div>
+    <div class="curtain right"></div>
+
+    <!-- ACCUEIL PRINCIPAL -->
     <div class="title-container" id="titleContainer">
         <h1 class="main-title">Samuel Guegant</h1>
         <h2 class="subtitle">Portfolio</h2>
     </div>
 
-    <!-- Menu style HUD -->
     <nav class="game-menu" id="mainMenu">
-        <a href="#projets" class="menu-btn btn-projets" id="projetsBtn">PROJETS</a>
-        <a href="#demoreel" class="menu-btn btn-demo" id="demoReelBtn">DEMO REEL</a>
-        <a href="#about" class="menu-btn btn-about" id="aboutBtn">ABOUT ME</a>
+        <button class="menu-btn btn-projets" id="openProjectsBtn">PROJETS</button>
+        <button class="menu-btn btn-demo" id="demoReelBtn">DEMO REEL</button>
+        <button class="menu-btn btn-about" id="aboutBtn">ABOUT ME</button>
     </nav>
 
-    <!-- Rideaux Cyber pour Transition -->
-    <div class="curtain-container open" id="curtainContainer">
-        <div class="curtain-panel left"></div>
-        <div class="curtain-panel right"></div>
-    </div>
-
-    <!-- SCÈNE EN CÔNE DE PROJETS (HUB / GAME LOBBY) -->
-    <section id="projectsHub">
-        <div class="hub-header">
+    <!-- SCÈNE PROJETS CÔNE PERSPECTIVE -->
+    <div id="projectsStage">
+        <div class="stage-header">
+            <button class="back-menu-btn" id="backToMenuBtn">← ACCUEIL</button>
             <h2 class="domain-title" id="domainTitle">GD & PROG</h2>
+            <div style="width: 120px;"></div>
         </div>
 
-        <div class="cone-corridor">
-            <!-- Murs de perspective -->
-            <div class="side-wall left"></div>
-            <div class="side-wall right"></div>
+        <div class="cone-viewport">
+            <div class="cone-wall-left"></div>
+            <div class="cone-wall-right"></div>
 
-            <!-- Grille des 4 bulles centrales -->
-            <div class="projects-grid-container" id="projectsGrid">
-                <div class="project-bubble bubble-slot-1" id="bubble1">
-    <!-- MODAL DEMO REEL -->
-    <div id="modal-demoreel" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md transition-all duration-300">
-        <div class="relative w-full max-w-5xl bg-slate-900/90 border-2 border-cyan-400/80 rounded-2xl shadow-[0_0_50px_rgba(6,182,212,0.4)] overflow-hidden flex flex-col max-h-[90vh]">
-            <!-- Header Modal avec Bouton Fermer/Retour Explicit -->
-            <div class="flex items-center justify-between p-4 bg-slate-950/80 border-b border-cyan-500/30">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-play-circle text-cyan-400 text-xl animate-pulse"></i>
-                    <h2 class="text-xl font-bold tracking-wider text-cyan-300 uppercase">Démo Reel - Samuel Guégant</h2>
-                </div>
-                <button onclick="closeDemoReel()" class="flex items-center gap-2 px-4 py-2 bg-red-600/30 hover:bg-red-500/50 border border-red-500 text-red-200 hover:text-white rounded-lg transition-all font-bold text-sm tracking-widest shadow-[0_0_15px_rgba(239,68,68,0.3)] hover:scale-105 active:scale-95 cursor-pointer">
-                    <i class="fas fa-times"></i> FERMER / RETOUR
-                </button>
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Les 4 bulles sont générées dynamiquement par JS -->
             </div>
-            <!-- Video Container -->
-            <div class="relative w-full aspect-video bg-black flex-1">
-                <iframe id="youtube-iframe" class="w-full h-full border-0" src="" title="Demo Reel" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <!-- Footer Modal pour rappel de fermeture -->
-            <div class="p-3 bg-slate-950/90 border-t border-cyan-500/20 text-center text-xs text-slate-400 flex items-center justify-between px-6">
-                <span><i class="fas fa-info-circle text-cyan-400 mr-1"></i> Cliquez sur RETOUR ou en dehors de la vidéo pour fermer</span>
-                <button onclick="closeDemoReel()" class="text-cyan-400 hover:text-cyan-200 underline text-xs">Fermer la vidéo</button>
-            </div>
+        </div>
+
+        <div class="stage-nav-bar">
+            <button class="nav-arrow-btn" id="prevDomainBtn">
+                <span class="arrow-icon">◄</span>
+                <span id="prevDomainLabel">Vers Level Design</span>
+            </button>
+            <button class="nav-arrow-btn" id="nextDomainBtn">
+                <span id="nextDomainLabel">Vers Documents</span>
+                <span class="arrow-icon">►</span>
+            </button>
         </div>
     </div>
 
-    <!-- MODAL ABOUT ME (Fiche de personnage) -->
-    <div id="modal-about" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md transition-all duration-300">
-        <div class="relative w-full max-w-4xl bg-slate-900/95 border-2 border-purple-500/80 rounded-2xl p-6 sm:p-8 shadow-[0_0_50px_rgba(168,85,247,0.4)] overflow-y-auto max-h-[90vh]">
-            <button onclick="closeAboutModal()" class="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 bg-red-600/30 hover:bg-red-500/50 border border-red-500 text-red-200 hover:text-white rounded-lg transition-all font-bold text-xs tracking-wider shadow-[0_0_10px_rgba(239,68,68,0.3)]">
-                <i class="fas fa-times"></i> FERMER
-            </button>
-
-            <button class="btn-back-menu" id="backToMenuBtn">RETOUR MENU</button>
-
-            <button class="nav-arrow-btn" id="navRightBtn">
-                <span id="navRightText">Vers Documents</span> <span class="nav-arrow-icon">&rarr;</span>
-            </button>
-        </div>
-    </section>
-
-    <!-- Modal lecteur vidéo Démo Reel -->
+    <!-- MODALE DEMO REEL -->
     <div class="video-modal-overlay" id="videoModal">
         <div class="video-container">
             <button class="close-btn" id="closeVideoBtn">FERMER [X]</button>
-            <iframe id="youtubeIframe" src="https://www.youtube.com/embed/3UwbJ8Q1MwU?enablejsapi=1" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe id="youtubeIframe" src="https://www.youtube.com/embed/3UwbJ8Q1MwU?enablejsapi=1" title="Demo Reel Video" allowfullscreen></iframe>
         </div>
     </div>
 
-    <!-- MODAL FICHE DE PERSONNAGE / ABOUT ME -->
+    <!-- MODALE FICHE PERSONNAGE ABOUT ME -->
     <div class="char-sheet-modal" id="charSheetModal">
         <div class="char-sheet-container">
             <button class="close-btn" id="closeCharSheetBtn">FERMER [X]</button>
@@ -868,153 +611,69 @@
             <div class="char-header">
                 <div class="char-title-box">
                     <h2>SAMUEL GUEGANT</h2>
-                    <span>Âge: 27 ans // GAME DESIGNER & PROTOTYPER</span>
+                    <span>GAME DESIGNER & PROTOTYPER</span>
                 </div>
-                <div class="char-class-badge">GAME DESIGNER</div>
             </div>
 
             <div class="char-grid">
-                <!-- COLONNE 1 : AVATAR & STATUS -->
-                <div class="cyber-card avatar-box">
+                <div class="cyber-card">
                     <div class="avatar-frame">
-                        <img src="images/PhotoPro_Samuel_GUEGANT.png" alt="Samuel Guegant Avatar" onerror="this.src='https://via.placeholder.com/280x280/1a0033/00f0ff?text=SAMUEL+GUEGANT'">
-                    </div>
-                    <div class="status-pill">
-                        <div class="status-dot"></div>
-                        READY FOR FREELANCE OR INTERNSHIPS
+                        <img src="images/PhotoPro_Samuel_GUEGANT.png" alt="Samuel Guegant" onerror="this.src='https://via.placeholder.com/260x260/1a0033/00f0ff?text=SAMUEL+GUEGANT'">
                     </div>
                 </div>
 
-                <!-- COLONNE 2 : STATS & ATTRIBUTS -->
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <div class="cyber-card">
-                        <h3>ATTRIBUTS PRINCIPAUX</h3>
-                        <div class="stat-row">
-                            <span class="stat-label">GAME DESIGN</span>
-                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 95%;"></div></div>
-                            <span class="stat-value">95</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">LEVEL DESIGN</span>
-                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 94%;"></div></div>
-                            <span class="stat-value">94</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">PROTOTYPING</span>
-                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 93%;"></div></div>
-                            <span class="stat-value">93</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">BALANCING</span>
-                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 95%;"></div></div>
-                            <span class="stat-value">95</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">DATA ANALYSIS</span>
-                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 93%;"></div></div>
-                            <span class="stat-value">93</span>
-                        </div>
+                <div class="cyber-card">
+                    <h3>ATTRIBUTS</h3>
+                    <div class="stat-row">
+                        <span class="stat-label">GAME DESIGN</span>
+                        <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 95%;"></div></div>
+                        <span class="stat-value">95</span>
                     </div>
-
-                    <div class="cyber-card">
-                        <h3>COMPÉTENCES & OUTILS</h3>
-                        <div class="skills-tag-container">
-                            <span class="skill-tag">Unreal Engine 5</span>
-                            <span class="skill-tag">Unity</span>
-                            <span class="skill-tag">RPG Maker MV</span>
-                            <span class="skill-tag">C# / JavaScript</span>
-                            <span class="skill-tag">UI / UX Design</span>
-                            <span class="skill-tag">QA Testing</span>
-                            <span class="skill-tag">Notion</span>
-                            <span class="skill-tag">Google Sheet & Excel</span>
-                        </div>
+                    <div class="stat-row">
+                        <span class="stat-label">LEVEL DESIGN</span>
+                        <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 94%;"></div></div>
+                        <span class="stat-value">94</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">PROTOTYPING</span>
+                        <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 93%;"></div></div>
+                        <span class="stat-value">93</span>
                     </div>
                 </div>
 
-                <!-- COLONNE 3 : BACKGROUND & BIO -->
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <div class="cyber-card" style="height: 100%;">
-                        <h3>BACKGROUND / NOTES</h3>
-                        <div class="bio-text">
-                            <p>Spécialité : Conception de <strong>système de jeu</strong>, <strong>prototypage rapide</strong>, <strong>intégration</strong> et <strong>rapports détaillés</strong>.</p>
-                            <p>Diplômé de <strong>Sciences Po Rennes</strong>, en Master 2 de Game Design à <strong>Isart Digital</strong>. Combinant <strong>rigueur méthodologique</strong> et <strong>vision créative</strong>.</p>
-                            <p>Passionné par la création d'<strong>expériences ludiques</strong>, <strong>immersives</strong> et <strong>équilibrées</strong>, allant des <strong>serious games</strong> engagés aux <strong>jeux de stratégie</strong> complexes.</p>
-                        </div>
+                <div class="cyber-card">
+                    <h3>BACKGROUND</h3>
+                    <div class="bio-text">
+                        <p>Spécialité : Conception de <strong>système de jeu</strong>, <strong>prototypage rapide</strong>, <strong>intégration</strong>.</p>
+                        <p>Diplômé de <strong>Sciences Po Rennes</strong>, Master 2 Game Design à <strong>Isart Digital</strong>.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DETAIL D'UN PROJET -->
-    <div class="project-modal" id="projectModal">
-        <div class="project-modal-container">
-            <button class="close-btn" id="closeProjectModalBtn">FERMER [X]</button>
-            <h2 id="modalProjectTitle">Titre du Projet</h2>
-            <p id="modalProjectDesc">Description détaillée du projet...</p>
+    <!-- MODALE DÉTAIL D'UN PROJET -->
+    <div class="project-detail-modal" id="projectDetailModal">
+        <div class="char-sheet-container" style="max-width: 800px;">
+            <button class="close-btn" id="closeProjectDetailBtn">FERMER [X]</button>
+            <h2 id="modalProjectTitle" style="font-family:'Orbitron'; color:#00f0ff; margin-bottom:15px;">PROJET</h2>
+            <p id="modalProjectDesc" style="color:#d1c4e9; line-height:1.6;"></p>
         </div>
     </div>
 
     <script>
-        // -------------------------------------------------------------------------
-// Open/Close Demo Reel
-function openDemoReel() {
-    const modal = document.getElementById('modal-demoreel');
-    const iframe = document.getElementById('youtube-iframe');
-    // Set YouTube Embed URL with autoplay
-    iframe.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1";
-    modal.classList.remove('hidden');
-}
+        // 1. CURSEUR SUIVEUR
+        const customCursor = document.getElementById('customCursor');
+        window.addEventListener('mousemove', (e) => {
+            customCursor.style.left = e.clientX + 'px';
+            customCursor.style.top = e.clientY + 'px';
+        });
 
-function closeDemoReel() {
-    const modal = document.getElementById('modal-demoreel');
-    const iframe = document.getElementById('youtube-iframe');
-    iframe.src = ""; // Stoppe immédiatement le son/lecture
-    modal.classList.add('hidden');
-}
-
-function openAboutModal() {
-    document.getElementById('modal-about').classList.remove('hidden');
-}
-
-function closeAboutModal() {
-    document.getElementById('modal-about').classList.add('hidden');
-}
-
-// Global click event to detect clicks on modal background overlays
-window.addEventListener('click', function(event) {
-    const modalDemo = document.getElementById('modal-demoreel');
-    const modalAbout = document.getElementById('modal-about');
-    const modalProject = document.getElementById('modal-project');
-
-    // Close Demo Reel if background overlay is clicked directly
-    if (event.target === modalDemo) {
-        closeDemoReel();
-    }
-    // Close About Modal if background overlay is clicked directly
-    if (event.target === modalAbout) {
-        closeAboutModal();
-    }
-    // Close Project Details Modal if background overlay is clicked directly
-    if (event.target === modalProject) {
-        closeProjectModal();
-    }
-});
-
-// Escape key shortcut to close any open modal
-window.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeDemoReel();
-        closeAboutModal();
-        closeProjectModal();
-    }
-});
-
+        // 2. CANVAS ET PARTICULES DE FOND
         const canvas = document.getElementById('effectsCanvas');
         const ctx = canvas.getContext('2d');
-        const titleContainer = document.getElementById('titleContainer');
-
         let width, height;
+
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
@@ -1022,337 +681,191 @@ window.addEventListener('keydown', function(event) {
         window.addEventListener('resize', resize);
         resize();
 
-        const bgParticles = [];
-        const BG_PARTICLE_COUNT = 45;
+        const particles = Array.from({ length: 40 }, () => ({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            speedY: 0.2 + Math.random() * 0.4,
+            size: Math.random() * 3 + 1.5,
+            opacity: Math.random() * 0.7 + 0.2
+        }));
 
-        for (let i = 0; i < BG_PARTICLE_COUNT; i++) {
-            bgParticles.push({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                speedY: 0.2 + Math.random() * 0.4,
-                speedX: (Math.random() - 0.5) * 0.2,
-                opacity: Math.random() * 0.7 + 0.2,
-                baseOpacity: Math.random() * 0.7 + 0.2,
-                pulseSpeed: 0.01 + Math.random() * 0.02,
-                size: Math.random() * 3 + 1.5
-            });
-        }
-
-        function updateAndDrawBgParticles(frameCount) {
-            for (let p of bgParticles) {
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            for (let p of particles) {
                 p.y -= p.speedY;
-                p.x += p.speedX;
-                p.opacity = p.baseOpacity + Math.sin(frameCount * p.pulseSpeed) * 0.2;
+                if (p.y < -10) p.y = height + 10;
 
-                if (p.y < -20) {
-                    p.y = height + 10;
-                    p.x = Math.random() * width;
-                }
-
-                ctx.save();
-                ctx.globalAlpha = Math.max(0, p.opacity);
-                
-                const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-                grad.addColorStop(0, 'rgba(220, 160, 255, 0.9)');
-                grad.addColorStop(1, 'rgba(140, 30, 255, 0)');
-                
-                ctx.fillStyle = grad;
+                ctx.fillStyle = `rgba(212, 136, 255, ${p.opacity})`;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.restore();
             }
+            requestAnimationFrame(animateParticles);
         }
+        animateParticles();
 
-        // -------------------------------------------------------------------------
-        // 2. DONNÉES DES PROJETS PAR DOMAINE
-        // -------------------------------------------------------------------------
-        const domainsData = {
-            'level_design': {
+        // 3. DONNÉES DES PROJETS PAR DOMAINE
+        const domains = [
+            {
+                id: 'level_design',
                 title: 'LEVEL DESIGN',
-                leftNav: { domain: 'documents', label: 'Vers Documents' },
-                rightNav: { domain: 'gd_prog', label: 'Vers GD & Prog' },
                 projects: [
-                    { title: 'Infiltration Map', tag: 'UE5 Blockout', desc: 'Conception d’une carte d’infiltration 3D sur Unreal Engine 5 axée sur la verticalité et le choke points design.' },
-                    { title: 'Boss Arena LD', tag: 'Combat Flow', desc: 'Design d’une arène de boss dynamique avec éléments destructibles et phases environnementales.' },
-                    { title: 'Dungeon Crawler', tag: 'Pacing & Flow', desc: 'Niveau d’exploration sous-terraine axé sur l’apprentissage progressif des mécaniques de puzzle.' },
-                    { title: 'Cyberpunk Hub', tag: 'Environmental Storytelling', desc: 'Création d’un quartier urbain futuriste riche en détails narratifs passifs et indices visuels.' }
+                    { title: 'Tomb Raider Dungeon', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Dungeon', desc: 'Conception de donjon 3D avec énigmes environnementales et lignes de vue maîtrisées.' },
+                    { title: 'Portal Level', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Portal', desc: 'Map de puzzle basée sur la verticalité et le momentum des portails.' },
+                    { title: 'UEFN Map', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=UEFN', desc: 'Niveau multijoueur sur Unreal Editor for Fortnite avec device mechanics personnalisés.' },
+                    { title: 'Open World Blockout', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Blockout', desc: 'Prototypage de zone ouverte axée sur le pacing et la découverte passive.' }
                 ]
             },
-            'gd_prog': {
+            {
+                id: 'gd_prog',
                 title: 'GD & PROG',
-                leftNav: { domain: 'level_design', label: 'Vers Level Design' },
-                rightNav: { domain: 'documents', label: 'Vers Documents' },
                 projects: [
-                    { title: 'Echoes of Above', tag: 'Gameplay System', desc: 'Prototypage complet des mécaniques de combat, d’inventaire et du comportement de l’IA en C# / Unity.' },
-                    { title: 'RPG Maker Plugin', tag: 'JS Architecture', desc: 'Développement d’un plugin personnalisé sous JS pour refondre le système de combat et d’économie.' },
-                    { title: 'Tactical System', tag: 'Grid & Balancing', desc: 'Système de jeu tactique au tour par tour incluant algorithme de pathfinding A* et gestion de portée.' },
-                    { title: 'Skill Tree Tool', tag: 'UI & Data Design', desc: 'Outil dynamique d’arbre de compétences lisant directement des données configurées sous Google Sheets.' }
+                    { title: 'Echoes of Above', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Echoes', desc: 'Jeu de puzzle / aventure publié sur Steam. Prototypage C# & intégration complète.' },
+                    { title: 'QTE Dodge Plugin', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=QTE+Plugin', desc: 'Plugin RPG Maker MV en JavaScript avec timing window dynamique.' },
+                    { title: 'Combat HUD', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=HUD+System', desc: 'Système d\'interface utilisateur réactif codé sous Unity.' },
+                    { title: 'Marine Bio Game', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Point+de+Break', desc: 'Jeu de sensibilisation à la biologie marine développé avec la startup Point de Break.' }
                 ]
             },
-            'documents': {
+            {
+                id: 'documents',
                 title: 'DOCUMENTS',
-                leftNav: { domain: 'gd_prog', label: 'Vers GD & Prog' },
-                rightNav: { domain: 'level_design', label: 'Vers Level Design' },
                 projects: [
-                    { title: 'GDD Complete', tag: 'Design Doc', desc: 'Document de game design synthétique de 40 pages détaillant mécaniques, loop et directions artistiques.' },
-                    { title: 'System Analysis', tag: 'UX & Balancing', desc: 'Analyse approfondie des boucles d’engagement et d’équilibrage économique sur des titres phares.' },
-                    { title: 'Level Design Pitch', tag: 'Worldbuilding', desc: 'Dossier de pitch créatif et moodboards pour un projet de jeu d’aventure narratif.' },
-                    { title: 'Data Sheets', tag: 'Game Economy', desc: 'Tableau d’équilibrage complet sous Excel/Google Sheets simulant les courbes de progression du joueur.' }
+                    { title: 'GDD Echoes of Above', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=GDD', desc: 'Game Design Document complet incluant règles, boucle de gameplay et équilibrage.' },
+                    { title: 'Climate Fresco Game', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Climate+Doc', desc: 'Documentation éducative pour Game Impact / Ministère de l\'Éducation.' },
+                    { title: 'Balancing Sheet', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=Excel+Balancing', desc: 'Feuille de calcul complexe pour la courbe d\'expérience et les stats de combat.' },
+                    { title: 'UX Research', img: 'https://via.placeholder.com/160/1a0033/00f0ff?text=UX+Doc', desc: 'Rapport de tests utilisateurs, heatmaps et retours de playtest.' }
                 ]
             }
-        };
+        ];
 
-        let currentDomainKey = 'gd_prog';
+        let currentDomainIndex = 1; // Commence sur GD & PROG
 
-        // -------------------------------------------------------------------------
-        // 3. LOGIQUE D'AFFICHAGE DU CORRIDOR & NAVIGATION
-        // -------------------------------------------------------------------------
+        // 4. GESTION DU MODE PROJETS ET NAVIGATION
+        const openProjectsBtn = document.getElementById('openProjectsBtn');
+        const backToMenuBtn = document.getElementById('backToMenuBtn');
+        const projectsStage = document.getElementById('projectsStage');
         const domainTitle = document.getElementById('domainTitle');
         const projectsGrid = document.getElementById('projectsGrid');
-        const navLeftBtn = document.getElementById('navLeftBtn');
-        const navRightBtn = document.getElementById('navRightBtn');
-        const navLeftText = document.getElementById('navLeftText');
-        const navRightText = document.getElementById('navRightText');
+        const prevDomainBtn = document.getElementById('prevDomainBtn');
+        const nextDomainBtn = document.getElementById('nextDomainBtn');
+        const prevDomainLabel = document.getElementById('prevDomainLabel');
+        const nextDomainLabel = document.getElementById('nextDomainLabel');
 
-        function updateDomainView(key) {
-            currentDomainKey = key;
-            const data = domainsData[key];
+        function updateStage() {
+            const current = domains[currentDomainIndex];
+            const prevIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
+            const nextIndex = (currentDomainIndex + 1) % domains.length;
 
-            // Animation de fondu des bulles
+            domainTitle.textContent = current.title;
+            prevDomainLabel.textContent = `Vers ${domains[prevIndex].title}`;
+            nextDomainLabel.textContent = `Vers ${domains[nextIndex].title}`;
+
+            // Générer les 4 bulles
             projectsGrid.style.opacity = 0;
-            projectsGrid.style.transform = 'scale(0.85)';
-
             setTimeout(() => {
-                domainTitle.innerText = data.title;
-                navLeftText.innerText = data.leftNav.label;
-                navRightText.innerText = data.rightNav.label;
-
-                // Mise à jour des 4 bulles
-                for (let i = 0; i < 4; i++) {
-                    const proj = data.projects[i];
-                    document.getElementById(`b${i+1}-title`).innerText = proj.title;
-                    document.getElementById(`b${i+1}-tag`).innerText = proj.tag;
-
-                    // Attribuer l'événement de clic pour le modal projet
-                    const bubbleEl = document.getElementById(`bubble${i+1}`);
-                    bubbleEl.onclick = () => openProjectModal(proj);
-                }
-
+                projectsGrid.innerHTML = '';
+                current.projects.forEach(p => {
+                    const bubble = document.createElement('div');
+                    bubble.className = 'project-bubble';
+                    bubble.innerHTML = `
+                        <img src="${p.img}" alt="${p.title}">
+                        <div class="bubble-title">${p.title}</div>
+                    `;
+                    bubble.addEventListener('click', () => openProjectDetail(p));
+                    projectsGrid.appendChild(bubble);
+                });
                 projectsGrid.style.opacity = 1;
-                projectsGrid.style.transform = 'scale(1)';
-            }, 250);
+            }, 200);
         }
 
-        navLeftBtn.addEventListener('click', () => {
-            const nextKey = domainsData[currentDomainKey].leftNav.domain;
-            updateDomainView(nextKey);
-        });
-
-        navRightBtn.addEventListener('click', () => {
-            const nextKey = domainsData[currentDomainKey].rightNav.domain;
-            updateDomainView(nextKey);
-        });
-
-        // -------------------------------------------------------------------------
-        // 4. TRANSITIONS RIDEAUX CYBER & OUVERTURE DU HUB
-        // -------------------------------------------------------------------------
-        const projetsBtn = document.getElementById('projetsBtn');
-        const curtainContainer = document.getElementById('curtainContainer');
-        const projectsHub = document.getElementById('projectsHub');
-        const mainMenu = document.getElementById('mainMenu');
-        const backToMenuBtn = document.getElementById('backToMenuBtn');
-
-        projetsBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            // Fermer les rideaux
-            curtainContainer.classList.remove('open');
-            curtainContainer.classList.add('closed');
-
+        openProjectsBtn.addEventListener('click', () => {
+            document.body.classList.remove('curtains-closed');
             setTimeout(() => {
-                // Cacher menu & titre principal, ouvrir le Hub
-                mainMenu.style.opacity = 0;
-                titleContainer.style.opacity = 0;
-                mainMenu.style.pointerEvents = 'none';
-                titleContainer.style.pointerEvents = 'none';
-
-                projectsHub.classList.add('active');
-                updateDomainView('gd_prog');
-
-                // Rouvrir les rideaux sur la nouvelle scène
-                curtainContainer.classList.remove('closed');
-                curtainContainer.classList.add('open');
-            }, 700);
+                projectsStage.classList.add('active');
+                updateStage();
+            }, 300);
         });
 
         backToMenuBtn.addEventListener('click', () => {
-            curtainContainer.classList.remove('open');
-            curtainContainer.classList.add('closed');
-
+            projectsStage.classList.remove('active');
             setTimeout(() => {
-                projectsHub.classList.remove('active');
-                mainMenu.style.opacity = 1;
-                titleContainer.style.opacity = 1;
-                mainMenu.style.pointerEvents = 'auto';
-                titleContainer.style.pointerEvents = 'auto';
-
-                curtainContainer.classList.remove('closed');
-                curtainContainer.classList.add('open');
-            }, 700);
+                document.body.classList.add('curtains-closed');
+            }, 200);
         });
 
-        // -------------------------------------------------------------------------
-        // 5. MODALS (DETAIL PROJET, DEMO REEL & ABOUT ME)
-        // -------------------------------------------------------------------------
-        const projectModal = document.getElementById('projectModal');
-        const modalProjectTitle = document.getElementById('modalProjectTitle');
-        const modalProjectDesc = document.getElementById('modalProjectDesc');
-        const closeProjectModalBtn = document.getElementById('closeProjectModalBtn');
-
-        function openProjectModal(proj) {
-            modalProjectTitle.innerText = proj.title;
-            modalProjectDesc.innerText = proj.desc;
-            projectModal.classList.add('active');
-        }
-
-        closeProjectModalBtn.addEventListener('click', () => {
-            projectModal.classList.remove('active');
+        prevDomainBtn.addEventListener('click', () => {
+            currentDomainIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
+            updateStage();
         });
 
-        // Demo Reel Youtube
+        nextDomainBtn.addEventListener('click', () => {
+            currentDomainIndex = (currentDomainIndex + 1) % domains.length;
+            updateStage();
+        });
+
+        // 5. GESTION DES MODALES (DEMO REEL, ABOUT, DÉTAILS)
         const demoReelBtn = document.getElementById('demoReelBtn');
         const videoModal = document.getElementById('videoModal');
         const closeVideoBtn = document.getElementById('closeVideoBtn');
         const youtubeIframe = document.getElementById('youtubeIframe');
-        const baseUrl = "https://www.youtube.com/embed/3UwbJ8Q1MwU";
 
-        demoReelBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            youtubeIframe.src = baseUrl + "?autoplay=1&enablejsapi=1";
+        demoReelBtn.addEventListener('click', () => {
+            youtubeIframe.src = "https://www.youtube.com/embed/3UwbJ8Q1MwU?autoplay=1&enablejsapi=1";
             videoModal.classList.add('active');
         });
 
         function closeVideo() {
             videoModal.classList.remove('active');
-            youtubeIframe.src = baseUrl + "?enablejsapi=1";
+            youtubeIframe.src = "https://www.youtube.com/embed/3UwbJ8Q1MwU?enablejsapi=1";
         }
         closeVideoBtn.addEventListener('click', closeVideo);
 
-        // About Me / Char Sheet
         const aboutBtn = document.getElementById('aboutBtn');
         const charSheetModal = document.getElementById('charSheetModal');
         const closeCharSheetBtn = document.getElementById('closeCharSheetBtn');
 
-        aboutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            charSheetModal.classList.add('active');
-        });
-        closeCharSheetBtn.addEventListener('click', () => {
-            charSheetModal.classList.remove('active');
+        aboutBtn.addEventListener('click', () => charSheetModal.classList.add('active'));
+        closeCharSheetBtn.addEventListener('click', () => charSheetModal.classList.remove('active'));
+
+        const projectDetailModal = document.getElementById('projectDetailModal');
+        const closeProjectDetailBtn = document.getElementById('closeProjectDetailBtn');
+        const modalProjectTitle = document.getElementById('modalProjectTitle');
+        const modalProjectDesc = document.getElementById('modalProjectDesc');
+
+        function openProjectDetail(project) {
+            modalProjectTitle.textContent = project.title;
+            modalProjectDesc.textContent = project.desc;
+            projectDetailModal.classList.add('active');
+        }
+        closeProjectDetailBtn.addEventListener('click', () => projectDetailModal.classList.remove('active'));
+
+        // FERMETURE EN CLIQUANT À CÔTÉ OU AVEC ÉCHAP
+        [videoModal, charSheetModal, projectDetailModal].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    if (modal === videoModal) closeVideo();
+                }
+            });
         });
 
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                if (videoModal.classList.contains('active')) closeVideo();
-                if (charSheetModal.classList.contains('active')) charSheetModal.classList.remove('active');
-                if (projectModal.classList.contains('active')) projectModal.classList.remove('active');
+                closeVideo();
+                charSheetModal.classList.remove('active');
+                projectDetailModal.classList.remove('active');
             }
         });
 
-        // Effet Slash au clic
+        // 6. EFFET SLASH SUR LE CLIC DE SOURIS
         window.addEventListener('mousedown', (e) => {
             const slash = document.createElement('div');
             slash.className = 'slash-effect';
             slash.style.left = e.clientX + 'px';
             slash.style.top = e.clientY + 'px';
             document.body.appendChild(slash);
-
-            setTimeout(() => slash.remove(), 220);
+            setTimeout(() => slash.remove(), 200);
         });
-
-        // -------------------------------------------------------------------------
-        // 6. ANIMATION DE DISPARITION DU TITRE ET DUST
-        // -------------------------------------------------------------------------
-        let titleState = 'fade_in';
-        let titleTimer = 0;
-        let titleOpacity = 0;
-        const dustParticles = [];
-
-        function spawnTitleDust(intensity) {
-            const rect = titleContainer.getBoundingClientRect();
-            const rx = (Math.random() - 0.5) * (rect.width || 600);
-            const ry = (Math.random() - 0.5) * (rect.height || 150);
-
-            dustParticles.push({
-                x: (rect.left + (rect.width / 2) || width / 2) + rx,
-                y: (rect.top + (rect.height / 2) || height / 4) + ry,
-                vx: (Math.random() * 1.8 + 0.4) * intensity,
-                vy: -(Math.random() * 1.6 + 0.4) * intensity,
-                opacity: 200,
-                life: 45 + Math.random() * 30,
-                size: Math.floor(2 + Math.random() * 3)
-            });
-        }
-
-        function updateDustParticles() {
-            for (let i = dustParticles.length - 1; i >= 0; i--) {
-                const p = dustParticles[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                p.opacity -= 4;
-                p.life--;
-
-                ctx.save();
-                ctx.globalAlpha = Math.max(0, p.opacity / 255);
-                ctx.fillStyle = 'rgba(212, 136, 255, 0.85)';
-                ctx.fillRect(p.x, p.y, p.size, p.size);
-                ctx.restore();
-
-                if (p.opacity <= 0 || p.life <= 0) {
-                    dustParticles.splice(i, 1);
-                }
-            }
-        }
-
-        function updateTitleAnimation() {
-            if (projectsHub.classList.contains('active')) return;
-
-            titleTimer++;
-            switch (titleState) {
-                case 'fade_in':
-                    titleOpacity += 4;
-                    if (titleOpacity >= 255) { titleOpacity = 255; titleState = 'hold'; titleTimer = 0; }
-                    break;
-                case 'hold':
-                    if (titleTimer > 250 && Math.random() < 0.6) spawnTitleDust(1);
-                    if (titleTimer >= 350) { titleState = 'disintegrate'; titleTimer = 0; }
-                    break;
-                case 'disintegrate':
-                    titleOpacity -= 4;
-                    if (titleOpacity > 0) { for (let i = 0; i < 5; i++) spawnTitleDust(2); }
-                    if (titleOpacity <= 0) { titleOpacity = 0; titleState = 'wait'; titleTimer = 0; }
-                    break;
-                case 'wait':
-                    if (titleTimer >= 150) { titleState = 'fade_in'; titleTimer = 0; }
-                    break;
-            }
-            titleContainer.style.opacity = (titleOpacity / 255).toFixed(2);
-            updateDustParticles();
-        }
-
-        // Boucle d'animation principale
-        let frameCount = 0;
-        function loop() {
-            frameCount++;
-            ctx.clearRect(0, 0, width, height);
-
-            updateAndDrawBgParticles(frameCount);
-            updateTitleAnimation();
-
-            requestAnimationFrame(loop);
-        }
-
-        requestAnimationFrame(loop);
     </script>
 </body>
 </html>
