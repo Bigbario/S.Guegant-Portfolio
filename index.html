@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Samuel Guegant Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@700;900&family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Orbitron:wght@600;700;900&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -220,6 +220,239 @@
             box-shadow: 0 0 20px rgba(220, 160, 255, 0.9);
         }
 
+        /* --- FICHE DE PERSONNAGE CYBERPUNK / ABOUT ME --- */
+        .char-sheet-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 2, 25, 0.92);
+            backdrop-filter: blur(14px);
+            z-index: 9500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        .char-sheet-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .char-sheet-container {
+            width: 90vw;
+            max-width: 1200px;
+            max-height: 90vh;
+            background: rgba(22, 8, 42, 0.85);
+            border: 2px solid rgba(190, 80, 255, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 0 50px rgba(160, 30, 255, 0.5), inset 0 0 30px rgba(180, 50, 255, 0.15);
+            padding: 30px;
+            position: relative;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .char-sheet-modal.active .char-sheet-container {
+            transform: scale(1);
+        }
+
+        /* Header de la fiche */
+        .char-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(190, 80, 255, 0.5);
+            padding-bottom: 15px;
+        }
+
+        .char-title-box h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            color: #ffffff;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(200, 80, 255, 0.8);
+        }
+
+        .char-title-box span {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f0ff;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .char-class-badge {
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid #00f0ff;
+            padding: 8px 18px;
+            border-radius: 8px;
+            color: #00f0ff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+        }
+
+        /* Grille principale inspirée de la fiche */
+        .char-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .char-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Module Cadre Cyber */
+        .cyber-card {
+            background: rgba(35, 12, 65, 0.6);
+            border: 1px solid rgba(180, 50, 255, 0.4);
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .cyber-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: #d488ff;
+            margin-bottom: 12px;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid rgba(180, 50, 255, 0.3);
+            padding-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Photo Avatar Cyber */
+        .avatar-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar-frame {
+            width: 100%;
+            height: 280px;
+            border: 2px solid #00f0ff;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            background: #000;
+        }
+
+        .avatar-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.1) brightness(0.95);
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #39ff14;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #39ff14;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #39ff14;
+        }
+
+        /* Attributs & Barres de Stats */
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .stat-label {
+            font-family: 'Orbitron', sans-serif;
+            color: #e0b0ff;
+            font-weight: 600;
+        }
+
+        .stat-bar-container {
+            width: 120px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid rgba(180, 50, 255, 0.4);
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8a2be2, #00f0ff);
+            box-shadow: 0 0 10px #00f0ff;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f0ff;
+            font-weight: 700;
+            width: 25px;
+            text-align: right;
+        }
+
+        /* Tags de Compétences */
+        .skills-tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .skill-tag {
+            background: rgba(140, 30, 255, 0.25);
+            border: 1px solid rgba(190, 80, 255, 0.6);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #ffffff;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .skill-tag:hover {
+            border-color: #00f0ff;
+            color: #00f0ff;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+
+        /* Background & Textes */
+        .bio-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #d1c4e9;
+        }
+
+        .bio-text p {
+            margin-bottom: 10px;
+        }
+
         /* Slash / Magie au clic */
         .slash-effect {
             position: fixed;
@@ -266,7 +499,7 @@
     <nav class="game-menu">
         <a href="#projets" class="menu-btn btn-projets">PROJETS</a>
         <a href="#demoreel" class="menu-btn btn-demo" id="demoReelBtn">DEMO REEL</a>
-        <a href="#about" class="menu-btn btn-about">ABOUT ME</a>
+        <a href="#about" class="menu-btn btn-about" id="aboutBtn">ABOUT ME</a>
     </nav>
 
     <!-- Modal lecteur vidéo Démo Reel -->
@@ -274,6 +507,92 @@
         <div class="video-container">
             <button class="close-btn" id="closeVideoBtn">FERMER [X]</button>
             <iframe id="youtubeIframe" src="https://www.youtube.com/embed/O8SmeeWGd3Q?enablejsapi=1" title="Demo Reel Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- MODAL FICHE DE PERSONNAGE / ABOUT ME -->
+    <div class="char-sheet-modal" id="charSheetModal">
+        <div class="char-sheet-container">
+            <button class="close-btn" id="closeCharSheetBtn">FERMER [X]</button>
+            
+            <div class="char-header">
+                <div class="char-title-box">
+                    <h2>SAMUEL GUEGANT</h2>
+                    <span>ID: #SG-9821 // GAME DESIGNER & PROTOTYPER</span>
+                </div>
+                <div class="char-class-badge">CLASS: GAME DESIGNER</div>
+            </div>
+
+            <div class="char-grid">
+                <!-- COLONNE 1 : AVATAR & STATUS -->
+                <div class="cyber-card avatar-box">
+                    <div class="avatar-frame">
+                        <img src="images/profile.jpg" alt="Samuel Guegant Avatar" onerror="this.src='https://via.placeholder.com/280x280/1a0033/00f0ff?text=SAMUEL+GUEGANT'">
+                    </div>
+                    <div class="status-pill">
+                        <div class="status-dot"></div>
+                        STATUS: READY FOR QUESTS
+                    </div>
+                </div>
+
+                <!-- COLONNE 2 : STATS & ATTRIBUTS -->
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="cyber-card">
+                        <h3>ATTRIBUTS PRINCIPAUX</h3>
+                        <div class="stat-row">
+                            <span class="stat-label">GAME DESIGN</span>
+                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 95%;"></div></div>
+                            <span class="stat-value">95</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">LEVEL DESIGN</span>
+                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 88%;"></div></div>
+                            <span class="stat-value">88</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">PROTOTYPING</span>
+                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 90%;"></div></div>
+                            <span class="stat-value">90</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">SYSTEM & BALANCING</span>
+                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 85%;"></div></div>
+                            <span class="stat-value">85</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">CREATIVITY</span>
+                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 98%;"></div></div>
+                            <span class="stat-value">98</span>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card">
+                        <h3>COMPÉTENCES & OUTILS</h3>
+                        <div class="skills-tag-container">
+                            <span class="skill-tag">Unreal Engine 5</span>
+                            <span class="skill-tag">Unity</span>
+                            <span class="skill-tag">Blueprints</span>
+                            <span class="skill-tag">C# / JavaScript</span>
+                            <span class="skill-tag">RPG Maker MV</span>
+                            <span class="skill-tag">UI / UX Design</span>
+                            <span class="skill-tag">QA Testing</span>
+                            <span class="skill-tag">Serious Games</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLONNE 3 : BACKGROUND & BIO -->
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="cyber-card" style="height: 100%;">
+                        <h3>BACKGROUND / NOTES</h3>
+                        <div class="bio-text">
+                            <p><strong>Spécialité :</strong> Conception de systèmes de jeu, prototypage rapide et intégration de mécaniques personnalisées.</p>
+                            <p>Passionné par la création d'expériences ludiques immersives et équilibrées, allant des Serious Games engagés aux jeux de stratégie complexes.</p>
+                            <p>Diplômé de Master 2 Game Design (ISART Digital) et Sciences Po Rennes, combinant rigueur méthodologique et vision créative.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -472,14 +791,40 @@
             }
         });
 
+        // -------------------------------------------------------------------------
+        // 4. MODAL FICHE DE PERSONNAGE (ABOUT ME)
+        // -------------------------------------------------------------------------
+        const aboutBtn = document.getElementById('aboutBtn');
+        const charSheetModal = document.getElementById('charSheetModal');
+        const closeCharSheetBtn = document.getElementById('closeCharSheetBtn');
+
+        aboutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            charSheetModal.classList.add('active');
+        });
+
+        function closeCharSheet() {
+            charSheetModal.classList.remove('active');
+        }
+
+        closeCharSheetBtn.addEventListener('click', closeCharSheet);
+
+        charSheetModal.addEventListener('click', (e) => {
+            if (e.target === charSheetModal) {
+                closeCharSheet();
+            }
+        });
+
+        // Touche Échap globale pour fermer les modales
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && videoModal.classList.contains('active')) {
-                closeVideo();
+            if (e.key === 'Escape') {
+                if (videoModal.classList.contains('active')) closeVideo();
+                if (charSheetModal.classList.contains('active')) closeCharSheet();
             }
         });
 
         // -------------------------------------------------------------------------
-        // 4. SLASH AU CLIC SOURIS
+        // 5. SLASH AU CLIC SOURIS
         // -------------------------------------------------------------------------
         window.addEventListener('mousedown', (e) => {
             const slash = document.createElement('div');
@@ -492,7 +837,7 @@
         });
 
         // -------------------------------------------------------------------------
-        // 5. BOUCLE PRINCIPALE
+        // 6. BOUCLE PRINCIPALE
         // -------------------------------------------------------------------------
         let frameCount = 0;
         function loop() {
