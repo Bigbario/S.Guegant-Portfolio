@@ -528,25 +528,19 @@
         .stat-bar-container { width: 100%; height: 10px; background: rgba(255, 255, 255, 0.1); border-radius: 5px; overflow: hidden; border: 1px solid rgba(180, 50, 255, 0.4); }
         .stat-bar-fill { height: 100%; background: linear-gradient(90deg, #8a2be2, #00f0ff); box-shadow: 0 0 10px #00f0ff; }
 
-        /* --- SCORE S DORÉ OSU STYLE --- */
+        /* --- SCORE S DORÉ OSU STYLE MODIFIÉ POUR PLUS DE LISIBILITÉ --- */
         .osu-s-grade {
-            font-family: 'Montserrat', 'Orbitron', sans-serif;
+            font-family: 'Orbitron', 'Montserrat', sans-serif;
             font-weight: 900;
-            font-size: 1.6rem;
-            font-style: italic;
-            color: #fff9d0;
-            text-shadow: 
-                0 0 2px #e6a100,
-                0 0 5px #ffb700,
-                0 0 10px #ffa000,
-                2px 2px 0px #b36b00;
-            background: linear-gradient(180deg, #ffffff 0%, #ffe600 40%, #ff9900 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));
+            font-size: 1.7rem;
+            color: #ffd700;
             text-align: right;
             display: inline-block;
-            transform: skewX(-8deg);
+            text-shadow: 
+                0 0 8px rgba(255, 215, 0, 0.9),
+                0 0 15px rgba(255, 170, 0, 0.6),
+                1px 1px 2px #000000;
+            transform: skewX(-6deg);
         }
 
         .skills-tag-container { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -706,6 +700,7 @@
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
         }
 
+        /* Affichage conditionnel de lextension Clic pour agrandir uniquement sur les images */
         .gallery-media::after {
             content: '🔍 Clic pour agrandir';
             position: absolute;
@@ -725,6 +720,11 @@
 
         .gallery-media:hover::after {
             opacity: 1;
+        }
+
+        /* DÉSACTIVER "CLIC POUR AGRANDIR" LORSQUE C'EST UNE VIDÉO */
+        .gallery-media.is-video::after {
+            display: none !important;
         }
 
         .gallery-media img {
@@ -1204,6 +1204,16 @@
             }
         }
 
+        let frameCount = 0;
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            frameCount++;
+            updateAndDrawBgParticles(frameCount);
+            updateTitleAnimation();
+            requestAnimationFrame(animate);
+        }
+        animate();
+
         // FONCTION UTILITAIRE YOUTUBE
         function getYouTubeEmbedUrl(url) {
             if (!url) return null;
@@ -1218,7 +1228,7 @@
             return videoId ? `https://www.youtube.com/embed/${videoId}?enablejsapi=1` : null;
         }
 
-        // DATA PROJETS AVEC LIEN CONFIGURABLE PAR PROJET
+        // DATA PROJETS AVEC CHEMINS DE GALERIE ET NOMS DE DOSSIER CORRIGÉS
         const domains = [
             {
                 id: 'level_design',
@@ -1301,40 +1311,40 @@
                         desc: 'Création d\'un blockout 3D immersif à l\'intérieur d\'un organisme géant. Travail approfondi sur la verticalité, la composition de cadrage et la narration environnementale.',
                         gallery: [
                             { img: 'https://youtu.be/HWfIMcgbHo0', caption: 'Walkthrough vidéo Blockout 3D' },
-                            { img: 'Galleries/LD3D Whale Thematic/LD3D Whale\'s Inside Logo.png', caption: 'Logo' },
-                            { img: 'Galleries/LD3D Whale Thematic/1.png', caption: 'Section 1' },
-                            { img: 'Galleries/LD3D Whale Thematic/2.png', caption: 'Section 2' },
-                            { img: 'Galleries/LD3D Whale Thematic/3.png', caption: 'Section 3' },
-                            { img: 'Galleries/LD3D Whale Thematic/4.png', caption: 'Section 4' },
-                            { img: 'Galleries/LD3D Whale Thematic/5.png', caption: 'Section 5' },
-                            { img: 'Galleries/LD3D Whale Thematic/6.png', caption: 'Section 6' },
-                            { img: 'Galleries/LD3D Whale Thematic/7.png', caption: 'Section 7' },
-                            { img: 'Galleries/LD3D Whale Thematic/8.png', caption: 'Section 8' },
-                            { img: 'Galleries/LD3D Whale Thematic/9.png', caption: 'Section 9' },
-                            { img: 'Galleries/LD3D Whale Thematic/10.png', caption: 'Section 10' },
-                            { img: 'Galleries/LD3D Whale Thematic/11.png', caption: 'Section 11' },
-                            { img: 'Galleries/LD3D Whale Thematic/PARTIE II.png', caption: 'Partie II' },
-                            { img: 'Galleries/LD3D Whale Thematic/13.png', caption: 'Section 13' },
-                            { img: 'Galleries/LD3D Whale Thematic/14.png', caption: 'Section 14' },
-                            { img: 'Galleries/LD3D Whale Thematic/15.png', caption: 'Section 15' },
-                            { img: 'Galleries/LD3D Whale Thematic/16.png', caption: 'Section 16' },
-                            { img: 'Galleries/LD3D Whale Thematic/PARTIE III.png', caption: 'Partie III' },
-                            { img: 'Galleries/LD3D Whale Thematic/18.png', caption: 'Section 18' },
-                            { img: 'Galleries/LD3D Whale Thematic/19.png', caption: 'Section 19' },
-                            { img: 'Galleries/LD3D Whale Thematic/20.png', caption: 'Section 20' },
-                            { img: 'Galleries/LD3D Whale Thematic/21.png', caption: 'Section 21' },
-                            { img: 'Galleries/LD3D Whale Thematic/22.png', caption: 'Section 22' },
-                            { img: 'Galleries/LD3D Whale Thematic/23.png', caption: 'Section 23' },
-                            { img: 'Galleries/LD3D Whale Thematic/PARTIE IV.png', caption: 'Partie IV' },
-                            { img: 'Galleries/LD3D Whale Thematic/25.png', caption: 'Section 25' },
-                            { img: 'Galleries/LD3D Whale Thematic/26.png', caption: 'Section 26' },
-                            { img: 'Galleries/LD3D Whale Thematic/27.png', caption: 'Section 27' },
-                            { img: 'Galleries/LD3D Whale Thematic/28.png', caption: 'Section 28' },
-                            { img: 'Galleries/LD3D Whale Thematic/29.png', caption: 'Section 29' },
-                            { img: 'Galleries/LD3D Whale Thematic/30.png', caption: 'Section 30' },
-                            { img: 'Galleries/LD3D Whale Thematic/31.png', caption: 'Section 31' },
-                            { img: 'Galleries/LD3D Whale Thematic/32.png', caption: 'Section 32' },
-                            { img: 'Galleries/LD3D Whale Thematic/33.png', caption: 'Section 33' }
+                            { img: 'Galleries/LD3D Whale\'s Inside/LD3D Whale\'s Inside Logo.png', caption: 'Logo' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/1.png', caption: 'Section 1' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/2.png', caption: 'Section 2' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/3.png', caption: 'Section 3' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/4.png', caption: 'Section 4' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/5.png', caption: 'Section 5' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/6.png', caption: 'Section 6' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/7.png', caption: 'Section 7' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/8.png', caption: 'Section 8' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/9.png', caption: 'Section 9' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/10.png', caption: 'Section 10' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/11.png', caption: 'Section 11' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/PARTIE II.png', caption: 'Partie II' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/13.png', caption: 'Section 13' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/14.png', caption: 'Section 14' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/15.png', caption: 'Section 15' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/16.png', caption: 'Section 16' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/PARTIE III.png', caption: 'Partie III' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/18.png', caption: 'Section 18' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/19.png', caption: 'Section 19' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/20.png', caption: 'Section 20' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/21.png', caption: 'Section 21' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/22.png', caption: 'Section 22' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/23.png', caption: 'Section 23' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/PARTIE IV.png', caption: 'Partie IV' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/25.png', caption: 'Section 25' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/26.png', caption: 'Section 26' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/27.png', caption: 'Section 27' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/28.png', caption: 'Section 28' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/29.png', caption: 'Section 29' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/30.png', caption: 'Section 30' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/31.png', caption: 'Section 31' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/32.png', caption: 'Section 32' },
+                            { img: 'Galleries/LD3D Whale\'s Inside/33.png', caption: 'Section 33' }
                         ]
                     },
                     { 
@@ -1719,32 +1729,27 @@
                     gItem.className = `gallery-item ${idx === 0 ? 'active' : ''}`;
                     
                     const ytUrl = getYouTubeEmbedUrl(item.img);
-                    const isVideo = item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm');
+                    const isVideo = ytUrl || item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm');
                     
                     let mediaHTML = '';
                     if (ytUrl) {
-                        mediaHTML = `<iframe src="${ytUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-                    } else if (isVideo) {
-                        mediaHTML = `<video controls preload="metadata">
-                             <source src="${item.img}" type="video/mp4">
-                             Votre navigateur ne prend pas en charge la lecture vidéo.
-                           </video>`;
+                        mediaHTML = `<div class="gallery-media is-video"><iframe src="${ytUrl}" allowfullscreen></iframe></div>`;
+                    } else if (item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm')) {
+                        mediaHTML = `<div class="gallery-media is-video"><video src="${item.img}" controls></video></div>`;
                     } else {
-                        mediaHTML = `<img src="${item.img}" alt="${project.title}" onerror="this.src='https://via.placeholder.com/400x220/1a0033/00f0ff?text=Aper%C3%A7u'">`;
+                        mediaHTML = `<div class="gallery-media"><img src="${item.img}" alt="${item.caption || 'Aperçu'}" onerror="this.src='https://via.placeholder.com/600x380/1a0033/00f0ff?text=Image+Indisponible'"></div>`;
                     }
 
                     gItem.innerHTML = `
-                        <div class="gallery-media" data-index="${idx}">
-                            ${mediaHTML}
-                        </div>
+                        ${mediaHTML}
                         <div class="gallery-caption">${item.caption || ''}</div>
                     `;
 
+                    // Clic pour ouvrir en grande taille (Lightbox) uniquement si ce n'est pas une vidéo
                     const mediaBox = gItem.querySelector('.gallery-media');
-                    mediaBox.addEventListener('click', (e) => {
-                        if (e.target.tagName === 'VIDEO' || e.target.tagName === 'IFRAME') return;
-                        openLightbox(idx);
-                    });
+                    if (!isVideo) {
+                        mediaBox.addEventListener('click', () => openLightbox(idx));
+                    }
 
                     itemsWrapper.appendChild(gItem);
                 });
@@ -1754,50 +1759,59 @@
                 if (project.gallery.length > 1) {
                     const controls = document.createElement('div');
                     controls.className = 'carousel-controls';
-                    controls.innerHTML = `
-                        <button class="carousel-btn" id="prevMediaBtn">&#9668; Précédent</button>
-                        <span class="carousel-counter" id="carouselCounter">1 / ${project.gallery.length}</span>
-                        <button class="carousel-btn" id="nextMediaBtn">Suivant &#9658;</button>
-                    `;
+
+                    const prevBtn = document.createElement('button');
+                    prevBtn.className = 'carousel-btn';
+                    prevBtn.textContent = '◄ Précédent';
+                    
+                    const counter = document.createElement('span');
+                    counter.className = 'carousel-counter';
+                    counter.textContent = `1 / ${project.gallery.length}`;
+
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = 'carousel-btn';
+                    nextBtn.textContent = 'Suivant ►';
+
+                    prevBtn.addEventListener('click', () => {
+                        showGalleryItem((currentGalleryIndex - 1 + project.gallery.length) % project.gallery.length);
+                    });
+
+                    nextBtn.addEventListener('click', () => {
+                        showGalleryItem((currentGalleryIndex + 1) % project.gallery.length);
+                    });
+
+                    controls.appendChild(prevBtn);
+                    controls.appendChild(counter);
+                    controls.appendChild(nextBtn);
                     carouselContainer.appendChild(controls);
                 }
 
                 modalProjectGallery.appendChild(carouselContainer);
-
-                if (project.gallery.length > 1) {
-                    const items = itemsWrapper.querySelectorAll('.gallery-item');
-                    const counter = document.getElementById('carouselCounter');
-
-                    const updateCarousel = (newIndex) => {
-                        items[currentGalleryIndex].classList.remove('active');
-                        
-                        const video = items[currentGalleryIndex].querySelector('video');
-                        if (video) video.pause();
-                        const iframe = items[currentGalleryIndex].querySelector('iframe');
-                        if (iframe) {
-                            const src = iframe.src;
-                            iframe.src = src;
-                        }
-
-                        currentGalleryIndex = (newIndex + items.length) % items.length;
-                        items[currentGalleryIndex].classList.add('active');
-                        counter.textContent = `${currentGalleryIndex + 1} / ${items.length}`;
-                    };
-
-                    document.getElementById('prevMediaBtn').addEventListener('click', () => updateCarousel(currentGalleryIndex - 1));
-                    document.getElementById('nextMediaBtn').addEventListener('click', () => updateCarousel(currentGalleryIndex + 1));
-                }
-
             } else {
-                modalProjectGallery.innerHTML = '<div style="color:#a0a0a0; font-size:0.9rem;">Aucun visuel supplémentaire pour le moment.</div>';
+                modalProjectGallery.innerHTML = '<div style="color: #a0a0a0; font-style: italic;">Aucun média disponible dans la galerie.</div>';
             }
 
             projectDetailModal.classList.add('active');
         }
 
-        closeProjectDetailBtn.addEventListener('click', () => projectDetailModal.classList.remove('active'));
+        function showGalleryItem(index) {
+            currentGalleryIndex = index;
+            const items = modalProjectGallery.querySelectorAll('.gallery-item');
+            items.forEach((item, idx) => {
+                item.classList.toggle('active', idx === currentGalleryIndex);
+            });
+            const counter = modalProjectGallery.querySelector('.carousel-counter');
+            if (counter) {
+                counter.textContent = `${currentGalleryIndex + 1} / ${currentProjectGalleryData.length}`;
+            }
+        }
 
-        // GESTION DE LA LIGHTBOX PLEIN ÉCRAN
+        function closeProjectDetail() {
+            projectDetailModal.classList.remove('active');
+        }
+        closeProjectDetailBtn.addEventListener('click', closeProjectDetail);
+
+        // LIGHTBOX
         const lightboxModal = document.getElementById('lightboxModal');
         const closeLightboxBtn = document.getElementById('closeLightboxBtn');
         const lightboxMediaWrapper = document.getElementById('lightboxMediaWrapper');
@@ -1815,85 +1829,44 @@
         function updateLightboxContent() {
             if (!currentProjectGalleryData || currentProjectGalleryData.length === 0) return;
             const item = currentProjectGalleryData[lightboxIndex];
+            
+            lightboxMediaWrapper.innerHTML = '';
             const ytUrl = getYouTubeEmbedUrl(item.img);
-            const isVideo = item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm');
-
             if (ytUrl) {
-                lightboxMediaWrapper.innerHTML = `<iframe src="${ytUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-            } else if (isVideo) {
-                lightboxMediaWrapper.innerHTML = `<video controls autoplay loop style="max-width:85vw; max-height:80vh;">
-                     <source src="${item.img}" type="video/mp4">
-                   </video>`;
+                lightboxMediaWrapper.innerHTML = `<iframe src="${ytUrl}" allowfullscreen></iframe>`;
+            } else if (item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm')) {
+                lightboxMediaWrapper.innerHTML = `<video src="${item.img}" controls autoplay></video>`;
             } else {
-                lightboxMediaWrapper.innerHTML = `<img src="${item.img}" alt="Plein écran" style="max-width:85vw; max-height:80vh; object-fit:contain;">`;
+                lightboxMediaWrapper.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu Plein Écran'}">`;
             }
 
-            lightboxCaption.textContent = item.caption ? `${item.caption} (${lightboxIndex + 1}/${currentProjectGalleryData.length})` : `Aperçu (${lightboxIndex + 1}/${currentProjectGalleryData.length})`;
+            lightboxCaption.textContent = item.caption || '';
         }
 
-        function closeLightbox() {
-            lightboxModal.classList.remove('active');
-            lightboxMediaWrapper.innerHTML = '';
-        }
-
-        closeLightboxBtn.addEventListener('click', closeLightbox);
         lightboxPrevBtn.addEventListener('click', () => {
             lightboxIndex = (lightboxIndex - 1 + currentProjectGalleryData.length) % currentProjectGalleryData.length;
             updateLightboxContent();
         });
+
         lightboxNextBtn.addEventListener('click', () => {
             lightboxIndex = (lightboxIndex + 1) % currentProjectGalleryData.length;
             updateLightboxContent();
         });
 
-        [videoModal, charSheetModal, projectDetailModal, lightboxModal].forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                    if (modal === videoModal) closeVideo();
-                    if (modal === lightboxModal) closeLightbox();
-                }
-            });
+        closeLightboxBtn.addEventListener('click', () => {
+            lightboxModal.classList.remove('active');
+            lightboxMediaWrapper.innerHTML = '';
         });
 
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                if (lightboxModal.classList.contains('active')) closeLightbox();
-                else if (videoModal.classList.contains('active')) closeVideo();
-                else if (charSheetModal.classList.contains('active')) closeCharSheet();
-                else if (projectDetailModal.classList.contains('active')) projectDetailModal.classList.remove('active');
-            }
-            if (lightboxModal.classList.contains('active')) {
-                if (e.key === 'ArrowLeft') {
-                    lightboxIndex = (lightboxIndex - 1 + currentProjectGalleryData.length) % currentProjectGalleryData.length;
-                    updateLightboxContent();
-                } else if (e.key === 'ArrowRight') {
-                    lightboxIndex = (lightboxIndex + 1) % currentProjectGalleryData.length;
-                    updateLightboxContent();
-                }
-            }
-        });
-
-        // SLASH CLIC
-        window.addEventListener('mousedown', (e) => {
+        // EFFET DE SLASH AU CLIC
+        window.addEventListener('click', (e) => {
             const slash = document.createElement('div');
             slash.className = 'slash-effect';
-            slash.style.left = e.clientX + 'px';
-            slash.style.top = e.clientY + 'px';
+            slash.style.left = `${e.clientX}px`;
+            slash.style.top = `${e.clientY}px`;
             document.body.appendChild(slash);
-            setTimeout(() => slash.remove(), 220);
+            setTimeout(() => slash.remove(), 250);
         });
-
-        // BOUCLE PRINCIPALE
-        let frameCount = 0;
-        function loop() {
-            frameCount++;
-            ctx.clearRect(0, 0, width, height);
-            updateAndDrawBgParticles(frameCount);
-            updateTitleAnimation();
-            requestAnimationFrame(loop);
-        }
-        requestAnimationFrame(loop);
     </script>
 </body>
 </html>
