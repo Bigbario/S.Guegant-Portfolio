@@ -231,6 +231,7 @@
 
         .btn-projets { font-size: 2.5rem; padding: 20px 0; }
         .btn-demo { font-size: 2.1rem; padding: 18px 0; }
+        .btn-about { font-size: 1.8rem; padding: 16px 0; }
 
         .menu-btn:hover {
             background: linear-gradient(135deg, rgba(170, 40, 255, 0.7), rgba(80, 10, 120, 0.9));
@@ -454,7 +455,7 @@
         .arrow-icon { font-size: 1.6rem; color: #00f0ff; }
 
         /* --- MODALES --- */
-        .video-modal-overlay, .project-detail-modal, .lightbox-modal, .contact-modal {
+        .video-modal-overlay, .char-sheet-modal, .project-detail-modal, .lightbox-modal, .contact-modal {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
@@ -469,7 +470,7 @@
             transition: opacity 0.3s ease;
         }
 
-        .video-modal-overlay.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active {
+        .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active {
             opacity: 1;
             pointer-events: auto;
         }
@@ -513,7 +514,7 @@
             transform: translateX(-50%) scale(1.05);
         }
 
-        .contact-modal-container {
+        .char-sheet-container, .contact-modal-container {
             width: 90vw;
             max-width: 700px;
             max-height: 88vh;
@@ -528,6 +529,128 @@
             flex-direction: column;
             gap: 20px;
         }
+
+        .char-sheet-container {
+            max-width: 1200px;
+            border-color: rgba(190, 80, 255, 0.8);
+            box-shadow: 0 0 50px rgba(160, 30, 255, 0.5);
+            padding: 60px 30px 30px 30px;
+        }
+
+        .char-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(190, 80, 255, 0.5);
+            padding-bottom: 15px;
+        }
+
+        .char-title-box h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            color: #ffffff;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(200, 80, 255, 0.8);
+        }
+
+        .char-title-box span {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f0ff;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .char-class-badge {
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid #00f0ff;
+            padding: 8px 18px;
+            border-radius: 8px;
+            color: #00f0ff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+
+        .char-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) { .char-grid { grid-template-columns: 1fr; } }
+
+        .cyber-card {
+            background: rgba(35, 12, 65, 0.6);
+            border: 1px solid rgba(180, 50, 255, 0.4);
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .cyber-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: #d488ff;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(180, 50, 255, 0.3);
+            padding-bottom: 6px;
+        }
+
+        .avatar-frame {
+            width: 100%;
+            height: 280px;
+            border: 2px solid #00f0ff;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #39ff14;
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 10px;
+        }
+
+        .status-dot { width: 10px; height: 10px; background: #39ff14; border-radius: 50%; box-shadow: 0 0 10px #39ff14; }
+
+        .stat-row {
+            display: grid;
+            grid-template-columns: 140px 1fr 40px;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+
+        .stat-label { font-family: 'Orbitron', sans-serif; color: #e0b0ff; font-weight: 600; }
+        .stat-bar-container { width: 100%; height: 10px; background: rgba(255, 255, 255, 0.1); border-radius: 5px; overflow: hidden; border: 1px solid rgba(180, 50, 255, 0.4); }
+        .stat-bar-fill { height: 100%; background: linear-gradient(90deg, #8a2be2, #00f0ff); box-shadow: 0 0 10px #00f0ff; }
+
+        .osu-s-grade {
+            font-family: 'Orbitron', 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.7rem;
+            color: #ffd700;
+            text-align: right;
+            display: inline-block;
+            text-shadow: 
+                0 0 8px rgba(255, 215, 0, 0.9),
+                0 0 15px rgba(255, 170, 0, 0.6),
+                1px 1px 2px #000000;
+            transform: skewX(-6deg);
+        }
+
+        .skills-tag-container { display: flex; flex-wrap: wrap; gap: 8px; }
+        .skill-tag { background: rgba(140, 30, 255, 0.25); border: 1px solid rgba(190, 80, 255, 0.6); padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; }
+
+        .bio-text { font-size: 0.9rem; line-height: 1.6; color: #d1c4e9; }
+        .bio-text p { margin-bottom: 10px; }
+        .bio-text strong { color: #00f0ff; }
 
         /* --- MODALE DETAIL PROJET --- */
         .project-modal-container {
@@ -924,6 +1047,7 @@
     <nav class="game-menu" id="mainMenu">
         <button class="menu-btn btn-projets" id="openProjectsBtn">PROJETS</button>
         <button class="menu-btn btn-demo" id="demoReelBtn">DEMO REEL</button>
+        <button class="menu-btn btn-about" id="aboutBtn">ABOUT ME</button>
     </nav>
 
     <!-- SCÈNE DES PROJETS -->
@@ -978,6 +1102,87 @@
         <div class="video-container">
             <button class="close-btn" id="closeVideoBtn">FERMER [X]</button>
             <iframe id="youtubeIframe" src="https://www.youtube.com/embed/3UwbJ8Q1MwU?enablejsapi=1" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- MODAL ABOUT ME -->
+    <div class="char-sheet-modal" id="charSheetModal">
+        <div class="char-sheet-container">
+            <button class="close-btn" id="closeCharSheetBtn">FERMER [X]</button>
+            
+            <div class="char-header">
+                <div class="char-title-box">
+                    <h2>SAMUEL GUEGANT</h2>
+                    <span>GAME DESIGNER & PROTOTYPER</span>
+                </div>
+                <div class="char-class-badge">GAME DESIGNER</div>
+            </div>
+
+            <div class="char-grid">
+                <div class="cyber-card">
+                    <div class="avatar-frame">
+                        <img src="images/PhotoPro_Samuel_GUEGANT.png" alt="Samuel Guegant Avatar" onerror="this.src='https://via.placeholder.com/280x280/1a0033/00f0ff?text=SAMUEL+GUEGANT'">
+                    </div>
+                    <div class="status-pill">
+                        <div class="status-dot"></div>
+                        READY FOR FREELANCE OR INTERNSHIPS
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="cyber-card">
+                        <h3>ATTRIBUTS PRINCIPAUX</h3>
+                        <div class="stat-row">
+                            <span class="stat-label">GAME DESIGN</span>
+                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 95%;"></div></div>
+                            <span class="osu-s-grade">S</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">LEVEL DESIGN</span>
+                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 94%;"></div></div>
+                            <span class="osu-s-grade">S</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">PROTOTYPING</span>
+                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 93%;"></div></div>
+                            <span class="osu-s-grade">S</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">BALANCING</span>
+                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 95%;"></div></div>
+                            <span class="osu-s-grade">S</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">DATA ANALYSIS</span>
+                            <div class="stat-bar-container"><div class="stat-bar-fill" style="width: 93%;"></div></div>
+                            <span class="osu-s-grade">S</span>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card">
+                        <h3>COMPÉTENCES & OUTILS</h3>
+                        <div class="skills-tag-container">
+                            <span class="skill-tag">Unreal Engine 5</span>
+                            <span class="skill-tag">Unity</span>
+                            <span class="skill-tag">RPG Maker MV</span>
+                            <span class="skill-tag">C# / JavaScript</span>
+                            <span class="skill-tag">UI / UX Design</span>
+                            <span class="skill-tag">QA Testing</span>
+                            <span class="skill-tag">Notion</span>
+                            <span class="skill-tag">Google Sheet & Excel</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cyber-card">
+                    <h3>BACKGROUND / NOTES</h3>
+                    <div class="bio-text">
+                        <p>Spécialité : Conception de <strong>système de jeu</strong>, <strong>prototypage rapide</strong>, <strong>intégration</strong> et <strong>rapports détaillés</strong>.</p>
+                        <p>Diplômé de <strong>Sciences Po Rennes</strong>, en Master 2 de Game Design à <strong>Isart Digital</strong>. Combinant <strong>rigueur méthodologique</strong> et <strong>vision créative</strong>.</p>
+                        <p>Passionné par la création d'<strong>expériences ludiques</strong>, <strong>immersives</strong> et <strong>équilibrées</strong>, allant des <strong>serious games</strong> engagés aux <strong>jeux de stratégie</strong> complexes.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1067,6 +1272,7 @@
         const modalsWithContainers = [
             { modal: document.getElementById('contactModal'), containerClass: 'contact-modal-container' },
             { modal: document.getElementById('videoModal'), containerClass: 'video-container' },
+            { modal: document.getElementById('charSheetModal'), containerClass: 'char-sheet-container' },
             { modal: document.getElementById('projectDetailModal'), containerClass: 'project-modal-container' },
             { modal: document.getElementById('lightboxModal'), containerClass: 'lightbox-container' }
         ];
@@ -1600,7 +1806,15 @@
             }, 600);
         });
 
-        // MODALE DEMO REEL
+        // MODALE ABOUT ME ET DEMO REEL
+        document.getElementById('aboutBtn').addEventListener('click', () => {
+            document.getElementById('charSheetModal').classList.add('active');
+        });
+
+        document.getElementById('closeCharSheetBtn').addEventListener('click', () => {
+            document.getElementById('charSheetModal').classList.remove('active');
+        });
+
         document.getElementById('demoReelBtn').addEventListener('click', () => {
             document.getElementById('videoModal').classList.add('active');
         });
