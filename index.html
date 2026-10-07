@@ -628,7 +628,6 @@
             margin-bottom: 20px;
         }
 
-        /* BOUTON DE LIEN DU PROJET (Photo 3) */
         .project-link-box {
             margin-top: auto;
             padding-top: 15px;
@@ -737,10 +736,12 @@
             display: block;
         }
 
-        .gallery-media video {
+        .gallery-media video, .gallery-media iframe {
             width: 100%;
+            height: 300px;
             max-height: 380px;
             border-radius: 4px;
+            border: none;
             outline: none;
         }
 
@@ -800,17 +801,27 @@
         }
 
         .lightbox-media-wrapper {
-            max-width: 85vw;
-            max-height: 80vh;
+            width: 85vw;
+            height: 80vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .lightbox-media-wrapper img, .lightbox-media-wrapper video {
+        .lightbox-media-wrapper img {
             max-width: 100%;
             max-height: 80vh;
             object-fit: contain;
+            border: 2px solid #00f0ff;
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.4);
+        }
+
+        .lightbox-media-wrapper video, .lightbox-media-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            max-width: 85vw;
+            max-height: 80vh;
             border: 2px solid #00f0ff;
             border-radius: 8px;
             box-shadow: 0 0 40px rgba(0, 240, 255, 0.4);
@@ -1062,7 +1073,6 @@
                         <div class="project-overview" id="modalProjectDesc"></div>
                     </div>
 
-                    <!-- LIEN DU PROJET CONFIGURABLE (Photo 3) -->
                     <div class="project-link-box" id="modalProjectLinkBox"></div>
                 </div>
 
@@ -1194,7 +1204,21 @@
             }
         }
 
-        // DATA PROJETS AVEC LIEN CONFIGURABLE PAR PROJET (link: "...")
+        // FONCTION UTILITAIRE YOUTUBE
+        function getYouTubeEmbedUrl(url) {
+            if (!url) return null;
+            let videoId = null;
+            if (url.includes('youtube.com/watch?v=')) {
+                videoId = url.split('v=')[1].split('&')[0];
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            } else if (url.includes('youtube.com/embed/')) {
+                return url;
+            }
+            return videoId ? `https://www.youtube.com/embed/${videoId}?enablejsapi=1` : null;
+        }
+
+        // DATA PROJETS AVEC LIEN CONFIGURABLE PAR PROJET
         const domains = [
             {
                 id: 'level_design',
@@ -1204,7 +1228,7 @@
                         title: 'Tomb Raider Dungeon', 
                         img: 'images/TombRaider.png',
                         bgImg: 'images/TombRaider.png',
-                        link: 'https://drive.google.com/file/d/1V55zKcqW59M8226xS9Ou7-msZElHfr4p/view?usp=drive_link', // <-- LIEN CONFIGURABLE ICI
+                        link: 'https://drive.google.com/file/d/1V55zKcqW59M8226xS9Ou7-msZElHfr4p/view?usp=drive_link',
                         linkLabel: '🔗 Lien de la présentation',
                         skills: ['Level Design', 'Puzzle Design', 'Documentation', 'Unreal Engine'],
                         desc: 'Itérations rapides du blockout de puzzles d\'un donjon d\'exploration inspiré de Tomb Raider. Structuration des énigmes environnementales, balisage de l\'espace et pacing de la progression du joueur.',
@@ -1228,7 +1252,7 @@
                             { img: 'Galleries/Tomb Raider/14.png', caption: 'Page 14' },
                             { img: 'Galleries/Tomb Raider/15.png', caption: 'Page 15' },
                             { img: 'Galleries/Tomb Raider/16.png', caption: 'Page 16' },
-                            { img: 'Galleries/Tomb Raider/17.png', caption: 'Page 17' },
+                            { img: 'Galleries/Tomb Raider/17.png', caption: 'Page 17' }
                         ]
                     },
                     { 
@@ -1240,6 +1264,7 @@
                         skills: ['Level Design', 'Puzzle Design', 'Documentation'],
                         desc: 'Design d\'un niveau via l\'éditeur de portal. Focalisation sur le guidage visuel et l\'apprentissage par l\'observation.',
                         gallery: [
+                            { img: 'https://youtu.be/0MizN12rNUk', caption: 'Walkthrough vidéo Portal' },
                             { img: 'Galleries/Portal/1.png', caption: 'Aperçu 1' },
                             { img: 'Galleries/Portal/2.png', caption: 'Aperçu 2' },
                             { img: 'Galleries/Portal/3.png', caption: 'Aperçu 3' },
@@ -1263,7 +1288,7 @@
                             { img: 'Galleries/Portal/21.png', caption: 'Aperçu 21' },
                             { img: 'Galleries/Portal/22.png', caption: 'Aperçu 22' },
                             { img: 'Galleries/Portal/23.png', caption: 'Aperçu 23' },
-                            { img: 'Galleries/Portal/24.png', caption: 'Aperçu 24' },
+                            { img: 'Galleries/Portal/24.png', caption: 'Aperçu 24' }
                         ]
                     },
                     { 
@@ -1275,6 +1300,7 @@
                         skills: ['Level Design', '3D Blockout', 'Documentation', 'UEFN'],
                         desc: 'Création d\'un blockout 3D immersif à l\'intérieur d\'un organisme géant. Travail approfondi sur la verticalité, la composition de cadrage et la narration environnementale.',
                         gallery: [
+                            { img: 'https://youtu.be/nk1aKOR9UJM', caption: 'Walkthrough vidéo Blockout 3D' },
                             { img: 'Galleries/LD3D Whale Thematic/LD3D Whale\'s Inside Logo.png', caption: 'Logo' },
                             { img: 'Galleries/LD3D Whale Thematic/1.png', caption: 'Section 1' },
                             { img: 'Galleries/LD3D Whale Thematic/2.png', caption: 'Section 2' },
@@ -1299,7 +1325,7 @@
                             { img: 'Galleries/LD3D Whale Thematic/21.png', caption: 'Section 21' },
                             { img: 'Galleries/LD3D Whale Thematic/22.png', caption: 'Section 22' },
                             { img: 'Galleries/LD3D Whale Thematic/23.png', caption: 'Section 23' },
-                            { img: 'Galleries/LD3D Whale Thematic/PARTIE IV.png', caption: 'Partie IV' }
+                            { img: 'Galleries/LD3D Whale Thematic/PARTIE IV.png', caption: 'Partie IV' },
                             { img: 'Galleries/LD3D Whale Thematic/25.png', caption: 'Section 25' },
                             { img: 'Galleries/LD3D Whale Thematic/26.png', caption: 'Section 26' },
                             { img: 'Galleries/LD3D Whale Thematic/27.png', caption: 'Section 27' },
@@ -1308,7 +1334,7 @@
                             { img: 'Galleries/LD3D Whale Thematic/30.png', caption: 'Section 30' },
                             { img: 'Galleries/LD3D Whale Thematic/31.png', caption: 'Section 31' },
                             { img: 'Galleries/LD3D Whale Thematic/32.png', caption: 'Section 32' },
-                            { img: 'Galleries/LD3D Whale Thematic/33.png', caption: 'Section 33' },
+                            { img: 'Galleries/LD3D Whale Thematic/33.png', caption: 'Section 33' }
                         ]
                     },
                     { 
@@ -1372,6 +1398,7 @@
                         skills: ['Game Design', 'Level Design', 'Narrative Design', 'World Design'],
                         desc: 'Conception d\'un univers féérique sombre. Élaboration des mécaniques narratives à choix multiples et architecture du monde interactif.',
                         gallery: [
+                            { img: 'https://youtu.be/hk353Cy4Huw', caption: 'Trailer Unseelie Court' },
                             { img: 'Galleries/Unseelie Court/Screenshot_Campfire.png', caption: 'Screenshot Campfire' },
                             { img: 'Galleries/Unseelie Court/Screenshot_DrunkenHideout.png', caption: 'Screenshot Drunken Hideout' },
                             { img: 'Galleries/Unseelie Court/Screenshot_Mine.png', caption: 'Screenshot Mine' },
@@ -1392,6 +1419,7 @@
                         skills: ['Game Design', 'Programming', 'Balancing', 'HUD System'],
                         desc: 'Jeu d\'action / réflexe axé sur le retournement et l\'inversion de mécaniques. Découpage UI/UX, programmation des systèmes de jeu et équilibrage des niveaux.',
                         gallery: [
+                            { img: 'https://youtu.be/M2mBmCmd5LU', caption: 'Trailer FlipIt' },
                             { img: 'Galleries/FlipIt_Screenshots/BallJump VS Rope.png', caption: 'BallJump VS Rope' },
                             { img: 'Galleries/FlipIt_Screenshots/BallJumpImpact2.png', caption: 'BallJump Impact 2' },
                             { img: 'Galleries/FlipIt_Screenshots/DoubleBallJumpImpact.png', caption: 'Double BallJump Impact' },
@@ -1417,6 +1445,7 @@
                         skills: ['Game Design', 'Level Design', 'World Design', 'Narrative Design', 'Balancing', 'Programming'],
                         desc: 'Collection de modules et plugins personnalisés JavaScript développés pour RPG Maker MV (Systèmes de QTE, menus personnalisés, mécaniques d\'esquive).',
                         gallery: [
+                            { img: 'https://youtu.be/MGyzw5mewII', caption: 'Map Timelapse RPG Maker (YouTube)' },
                             { img: 'Galleries/Rpg Maker/RPG Maker MV.mp4', caption: 'Démonstration système RPG Maker (Vidéo)' }
                         ]
                     }
@@ -1663,7 +1692,6 @@
 
             modalProjectDesc.textContent = project.desc || 'Aucune description disponible pour ce projet.';
 
-            // GESTION DU LIEN CLIQUABLE EN BAS À GAUCHE
             modalProjectLinkBox.innerHTML = '';
             if (project.link && project.link.trim() !== '') {
                 const linkBtn = document.createElement('a');
@@ -1690,14 +1718,20 @@
                     const gItem = document.createElement('div');
                     gItem.className = `gallery-item ${idx === 0 ? 'active' : ''}`;
                     
+                    const ytUrl = getYouTubeEmbedUrl(item.img);
                     const isVideo = item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm');
                     
-                    const mediaHTML = isVideo 
-                        ? `<video controls preload="metadata">
+                    let mediaHTML = '';
+                    if (ytUrl) {
+                        mediaHTML = `<iframe src="${ytUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                    } else if (isVideo) {
+                        mediaHTML = `<video controls preload="metadata">
                              <source src="${item.img}" type="video/mp4">
                              Votre navigateur ne prend pas en charge la lecture vidéo.
-                           </video>`
-                        : `<img src="${item.img}" alt="${project.title}" onerror="this.src='https://via.placeholder.com/400x220/1a0033/00f0ff?text=Aper%C3%A7u'">`;
+                           </video>`;
+                    } else {
+                        mediaHTML = `<img src="${item.img}" alt="${project.title}" onerror="this.src='https://via.placeholder.com/400x220/1a0033/00f0ff?text=Aper%C3%A7u'">`;
+                    }
 
                     gItem.innerHTML = `
                         <div class="gallery-media" data-index="${idx}">
@@ -1706,11 +1740,9 @@
                         <div class="gallery-caption">${item.caption || ''}</div>
                     `;
 
-                    // Événement Clic pour ouvrir la Lightbox Plein Écran
                     const mediaBox = gItem.querySelector('.gallery-media');
                     mediaBox.addEventListener('click', (e) => {
-                        // Empêcher l'ouverture si clic sur contrôle vidéo
-                        if (e.target.tagName === 'VIDEO') return;
+                        if (e.target.tagName === 'VIDEO' || e.target.tagName === 'IFRAME') return;
                         openLightbox(idx);
                     });
 
@@ -1741,6 +1773,11 @@
                         
                         const video = items[currentGalleryIndex].querySelector('video');
                         if (video) video.pause();
+                        const iframe = items[currentGalleryIndex].querySelector('iframe');
+                        if (iframe) {
+                            const src = iframe.src;
+                            iframe.src = src;
+                        }
 
                         currentGalleryIndex = (newIndex + items.length) % items.length;
                         items[currentGalleryIndex].classList.add('active');
@@ -1778,13 +1815,18 @@
         function updateLightboxContent() {
             if (!currentProjectGalleryData || currentProjectGalleryData.length === 0) return;
             const item = currentProjectGalleryData[lightboxIndex];
+            const ytUrl = getYouTubeEmbedUrl(item.img);
             const isVideo = item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm');
 
-            lightboxMediaWrapper.innerHTML = isVideo
-                ? `<video controls autoplay loop style="max-width:85vw; max-height:80vh;">
+            if (ytUrl) {
+                lightboxMediaWrapper.innerHTML = `<iframe src="${ytUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            } else if (isVideo) {
+                lightboxMediaWrapper.innerHTML = `<video controls autoplay loop style="max-width:85vw; max-height:80vh;">
                      <source src="${item.img}" type="video/mp4">
-                   </video>`
-                : `<img src="${item.img}" alt="Plein écran" style="max-width:85vw; max-height:80vh; object-fit:contain;">`;
+                   </video>`;
+            } else {
+                lightboxMediaWrapper.innerHTML = `<img src="${item.img}" alt="Plein écran" style="max-width:85vw; max-height:80vh; object-fit:contain;">`;
+            }
 
             lightboxCaption.textContent = item.caption ? `${item.caption} (${lightboxIndex + 1}/${currentProjectGalleryData.length})` : `Aperçu (${lightboxIndex + 1}/${currentProjectGalleryData.length})`;
         }
