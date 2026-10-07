@@ -1475,351 +1475,291 @@
                         skills: ['UX Research', 'Gameplay Analysis', 'Marketing Analysis', 'Video Game Market Analysis', 'Documentation'],
                         desc: 'Analyse approfondie de la boucle de gameplay, du modèle économique Gacha et des facteurs de succès UX/UI de la franchise Umamusume sur le marché asiatique et mondial.',
                         role: 'Auteur & Chercheur UX : analyse comparative, analyse de marché et rédaction de la documentation d\'étude.',
-                        gallery: []
+                        gallery: [
+                            { img: 'Galleries/Umamusume/1.png', caption: 'Page 1' },
+                            { img: 'Galleries/Umamusume/2.png', caption: 'Page 2' },
+                            { img: 'Galleries/Umamusume/3.png', caption: 'Page 3' },
+                            { img: 'Galleries/Umamusume/4.png', caption: 'Page 4' },
+                            { img: 'Galleries/Umamusume/5.png', caption: 'Page 5' },
+                            { img: 'Galleries/Umamusume/6.png', caption: 'Page 6' },
+                            { img: 'Galleries/Umamusume/7.png', caption: 'Page 7' },
+                            { img: 'Galleries/Umamusume/8.png', caption: 'Page 8' },
+                            { img: 'Galleries/Umamusume/9.png', caption: 'Page 9' },
+                            { img: 'Galleries/Umamusume/10.png', caption: 'Page 10' },
+                            { img: 'Galleries/Umamusume/11.png', caption: 'Page 11' },
+                            { img: 'Galleries/Umamusume/12.png', caption: 'Page 12' },
+                            { img: 'Galleries/Umamusume/13.png', caption: 'Page 13' },
+                            { img: 'Galleries/Umamusume/14.png', caption: 'Page 14' },
+                            { img: 'Galleries/Umamusume/15.png', caption: 'Page 15' },
+                            { img: 'Galleries/Umamusume/16.png', caption: 'Page 16' },
+                            { img: 'Galleries/Umamusume/17.png', caption: 'Page 17' },
+                            { img: 'Galleries/Umamusume/18.png', caption: 'Page 18' },
+                            { img: 'Galleries/Umamusume/19.png', caption: 'Page 19' },
+                            { img: 'Galleries/Umamusume/20.png', caption: 'Page 20' },
+                            { img: 'Galleries/Umamusume/21.png', caption: 'Page 21' },
+                            { img: 'Galleries/Umamusume/22.png', caption: 'Page 22' },
+                            { img: 'Galleries/Umamusume/23.png', caption: 'Page 23' },
+                            { img: 'Galleries/Umamusume/24.png', caption: 'Page 24' },
+                            { img: 'Galleries/Umamusume/25.png', caption: 'Page 25' },
+                            { img: 'Galleries/Umamusume/26.png', caption: 'Page 26' }
+                        ]
+                    },
+                    { 
+                        title: 'Video games and discriminations', 
+                        img: 'images/VideoGameDiscriminations.png', 
+                        bgImg: 'images/VideoGameDiscriminations.png',
+                        link: 'https://drive.google.com/file/d/14bj6jAMrinySHySFcSqiLS5RP1qkgDPM/view?usp=drive_link',
+                        linkLabel: '🔗 Lien de la présentation',
+                        skills: ['Inclusivity', 'Socio-economic analysis', 'Video Game Market Analysis', 'Documentation'],
+                        desc: 'Dossier de recherche analysant la représentation des minorités, la lutte contre la toxicité et l\'accessibilité numérique dans l\'industrie du jeu vidéo moderne.',
+                        role: 'Rédacteur & Chercheur : recherche sociologique, synthèses sectorielles et formulation de préconisations.',
+                        gallery: [
+                            { img: 'Galleries/VideoGameDiscriminations/1.png', caption: 'Page 1' },
+                            { img: 'Galleries/VideoGameDiscriminations/2.png', caption: 'Page 2' },
+                            { img: 'Galleries/VideoGameDiscriminations/3.png', caption: 'Page 3' },
+                            { img: 'Galleries/VideoGameDiscriminations/4.png', caption: 'Page 4' },
+                            { img: 'Galleries/VideoGameDiscriminations/5.png', caption: 'Page 5' },
+                            { img: 'Galleries/VideoGameDiscriminations/6.png', caption: 'Page 6' },
+                            { img: 'Galleries/VideoGameDiscriminations/7.png', caption: 'Page 7' },
+                            { img: 'Galleries/VideoGameDiscriminations/8.png', caption: 'Page 8' }
+                        ]
                     }
                 ]
             }
         ];
 
+        // LOGIQUE DE NAVIGATION ENTRE DOMAINES
         let currentDomainIndex = 0;
 
-        const openProjectsBtn = document.getElementById('openProjectsBtn');
-        const projectsStage = document.getElementById('projectsStage');
-        const backToMenuBtn = document.getElementById('backToMenuBtn');
-        const domainTitle = document.getElementById('domainTitle');
-        const projectsGrid = document.getElementById('projectsGrid');
-        const stageBgPreview = document.getElementById('stageBgPreview');
-        const prevDomainBtn = document.getElementById('prevDomainBtn');
-        const nextDomainBtn = document.getElementById('nextDomainBtn');
-        const prevDomainLabel = document.getElementById('prevDomainLabel');
-        const nextDomainLabel = document.getElementById('nextDomainLabel');
-        const mainMenu = document.getElementById('mainMenu');
-        const titleContainerElem = document.getElementById('titleContainer');
-
-        function updateStageContent() {
+        function updateStage() {
             const domain = domains[currentDomainIndex];
-            domainTitle.textContent = domain.title;
+            document.getElementById('domainTitle').textContent = domain.title;
 
-            // Navigation labels
             const prevIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
             const nextIndex = (currentDomainIndex + 1) % domains.length;
-            prevDomainLabel.textContent = `Vers ${domains[prevIndex].title}`;
-            nextDomainLabel.textContent = `Vers ${domains[nextIndex].title}`;
 
-            // Grille des projets
-            projectsGrid.innerHTML = '';
-            domain.projects.forEach((proj, idx) => {
+            document.getElementById('prevDomainLabel').textContent = `Vers ${domains[prevIndex].title}`;
+            document.getElementById('nextDomainLabel').textContent = `Vers ${domains[nextIndex].title}`;
+
+            const grid = document.getElementById('projectsGrid');
+            grid.innerHTML = '';
+
+            domain.projects.forEach((proj) => {
                 const bubble = document.createElement('div');
                 bubble.className = 'project-bubble';
                 bubble.innerHTML = `
-                    <img src="${proj.img}" alt="${proj.title}" onerror="this.src='https://via.placeholder.com/170x170/1a0033/00f0ff?text=PROJET'">
+                    <img src="${proj.img}" alt="${proj.title}" onerror="this.src='https://via.placeholder.com/170/1a0033/00f0ff?text=${encodeURIComponent(proj.title)}'">
                     <div class="bubble-title">${proj.title}</div>
                 `;
 
                 bubble.addEventListener('mouseenter', () => {
-                    if (proj.bgImg) {
-                        stageBgPreview.style.backgroundImage = `url('${proj.bgImg}')`;
-                        stageBgPreview.classList.add('active');
-                    }
+                    const bgPreview = document.getElementById('stageBgPreview');
+                    bgPreview.style.backgroundImage = `url('${proj.bgImg || proj.img}')`;
+                    bgPreview.classList.add('active');
                 });
 
                 bubble.addEventListener('mouseleave', () => {
-                    stageBgPreview.classList.remove('active');
+                    document.getElementById('stageBgPreview').classList.remove('active');
                 });
 
-                bubble.addEventListener('click', () => {
-                    openProjectDetail(proj);
-                });
+                bubble.addEventListener('click', () => openProjectModal(proj));
 
-                projectsGrid.appendChild(bubble);
+                grid.appendChild(bubble);
             });
         }
 
-        if (openProjectsBtn) {
-            openProjectsBtn.addEventListener('click', () => {
-                document.body.classList.add('curtains-closed');
-                setTimeout(() => {
-                    mainMenu.classList.add('hidden');
-                    titleContainerElem.classList.add('hidden');
-                    currentDomainIndex = 0;
-                    updateStageContent();
-                    projectsStage.classList.add('active');
-                    document.body.classList.remove('curtains-closed');
-                }, 600);
-            });
-        }
+        // GESTION DES BOUTONS DE NAVIGATION DU STAGE
+        document.getElementById('prevDomainBtn').addEventListener('click', () => {
+            currentDomainIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
+            updateStage();
+        });
 
-        if (backToMenuBtn) {
-            backToMenuBtn.addEventListener('click', () => {
-                document.body.classList.add('curtains-closed');
-                setTimeout(() => {
-                    projectsStage.classList.remove('active');
-                    mainMenu.classList.remove('hidden');
-                    titleContainerElem.classList.remove('hidden');
-                    document.body.classList.remove('curtains-closed');
-                }, 600);
-            });
-        }
+        document.getElementById('nextDomainBtn').addEventListener('click', () => {
+            currentDomainIndex = (currentDomainIndex + 1) % domains.length;
+            updateStage();
+        });
 
-        if (prevDomainBtn) {
-            prevDomainBtn.addEventListener('click', () => {
-                currentDomainIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
-                updateStageContent();
-            });
-        }
+        document.getElementById('openProjectsBtn').addEventListener('click', () => {
+            document.body.classList.add('curtains-closed');
+            setTimeout(() => {
+                document.getElementById('mainMenu').classList.add('hidden');
+                document.getElementById('titleContainer').classList.add('hidden');
+                document.getElementById('projectsStage').classList.add('active');
+                updateStage();
+                setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
+            }, 600);
+        });
 
-        if (nextDomainBtn) {
-            nextDomainBtn.addEventListener('click', () => {
-                currentDomainIndex = (currentDomainIndex + 1) % domains.length;
-                updateStageContent();
-            });
-        }
+        document.getElementById('backToMenuBtn').addEventListener('click', () => {
+            document.body.classList.add('curtains-closed');
+            setTimeout(() => {
+                document.getElementById('projectsStage').classList.remove('active');
+                document.getElementById('mainMenu').classList.remove('hidden');
+                document.getElementById('titleContainer').classList.remove('hidden');
+                setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
+            }, 600);
+        });
 
-        // GESTION MODALE DETAIL PROJET & CARROUSEL GALERIE
-        const projectDetailModal = document.getElementById('projectDetailModal');
-        const closeProjectDetailBtn = document.getElementById('closeProjectDetailBtn');
-        const modalProjectTitle = document.getElementById('modalProjectTitle');
-        const modalProjectSkills = document.getElementById('modalProjectSkills');
-        const modalProjectDesc = document.getElementById('modalProjectDesc');
-        const modalProjectRole = document.getElementById('modalProjectRole');
-        const modalProjectLinkBox = document.getElementById('modalProjectLinkBox');
-        const modalProjectGallery = document.getElementById('modalProjectGallery');
+        // MODALE DEMO REEL
+        document.getElementById('demoReelBtn').addEventListener('click', () => {
+            document.getElementById('videoModal').classList.add('active');
+        });
 
+        document.getElementById('closeVideoBtn').addEventListener('click', () => {
+            document.getElementById('videoModal').classList.remove('active');
+            const iframe = document.getElementById('youtubeIframe');
+            if (iframe) iframe.src = iframe.src;
+        });
+
+        // LOGIQUE DES DETAIL PROJET ET LIGHTBOX
         let currentGalleryItems = [];
         let currentGalleryIndex = 0;
 
-        function openProjectDetail(proj) {
-            modalProjectTitle.textContent = proj.title;
+        function openProjectModal(project) {
+            document.getElementById('modalProjectTitle').textContent = project.title;
 
-            modalProjectSkills.innerHTML = '';
-            if (proj.skills) {
-                proj.skills.forEach(skill => {
-                    const badge = document.createElement('span');
-                    badge.className = 'project-skill-badge';
-                    badge.textContent = skill;
-                    modalProjectSkills.appendChild(badge);
-                });
+            const skillsList = document.getElementById('modalProjectSkills');
+            skillsList.innerHTML = '';
+            project.skills.forEach(skill => {
+                const badge = document.createElement('span');
+                badge.className = 'project-skill-badge';
+                badge.textContent = skill;
+                skillsList.appendChild(badge);
+            });
+
+            document.getElementById('modalProjectDesc').textContent = project.desc;
+            document.getElementById('modalProjectRole').textContent = project.role;
+
+            const linkBox = document.getElementById('modalProjectLinkBox');
+            if (project.link) {
+                linkBox.innerHTML = `<a href="${project.link}" target="_blank" class="project-link-btn">${project.linkLabel || '🔗 Voir le projet'}</a>`;
+            } else {
+                linkBox.innerHTML = '';
             }
 
-            modalProjectDesc.textContent = proj.desc || 'Aucune description disponible.';
-            modalProjectRole.textContent = proj.role || 'Aucun rôle spécifié.';
-
-            modalProjectLinkBox.innerHTML = '';
-            if (proj.link && proj.linkLabel) {
-                const linkBtn = document.createElement('a');
-                linkBtn.className = 'project-link-btn';
-                linkBtn.href = proj.link;
-                linkBtn.target = '_blank';
-                linkBtn.innerHTML = proj.linkLabel;
-                modalProjectLinkBox.appendChild(linkBtn);
-            }
-
-            // Construction du carrousel de galerie
-            modalProjectGallery.innerHTML = '';
-            currentGalleryItems = proj.gallery || [];
+            currentGalleryItems = project.gallery || [];
             currentGalleryIndex = 0;
 
-            if (currentGalleryItems.length > 0) {
-                const carouselContainer = document.createElement('div');
-                carouselContainer.className = 'carousel-container';
-
-                const itemsWrapper = document.createElement('div');
-                itemsWrapper.style.width = '100%';
-
-                currentGalleryItems.forEach((item, idx) => {
-                    const galleryItem = document.createElement('div');
-                    galleryItem.className = `gallery-item ${idx === 0 ? 'active' : ''}`;
-                    galleryItem.dataset.index = idx;
-
-                    const mediaBox = document.createElement('div');
-                    mediaBox.className = 'gallery-media';
-
-                    let isVideoType = false;
-                    const mediaSrc = item.img || '';
-
-                    if (mediaSrc.includes('youtube.com') || mediaSrc.includes('youtu.be')) {
-                        isVideoType = true;
-                        mediaBox.classList.add('is-video');
-                        const embedUrl = getYouTubeEmbedUrl(mediaSrc);
-                        mediaBox.innerHTML = `<iframe src="${embedUrl}" title="${item.caption || 'Vidéo'}" allowfullscreen></iframe>`;
-                    } else if (mediaSrc.endsWith('.mp4')) {
-                        isVideoType = true;
-                        mediaBox.classList.add('is-video');
-                        mediaBox.innerHTML = `<video src="${mediaSrc}" controls></video>`;
-                    } else {
-                        mediaBox.innerHTML = `<img src="${mediaSrc}" alt="${item.caption || 'Aperçu'}">`;
-                        mediaBox.addEventListener('click', () => {
-                            openLightbox(currentGalleryItems, idx);
-                        });
-                    }
-
-                    const captionElem = document.createElement('div');
-                    captionElem.className = 'gallery-caption';
-                    captionElem.textContent = item.caption || '';
-
-                    galleryItem.appendChild(mediaBox);
-                    galleryItem.appendChild(captionElem);
-                    itemsWrapper.appendChild(galleryItem);
-                });
-
-                carouselContainer.appendChild(itemsWrapper);
-
-                // Contrôles du carrousel
-                if (currentGalleryItems.length > 1) {
-                    const controls = document.createElement('div');
-                    controls.className = 'carousel-controls';
-
-                    const prevBtn = document.createElement('button');
-                    prevBtn.className = 'carousel-btn';
-                    prevBtn.innerHTML = '◄ Précédent';
-                    prevBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        showGallerySlide(currentGalleryIndex - 1);
-                    });
-
-                    const counter = document.createElement('div');
-                    counter.className = 'carousel-counter';
-                    counter.id = 'carouselCounterText';
-                    counter.textContent = `1 / ${currentGalleryItems.length}`;
-
-                    const nextBtn = document.createElement('button');
-                    nextBtn.className = 'carousel-btn';
-                    nextBtn.innerHTML = 'Suivant ►';
-                    nextBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        showGallerySlide(currentGalleryIndex + 1);
-                    });
-
-                    controls.appendChild(prevBtn);
-                    controls.appendChild(counter);
-                    controls.appendChild(nextBtn);
-                    carouselContainer.appendChild(controls);
-                }
-
-                modalProjectGallery.appendChild(carouselContainer);
-            } else {
-                modalProjectGallery.innerHTML = '<div style="color: #d488ff; font-style: italic; text-align:center; padding: 40px;">Aucun visuel disponible pour ce projet.</div>';
-            }
-
-            projectDetailModal.classList.add('active');
+            renderCarousel();
+            document.getElementById('projectDetailModal').classList.add('active');
         }
 
-        function showGallerySlide(index) {
-            const items = modalProjectGallery.querySelectorAll('.gallery-item');
-            if (items.length === 0) return;
+        document.getElementById('closeProjectDetailBtn').addEventListener('click', () => {
+            document.getElementById('projectDetailModal').classList.remove('active');
+        });
 
-            currentGalleryIndex = (index + items.length) % items.length;
+        function renderCarousel() {
+            const galleryCol = document.getElementById('modalProjectGallery');
+            galleryCol.innerHTML = '';
 
-            items.forEach((item, idx) => {
-                if (idx === currentGalleryIndex) {
-                    item.classList.add('active');
+            if (currentGalleryItems.length === 0) {
+                galleryCol.innerHTML = '<p style="color:#888;">Aucun média disponible.</p>';
+                return;
+            }
+
+            const container = document.createElement('div');
+            container.className = 'carousel-container';
+
+            currentGalleryItems.forEach((item, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = `gallery-item ${index === currentGalleryIndex ? 'active' : ''}`;
+
+                const mediaBox = document.createElement('div');
+                mediaBox.className = 'gallery-media';
+
+                const ytUrl = getYouTubeEmbedUrl(item.img);
+                if (ytUrl) {
+                    mediaBox.classList.add('is-video');
+                    mediaBox.innerHTML = `<iframe src="${ytUrl}" allowfullscreen></iframe>`;
+                } else if (item.img.endsWith('.mp4')) {
+                    mediaBox.classList.add('is-video');
+                    mediaBox.innerHTML = `<video src="${item.img}" controls></video>`;
                 } else {
-                    item.classList.remove('active');
-                    // Stop any playing video when switching slides
-                    const iframe = item.querySelector('iframe');
-                    const video = item.querySelector('video');
-                    if (iframe) iframe.src = iframe.src;
-                    if (video) video.pause();
+                    mediaBox.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu'}" onerror="this.src='https://via.placeholder.com/500x300/1a0033/00f0ff?text=IMAGE+INDISPONIBLE'">`;
+                    mediaBox.addEventListener('click', () => openLightbox(index));
                 }
+
+                const caption = document.createElement('div');
+                caption.className = 'gallery-caption';
+                caption.textContent = item.caption || '';
+
+                galleryItem.appendChild(mediaBox);
+                galleryItem.appendChild(caption);
+                container.appendChild(galleryItem);
             });
 
-            const counterText = document.getElementById('carouselCounterText');
-            if (counterText) {
-                counterText.textContent = `${currentGalleryIndex + 1} / ${items.length}`;
-            }
-        }
+            if (currentGalleryItems.length > 1) {
+                const controls = document.createElement('div');
+                controls.className = 'carousel-controls';
 
-        if (closeProjectDetailBtn) {
-            closeProjectDetailBtn.addEventListener('click', () => {
-                projectDetailModal.classList.remove('active');
-                // Stoppe les vidéos de la modale fermée
-                modalProjectGallery.querySelectorAll('iframe, video').forEach(media => {
-                    if (media.tagName === 'IFRAME') media.src = media.src;
-                    if (media.tagName === 'VIDEO') media.pause();
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'carousel-btn';
+                prevBtn.textContent = '◄ Précédent';
+                prevBtn.addEventListener('click', () => {
+                    currentGalleryIndex = (currentGalleryIndex - 1 + currentGalleryItems.length) % currentGalleryItems.length;
+                    renderCarousel();
                 });
-            });
+
+                const counter = document.createElement('span');
+                counter.className = 'carousel-counter';
+                counter.textContent = `${currentGalleryIndex + 1} / ${currentGalleryItems.length}`;
+
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'carousel-btn';
+                nextBtn.textContent = 'Suivant ►';
+                nextBtn.addEventListener('click', () => {
+                    currentGalleryIndex = (currentGalleryIndex + 1) % currentGalleryItems.length;
+                    renderCarousel();
+                });
+
+                controls.appendChild(prevBtn);
+                controls.appendChild(counter);
+                controls.appendChild(nextBtn);
+                container.appendChild(controls);
+            }
+
+            galleryCol.appendChild(container);
         }
 
-        // LIGHTBOX PLEIN ÉCRAN
-        const lightboxModal = document.getElementById('lightboxModal');
-        const closeLightboxBtn = document.getElementById('closeLightboxBtn');
-        const lightboxMediaWrapper = document.getElementById('lightboxMediaWrapper');
-        const lightboxCaption = document.getElementById('lightboxCaption');
-        const lightboxPrevBtn = document.getElementById('lightboxPrevBtn');
-        const lightboxNextBtn = document.getElementById('lightboxNextBtn');
-
-        let lbItems = [];
-        let lbIndex = 0;
-
-        function openLightbox(items, index) {
-            lbItems = items;
-            lbIndex = index;
-            renderLightboxItem();
-            lightboxModal.classList.add('active');
+        // LOGIQUE LIGHTBOX
+        function openLightbox(index) {
+            currentGalleryIndex = index;
+            updateLightboxContent();
+            document.getElementById('lightboxModal').classList.add('active');
         }
 
-        function renderLightboxItem() {
-            const item = lbItems[lbIndex];
-            if (!item) return;
+        function updateLightboxContent() {
+            const item = currentGalleryItems[currentGalleryIndex];
+            const wrapper = document.getElementById('lightboxMediaWrapper');
+            const caption = document.getElementById('lightboxCaption');
 
-            lightboxMediaWrapper.innerHTML = '';
-            lightboxCaption.textContent = item.caption || '';
+            wrapper.innerHTML = '';
+            caption.textContent = item.caption || '';
 
-            const src = item.img || '';
-            if (src.includes('youtube.com') || src.includes('youtu.be')) {
-                const embedUrl = getYouTubeEmbedUrl(src);
-                lightboxMediaWrapper.innerHTML = `<iframe src="${embedUrl}" title="${item.caption || 'Vidéo'}" allowfullscreen></iframe>`;
-            } else if (src.endsWith('.mp4')) {
-                lightboxMediaWrapper.innerHTML = `<video src="${src}" controls autoplay></video>`;
+            const ytUrl = getYouTubeEmbedUrl(item.img);
+            if (ytUrl) {
+                wrapper.innerHTML = `<iframe src="${ytUrl}" allowfullscreen></iframe>`;
+            } else if (item.img.endsWith('.mp4')) {
+                wrapper.innerHTML = `<video src="${item.img}" controls autoplay></video>`;
             } else {
-                lightboxMediaWrapper.innerHTML = `<img src="${src}" alt="${item.caption || 'Image'}">`;
+                wrapper.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu'}">`;
             }
         }
 
-        if (lightboxPrevBtn) {
-            lightboxPrevBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                lbIndex = (lbIndex - 1 + lbItems.length) % lbItems.length;
-                renderLightboxItem();
-            });
-        }
+        document.getElementById('closeLightboxBtn').addEventListener('click', () => {
+            document.getElementById('lightboxModal').classList.remove('active');
+            document.getElementById('lightboxMediaWrapper').innerHTML = '';
+        });
 
-        if (lightboxNextBtn) {
-            lightboxNextBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                lbIndex = (lbIndex + 1) % lbItems.length;
-                renderLightboxItem();
-            });
-        }
+        document.getElementById('lightboxPrevBtn').addEventListener('click', () => {
+            currentGalleryIndex = (currentGalleryIndex - 1 + currentGalleryItems.length) % currentGalleryItems.length;
+            updateLightboxContent();
+        });
 
-        if (closeLightboxBtn) {
-            closeLightboxBtn.addEventListener('click', () => {
-                lightboxModal.classList.remove('active');
-                lightboxMediaWrapper.querySelectorAll('iframe, video').forEach(media => {
-                    if (media.tagName === 'IFRAME') media.src = media.src;
-                    if (media.tagName === 'VIDEO') media.pause();
-                });
-            });
-        }
-
-        // MODAL DEMO REEL
-        const demoReelBtn = document.getElementById('demoReelBtn');
-        const videoModal = document.getElementById('videoModal');
-        const closeVideoBtn = document.getElementById('closeVideoBtn');
-        const youtubeIframe = document.getElementById('youtubeIframe');
-
-        if (demoReelBtn) {
-            demoReelBtn.addEventListener('click', () => {
-                videoModal.classList.add('active');
-            });
-        }
-
-        if (closeVideoBtn) {
-            closeVideoBtn.addEventListener('click', () => {
-                videoModal.classList.remove('active');
-                if (youtubeIframe) youtubeIframe.src = youtubeIframe.src;
-            });
-        }
+        document.getElementById('lightboxNextBtn').addEventListener('click', () => {
+            currentGalleryIndex = (currentGalleryIndex + 1) % currentGalleryItems.length;
+            updateLightboxContent();
+        });
     </script>
 </body>
 </html>
