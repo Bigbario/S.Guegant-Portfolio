@@ -29,11 +29,11 @@
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
-            cursor: default;
+            cursor: none; /* Curseur par défaut masqué */
         }
 
         button, a, .project-bubble, .gallery-media {
-            cursor: pointer;
+            cursor: none; /* Conserve le curseur personnalisé sur les éléments cliquables */
         }
 
         /* --- BOUTON CONTACT (HAUT DROITE) --- */
@@ -91,6 +91,7 @@
             font-size: 0.95rem;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
+            cursor: text;
         }
 
         .contact-form input:focus,
@@ -126,20 +127,26 @@
             transform: translateY(-2px);
         }
 
-        /* --- CURSEUR PERSONNAGE --- */
+        /* --- CURSEUR PERSONNAGE (ANIMÉ PAR SPRITESHEET) --- */
         #custom-cursor {
             position: fixed;
             top: 0;
             left: 0;
-            width: 40px;
-            height: 40px;
-            background-image: url('assets/cursors/character-idle.gif');
-            background-size: contain;
+            width: 32px;
+            height: 32px;
+            background-image: url('assets/cursors/mouseIconIdle.png');
+            background-size: 96px 32px; /* 3 images x 32px de large */
             background-repeat: no-repeat;
             pointer-events: none;
             z-index: 999999;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); /* Centré exactement sur la position du pointeur */
             display: block;
+            animation: walkAnim 0.6s steps(3) infinite;
+        }
+
+        @keyframes walkAnim {
+            from { background-position: 0px 0px; }
+            to { background-position: -96px 0px; }
         }
 
         /* Canvas pour particules */
@@ -1076,6 +1083,9 @@
             <h2 style="font-family:'Orbitron'; color:#00f0ff; font-size:2rem; border-bottom: 2px solid rgba(0,240,255,0.4); padding-bottom:10px;">CONTACT ME</h2>
             
             <form class="contact-form" id="contactForm">
+                <label for="email">VOTRE ADRESSE EMAIL</label>
+                <input type="email" id="email" name="email" placeholder="votre.email@exemple.com" required>
+
                 <label for="subject">SUJET</label>
                 <input type="text" id="subject" name="subject" placeholder="Sujet de votre message" required>
 
@@ -1226,6 +1236,55 @@
                 customCursor.style.top = `${e.clientY}px`;
             });
         }
+
+        // ENVOI FORMULAIRE DE CONTACT VIA MAILTO
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+
+                const mailtoUrl = `mailto:samuel.guegant@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("De: " + email + "\n\n" + message)}`;
+                window.location.href = mailtoUrl;
+                
+                document.getElementById('contactModal').classList.remove('active');
+            });
+        }
+
+        // FERMETURE DES MODALES AU CLIC À L'EXTÉRIEUR DU CONTENU
+        const modalsWithContainers = [
+            { modal: document.getElementById('contactModal'), containerClass: 'contact-modal-container' },
+            { modal: document.getElementById('videoModal'), containerClass: 'video-container' },
+            { modal: document.getElementById('charSheetModal'), containerClass: 'char-sheet-container' },
+            { modal: document.getElementById('projectDetailModal'), containerClass: 'project-modal-container' },
+            { modal: document.getElementById('lightboxModal'), containerClass: 'lightbox-container' }
+        ];
+
+        modalsWithContainers.forEach(({ modal, containerClass }) => {
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (!e.target.closest(`.${containerClass}`)) {
+                        modal.classList.remove('active');
+                        if (modal.id === 'videoModal') {
+                            const iframe = document.getElementById('youtubeIframe');
+                            if (iframe) iframe.src = iframe.src; // Stopper la vidéo
+                        }
+                    }
+                });
+            }
+        });
+
+        // EFFET DE SLASH AU CLIC
+        window.addEventListener('click', (e) => {
+            const slash = document.createElement('div');
+            slash.className = 'slash-effect';
+            slash.style.left = `${e.clientX}px`;
+            slash.style.top = `${e.clientY}px`;
+            document.body.appendChild(slash);
+            setTimeout(() => slash.remove(), 220);
+        });
 
         // CANVAS PARTICULES
         const canvas = document.getElementById('effectsCanvas');
@@ -1681,85 +1740,42 @@
                         img: 'images/MemoireIcon.png', 
                         bgImg: 'images/MemoireIcon.png',
                         link: 'https://drive.google.com/file/d/1WTZZiGQ0-saKYMVp91Jca3hyTSW2l52K/view?usp=sharing',
-                        linkLabel: '🔗 Lien de la présentation',
-                        skills: ['Territorial Management analysis', 'Data market analysis', 'New technology', 'Research Paper'],
-                        desc: 'Mémoire universitaire d\'analyse socio-politique et technique sur l\'utilisation des données publiques, les marchés de la data et les enjeux de gouvernance numérique.',
-                        role: 'Auteur du mémoire : recherche académique, enquêtes de terrain et synthèse stratégique.',
+                        linkLabel: '🔗 Lien du mémoire',
+                        skills: ['Data Governance', 'Research', 'Documentation'],
+                        desc: 'Mémoire universitaire d\'analyse sur les enjeux politiques, éthiques et la souveraineté des données dans le paysage numérique contemporain.',
+                        role: 'Chercheur & Auteur : recueil de données, entretiens qualitatifs et synthèse réflexive.',
                         gallery: [
-                            { img: 'Galleries/Mémoire/1.png', caption: 'Page 1' },
-                            { img: 'Galleries/Mémoire/2.png', caption: 'Page 2' },
-                            { img: 'Galleries/Mémoire/3.png', caption: 'Page 3' },
-                            { img: 'Galleries/Mémoire/4.png', caption: 'Page 4' },
-                            { img: 'Galleries/Mémoire/5.png', caption: 'Page 5' },
-                            { img: 'Galleries/Mémoire/6.png', caption: 'Page 6' },
-                            { img: 'Galleries/Mémoire/7.png', caption: 'Page 7' },
-                            { img: 'Galleries/Mémoire/8.png', caption: 'Page 8' },
-                            { img: 'Galleries/Mémoire/9.png', caption: 'Page 9' },
-                            { img: 'Galleries/Mémoire/MemoireIcon.png', caption: 'Icône Mémoire' }
+                            { img: 'images/MemoireIcon.png', caption: 'Couverture du mémoire' }
                         ]
                     }
                 ]
             }
         ];
 
-        let currentDomainIndex = 1;
+        let currentDomainIndex = 0;
+        let currentProjectGallery = [];
+        let currentLightboxIndex = 0;
+
+        // BOUTONS & MODALES MAIN
+        const contactTopBtn = document.getElementById('contactTopBtn');
+        const contactModal = document.getElementById('contactModal');
+        const closeContactBtn = document.getElementById('closeContactBtn');
+
+        contactTopBtn.addEventListener('click', () => contactModal.classList.add('active'));
+        closeContactBtn.addEventListener('click', () => contactModal.classList.remove('active'));
 
         const openProjectsBtn = document.getElementById('openProjectsBtn');
-        const backToMenuBtn = document.getElementById('backToMenuBtn');
         const projectsStage = document.getElementById('projectsStage');
-        const stageBgPreview = document.getElementById('stageBgPreview');
+        const backToMenuBtn = document.getElementById('backToMenuBtn');
         const mainMenu = document.getElementById('mainMenu');
-        const domainTitle = document.getElementById('domainTitle');
-        const projectsGrid = document.getElementById('projectsGrid');
-        const prevDomainBtn = document.getElementById('prevDomainBtn');
-        const nextDomainBtn = document.getElementById('nextDomainBtn');
-        const prevDomainLabel = document.getElementById('prevDomainLabel');
-        const nextDomainLabel = document.getElementById('nextDomainLabel');
-
-        function updateStage() {
-            const current = domains[currentDomainIndex];
-            const prevIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
-            const nextIndex = (currentDomainIndex + 1) % domains.length;
-
-            domainTitle.textContent = current.title;
-            prevDomainLabel.textContent = `Vers ${domains[prevIndex].title}`;
-            nextDomainLabel.textContent = `Vers ${domains[nextIndex].title}`;
-
-            stageBgPreview.classList.remove('active');
-
-            projectsGrid.style.opacity = 0;
-            setTimeout(() => {
-                projectsGrid.innerHTML = '';
-                current.projects.forEach(p => {
-                    const bubble = document.createElement('div');
-                    bubble.className = 'project-bubble';
-                    bubble.innerHTML = `<img src="${p.img}" alt="${p.title}" onerror="this.src='https://via.placeholder.com/170/1a0033/00f0ff?text=${encodeURIComponent(p.title)}'"><div class="bubble-title">${p.title}</div>`;
-                    
-                    bubble.addEventListener('mouseenter', () => {
-                        const bgToApply = p.bgImg || p.img;
-                        if (bgToApply) {
-                            stageBgPreview.style.backgroundImage = `url('${bgToApply}')`;
-                            stageBgPreview.classList.add('active');
-                        }
-                    });
-                    bubble.addEventListener('mouseleave', () => {
-                        stageBgPreview.classList.remove('active');
-                    });
-
-                    bubble.addEventListener('click', () => openProjectDetail(p));
-                    projectsGrid.appendChild(bubble);
-                });
-                projectsGrid.style.opacity = 1;
-            }, 200);
-        }
 
         openProjectsBtn.addEventListener('click', () => {
             document.body.classList.add('curtains-closed');
             setTimeout(() => {
-                titleContainer.classList.add('hidden');
                 mainMenu.classList.add('hidden');
+                titleContainer.classList.add('hidden');
                 projectsStage.classList.add('active');
-                updateStage();
+                renderDomain(currentDomainIndex);
                 document.body.classList.remove('curtains-closed');
             }, 600);
         });
@@ -1768,65 +1784,94 @@
             document.body.classList.add('curtains-closed');
             setTimeout(() => {
                 projectsStage.classList.remove('active');
-                titleContainer.classList.remove('hidden');
                 mainMenu.classList.remove('hidden');
+                titleContainer.classList.remove('hidden');
                 document.body.classList.remove('curtains-closed');
             }, 600);
-        });
-
-        prevDomainBtn.addEventListener('click', () => {
-            currentDomainIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
-            updateStage();
-        });
-
-        nextDomainBtn.addEventListener('click', () => {
-            currentDomainIndex = (currentDomainIndex + 1) % domains.length;
-            updateStage();
-        });
-
-        // MODALES & CONTACT MAILTO
-        const contactTopBtn = document.getElementById('contactTopBtn');
-        const contactModal = document.getElementById('contactModal');
-        const closeContactBtn = document.getElementById('closeContactBtn');
-        const contactForm = document.getElementById('contactForm');
-
-        contactTopBtn.addEventListener('click', () => contactModal.classList.add('active'));
-        closeContactBtn.addEventListener('click', () => contactModal.classList.remove('active'));
-
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
-            
-            const mailtoUri = `mailto:samgueg@gmx.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
-            window.location.href = mailtoUri;
         });
 
         const demoReelBtn = document.getElementById('demoReelBtn');
         const videoModal = document.getElementById('videoModal');
         const closeVideoBtn = document.getElementById('closeVideoBtn');
         const youtubeIframe = document.getElementById('youtubeIframe');
-        const baseUrl = "https://www.youtube.com/embed/3UwbJ8Q1MwU";
 
-        demoReelBtn.addEventListener('click', () => {
-            youtubeIframe.src = baseUrl + "?autoplay=1&enablejsapi=1";
-            videoModal.classList.add('active');
-        });
-
-        function closeVideo() {
+        demoReelBtn.addEventListener('click', () => videoModal.classList.add('active'));
+        closeVideoBtn.addEventListener('click', () => {
             videoModal.classList.remove('active');
-            youtubeIframe.src = baseUrl + "?enablejsapi=1";
-        }
-        closeVideoBtn.addEventListener('click', closeVideo);
+            if (youtubeIframe) youtubeIframe.src = youtubeIframe.src;
+        });
 
         const aboutBtn = document.getElementById('aboutBtn');
         const charSheetModal = document.getElementById('charSheetModal');
         const closeCharSheetBtn = document.getElementById('closeCharSheetBtn');
 
         aboutBtn.addEventListener('click', () => charSheetModal.classList.add('active'));
-        function closeCharSheet() { charSheetModal.classList.remove('active'); }
-        closeCharSheetBtn.addEventListener('click', closeCharSheet);
+        closeCharSheetBtn.addEventListener('click', () => charSheetModal.classList.remove('active'));
 
+        // NAVIGATION STAGE DOMAINES
+        const prevDomainBtn = document.getElementById('prevDomainBtn');
+        const nextDomainBtn = document.getElementById('nextDomainBtn');
+        const domainTitle = document.getElementById('domainTitle');
+        const prevDomainLabel = document.getElementById('prevDomainLabel');
+        const nextDomainLabel = document.getElementById('nextDomainLabel');
+        const projectsGrid = document.getElementById('projectsGrid');
+        const stageBgPreview = document.getElementById('stageBgPreview');
+
+        function renderDomain(index) {
+            const domain = domains[index];
+            domainTitle.textContent = domain.title;
+
+            const prevIndex = (index - 1 + domains.length) % domains.length;
+            const nextIndex = (index + 1) % domains.length;
+
+            prevDomainLabel.textContent = `Vers ${domains[prevIndex].title}`;
+            nextDomainLabel.textContent = `Vers ${domains[nextIndex].title}`;
+
+            projectsGrid.innerHTML = '';
+
+            domain.projects.forEach((proj) => {
+                const bubble = document.createElement('div');
+                bubble.className = 'project-bubble';
+
+                const img = document.createElement('img');
+                img.src = proj.img;
+                img.alt = proj.title;
+
+                const titleBox = document.createElement('div');
+                titleBox.className = 'bubble-title';
+                titleBox.textContent = proj.title;
+
+                bubble.appendChild(img);
+                bubble.appendChild(titleBox);
+
+                bubble.addEventListener('mouseenter', () => {
+                    if (proj.bgImg) {
+                        stageBgPreview.style.backgroundImage = `url('${proj.bgImg}')`;
+                        stageBgPreview.classList.add('active');
+                    }
+                });
+
+                bubble.addEventListener('mouseleave', () => {
+                    stageBgPreview.classList.remove('active');
+                });
+
+                bubble.addEventListener('click', () => openProjectModal(proj));
+
+                projectsGrid.appendChild(bubble);
+            });
+        }
+
+        prevDomainBtn.addEventListener('click', () => {
+            currentDomainIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
+            renderDomain(currentDomainIndex);
+        });
+
+        nextDomainBtn.addEventListener('click', () => {
+            currentDomainIndex = (currentDomainIndex + 1) % domains.length;
+            renderDomain(currentDomainIndex);
+        });
+
+        // MODAL DETAIL PROJET ET CARROUSEL
         const projectDetailModal = document.getElementById('projectDetailModal');
         const closeProjectDetailBtn = document.getElementById('closeProjectDetailBtn');
         const modalProjectTitle = document.getElementById('modalProjectTitle');
@@ -1836,125 +1881,122 @@
         const modalProjectLinkBox = document.getElementById('modalProjectLinkBox');
         const modalProjectGallery = document.getElementById('modalProjectGallery');
 
-        let currentGalleryIndex = 0;
-        let currentProjectGalleryData = [];
+        closeProjectDetailBtn.addEventListener('click', () => projectDetailModal.classList.remove('active'));
 
-        function openProjectDetail(project) {
-            modalProjectTitle.textContent = project.title;
-            
+        function openProjectModal(proj) {
+            modalProjectTitle.textContent = proj.title;
+
             modalProjectSkills.innerHTML = '';
-            if (project.skills) {
-                project.skills.forEach(s => {
-                    const badge = document.createElement('span');
-                    badge.className = 'project-skill-badge';
-                    badge.textContent = s;
-                    modalProjectSkills.appendChild(badge);
-                });
-            }
+            proj.skills.forEach(skill => {
+                const badge = document.createElement('span');
+                badge.className = 'project-skill-badge';
+                badge.textContent = skill;
+                modalProjectSkills.appendChild(badge);
+            });
 
-            modalProjectDesc.textContent = project.desc || 'Aucune description disponible pour ce projet.';
-            modalProjectRole.textContent = project.role || 'Aucune précision sur le rôle pour ce projet.';
+            modalProjectDesc.textContent = proj.desc || '';
+            modalProjectRole.textContent = proj.role || '';
 
             modalProjectLinkBox.innerHTML = '';
-            if (project.link) {
-                const linkBtn = document.createElement('a');
-                linkBtn.className = 'project-link-btn';
-                linkBtn.href = project.link;
-                linkBtn.target = '_blank';
-                linkBtn.innerHTML = project.linkLabel || '🔗 En savoir plus';
-                modalProjectLinkBox.appendChild(linkBtn);
+            if (proj.link) {
+                const a = document.createElement('a');
+                a.className = 'project-link-btn';
+                a.href = proj.link;
+                a.target = '_blank';
+                a.textContent = proj.linkLabel || '🔗 Voir le lien';
+                modalProjectLinkBox.appendChild(a);
             }
 
             modalProjectGallery.innerHTML = '';
-            currentProjectGalleryData = project.gallery || [];
-            currentGalleryIndex = 0;
+            currentProjectGallery = proj.gallery || [];
 
-            if (currentProjectGalleryData.length > 0) {
-                const carousel = document.createElement('div');
-                carousel.className = 'carousel-container';
+            if (currentProjectGallery.length > 0) {
+                const carouselContainer = document.createElement('div');
+                carouselContainer.className = 'carousel-container';
 
-                currentProjectGalleryData.forEach((item, index) => {
+                currentProjectGallery.forEach((item, idx) => {
                     const galleryItem = document.createElement('div');
-                    galleryItem.className = `gallery-item ${index === 0 ? 'active' : ''}`;
-                    galleryItem.dataset.index = index;
+                    galleryItem.className = `gallery-item ${idx === 0 ? 'active' : ''}`;
+                    galleryItem.dataset.index = idx;
 
-                    const mediaBox = document.createElement('div');
-                    mediaBox.className = 'gallery-media';
+                    const mediaWrapper = document.createElement('div');
+                    mediaWrapper.className = 'gallery-media';
 
                     const embedUrl = getYouTubeEmbedUrl(item.img);
+
                     if (embedUrl) {
-                        mediaBox.classList.add('is-video');
-                        mediaBox.innerHTML = `<iframe src="${embedUrl}" title="Vidéo projet" allowfullscreen></iframe>`;
+                        mediaWrapper.classList.add('is-video');
+                        const iframe = document.createElement('iframe');
+                        iframe.src = embedUrl;
+                        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+                        iframe.allowFullscreen = true;
+                        mediaWrapper.appendChild(iframe);
                     } else if (item.img.endsWith('.mp4') || item.img.endsWith('.webm')) {
-                        mediaBox.classList.add('is-video');
-                        mediaBox.innerHTML = `<video src="${item.img}" controls></video>`;
+                        mediaWrapper.classList.add('is-video');
+                        const video = document.createElement('video');
+                        video.src = item.img;
+                        video.controls = true;
+                        mediaWrapper.appendChild(video);
                     } else {
-                        mediaBox.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Image'}" onerror="this.src='https://via.placeholder.com/600x360/1a0033/00f0ff?text=Aperçu'">`;
-                        mediaBox.addEventListener('click', () => openLightbox(index));
+                        const img = document.createElement('img');
+                        img.src = item.img;
+                        img.alt = item.caption || proj.title;
+                        mediaWrapper.appendChild(img);
+
+                        mediaWrapper.addEventListener('click', () => openLightbox(idx));
                     }
 
                     const caption = document.createElement('div');
                     caption.className = 'gallery-caption';
                     caption.textContent = item.caption || '';
 
-                    galleryItem.appendChild(mediaBox);
+                    galleryItem.appendChild(mediaWrapper);
                     galleryItem.appendChild(caption);
-                    carousel.appendChild(galleryItem);
+                    carouselContainer.appendChild(galleryItem);
                 });
 
-                if (currentProjectGalleryData.length > 1) {
+                if (currentProjectGallery.length > 1) {
                     const controls = document.createElement('div');
                     controls.className = 'carousel-controls';
 
                     const prevBtn = document.createElement('button');
                     prevBtn.className = 'carousel-btn';
                     prevBtn.textContent = '◄ Précédent';
-                    prevBtn.addEventListener('click', () => changeGallerySlide(-1));
 
                     const counter = document.createElement('span');
                     counter.className = 'carousel-counter';
-                    counter.id = 'carouselCounter';
-                    counter.textContent = `1 / ${currentProjectGalleryData.length}`;
+                    counter.textContent = `1 / ${currentProjectGallery.length}`;
 
                     const nextBtn = document.createElement('button');
                     nextBtn.className = 'carousel-btn';
                     nextBtn.textContent = 'Suivant ►';
-                    nextBtn.addEventListener('click', () => changeGallerySlide(1));
+
+                    let curIdx = 0;
+
+                    function updateCarousel(newIdx) {
+                        const items = carouselContainer.querySelectorAll('.gallery-item');
+                        items[curIdx].classList.remove('active');
+                        curIdx = (newIdx + items.length) % items.length;
+                        items[curIdx].classList.add('active');
+                        counter.textContent = `${curIdx + 1} / ${items.length}`;
+                    }
+
+                    prevBtn.addEventListener('click', () => updateCarousel(curIdx - 1));
+                    nextBtn.addEventListener('click', () => updateCarousel(curIdx + 1));
 
                     controls.appendChild(prevBtn);
                     controls.appendChild(counter);
                     controls.appendChild(nextBtn);
-                    carousel.appendChild(controls);
+                    carouselContainer.appendChild(controls);
                 }
 
-                modalProjectGallery.appendChild(carousel);
-            } else {
-                modalProjectGallery.innerHTML = '<p style="color:#d1c4e9; font-style:italic;">Aucun visuel disponible.</p>';
+                modalProjectGallery.appendChild(carouselContainer);
             }
 
             projectDetailModal.classList.add('active');
         }
 
-        function changeGallerySlide(direction) {
-            const items = modalProjectGallery.querySelectorAll('.gallery-item');
-            if (items.length <= 1) return;
-
-            items[currentGalleryIndex].classList.remove('active');
-            currentGalleryIndex = (currentGalleryIndex + direction + items.length) % items.length;
-            items[currentGalleryIndex].classList.add('active');
-
-            const counter = document.getElementById('carouselCounter');
-            if (counter) {
-                counter.textContent = `${currentGalleryIndex + 1} / ${items.length}`;
-            }
-        }
-
-        function closeProjectDetail() {
-            projectDetailModal.classList.remove('active');
-        }
-        closeProjectDetailBtn.addEventListener('click', closeProjectDetail);
-
-        // LIGHTBOX
+        // LIGHTBOX MODAL
         const lightboxModal = document.getElementById('lightboxModal');
         const closeLightboxBtn = document.getElementById('closeLightboxBtn');
         const lightboxMediaWrapper = document.getElementById('lightboxMediaWrapper');
@@ -1962,58 +2004,50 @@
         const lightboxPrevBtn = document.getElementById('lightboxPrevBtn');
         const lightboxNextBtn = document.getElementById('lightboxNextBtn');
 
-        let lightboxIndex = 0;
+        closeLightboxBtn.addEventListener('click', () => lightboxModal.classList.remove('active'));
 
-        function openLightbox(index) {
-            lightboxIndex = index;
-            updateLightboxContent();
+        function openLightbox(idx) {
+            currentLightboxIndex = idx;
+            renderLightboxMedia();
             lightboxModal.classList.add('active');
         }
 
-        function updateLightboxContent() {
-            const item = currentProjectGalleryData[lightboxIndex];
+        function renderLightboxMedia() {
+            lightboxMediaWrapper.innerHTML = '';
+            const item = currentProjectGallery[currentLightboxIndex];
             if (!item) return;
 
-            lightboxMediaWrapper.innerHTML = '';
-            lightboxCaption.textContent = item.caption || '';
-
             const embedUrl = getYouTubeEmbedUrl(item.img);
+
             if (embedUrl) {
-                lightboxMediaWrapper.innerHTML = `<iframe src="${embedUrl}" title="Vidéo" allowfullscreen></iframe>`;
+                const iframe = document.createElement('iframe');
+                iframe.src = embedUrl;
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+                iframe.allowFullscreen = true;
+                lightboxMediaWrapper.appendChild(iframe);
             } else if (item.img.endsWith('.mp4') || item.img.endsWith('.webm')) {
-                lightboxMediaWrapper.innerHTML = `<video src="${item.img}" controls autoplay></video>`;
+                const video = document.createElement('video');
+                video.src = item.img;
+                video.controls = true;
+                video.autoplay = true;
+                lightboxMediaWrapper.appendChild(video);
             } else {
-                lightboxMediaWrapper.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Image'}">`;
+                const img = document.createElement('img');
+                img.src = item.img;
+                lightboxMediaWrapper.appendChild(img);
             }
-        }
 
-        function closeLightbox() {
-            lightboxModal.classList.remove('active');
-            lightboxMediaWrapper.innerHTML = '';
+            lightboxCaption.textContent = item.caption || '';
         }
-
-        closeLightboxBtn.addEventListener('click', closeLightbox);
 
         lightboxPrevBtn.addEventListener('click', () => {
-            if (currentProjectGalleryData.length === 0) return;
-            lightboxIndex = (lightboxIndex - 1 + currentProjectGalleryData.length) % currentProjectGalleryData.length;
-            updateLightboxContent();
+            currentLightboxIndex = (currentLightboxIndex - 1 + currentProjectGallery.length) % currentProjectGallery.length;
+            renderLightboxMedia();
         });
 
         lightboxNextBtn.addEventListener('click', () => {
-            if (currentProjectGalleryData.length === 0) return;
-            lightboxIndex = (lightboxIndex + 1) % currentProjectGalleryData.length;
-            updateLightboxContent();
-        });
-
-        // EFFET DE SLASH AU CLIC
-        window.addEventListener('click', (e) => {
-            const slash = document.createElement('div');
-            slash.className = 'slash-effect';
-            slash.style.left = `${e.clientX}px`;
-            slash.style.top = `${e.clientY}px`;
-            document.body.appendChild(slash);
-            setTimeout(() => slash.remove(), 220);
+            currentLightboxIndex = (currentLightboxIndex + 1) % currentProjectGallery.length;
+            renderLightboxMedia();
         });
     </script>
 </body>
