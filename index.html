@@ -29,11 +29,11 @@
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
-            cursor: none; /* Curseur par défaut masqué */
+            cursor: none; /* Masque le curseur système par défaut */
         }
 
-        button, a, .project-bubble, .gallery-media {
-            cursor: none; /* Conserve le curseur personnalisé sur les éléments cliquables */
+        button, a, .project-bubble, .gallery-media, input, textarea {
+            cursor: none; /* Conserve l'utilisation du curseur personnalisé */
         }
 
         /* --- BOUTON CONTACT (HAUT DROITE) --- */
@@ -91,7 +91,6 @@
             font-size: 0.95rem;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
-            cursor: text;
         }
 
         .contact-form input:focus,
@@ -1231,9 +1230,9 @@
         // SUIVI DU CURSEUR
         const customCursor = document.getElementById('custom-cursor');
         if (customCursor) {
-            window.addEventListener('mousemove', (e) => {
-                customCursor.style.left = `${e.clientX}px`;
-                customCursor.style.top = `${e.clientY}px`;
+            document.addEventListener('mousemove', (e) => {
+                customCursor.style.left = e.clientX + 'px';
+                customCursor.style.top = e.clientY + 'px';
             });
         }
 
@@ -1246,9 +1245,24 @@
                 const subject = document.getElementById('subject').value;
                 const message = document.getElementById('message').value;
 
-                const mailtoUrl = `mailto:samuel.guegant@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("De: " + email + "\n\n" + message)}`;
+                const mailtoUrl = `mailto:samgueg@gmx.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("De: " + email + "\n\n" + message)}`;
                 window.location.href = mailtoUrl;
                 
+                document.getElementById('contactModal').classList.remove('active');
+            });
+        }
+
+        // OUVERTURE DU FORMULAIRE DE CONTACT
+        const contactTopBtn = document.getElementById('contactTopBtn');
+        if (contactTopBtn) {
+            contactTopBtn.addEventListener('click', () => {
+                document.getElementById('contactModal').classList.add('active');
+            });
+        }
+
+        const closeContactBtn = document.getElementById('closeContactBtn');
+        if (closeContactBtn) {
+            closeContactBtn.addEventListener('click', () => {
                 document.getElementById('contactModal').classList.remove('active');
             });
         }
@@ -1709,345 +1723,252 @@
                             { img: 'Galleries/VideoGameDiscriminations/5.png', caption: 'Page 5' },
                             { img: 'Galleries/VideoGameDiscriminations/6.png', caption: 'Page 6' },
                             { img: 'Galleries/VideoGameDiscriminations/7.png', caption: 'Page 7' },
-                            { img: 'Galleries/VideoGameDiscriminations/8.png', caption: 'Page 8' },
-                            { img: 'Galleries/VideoGameDiscriminations/9.png', caption: 'Page 9' },
-                            { img: 'Galleries/VideoGameDiscriminations/10.png', caption: 'Page 10' },
-                            { img: 'Galleries/VideoGameDiscriminations/12.png', caption: 'Page 12' },
-                            { img: 'Galleries/VideoGameDiscriminations/13.png', caption: 'Page 13' }
-                        ]
-                    },
-                    { 
-                        title: 'Finance & Pop-culture', 
-                        img: 'images/Finance&Popculture.png', 
-                        bgImg: 'images/Finance&Popculture.png',
-                        link: 'https://drive.google.com/file/d/1YknOTUFpXb5flVicM9pgICdqsBZNieY8/view?usp=drive_link',
-                        linkLabel: '🔗 Lien de la présentation',
-                        skills: ['UX Research', 'Benchmarking', 'Game Design Analysis', 'Documentation'],
-                        desc: 'Étude comparative sur la manière dont les mécaniques financières réelles (bourse, rareté, marchés) sont ludifiées dans les univers de la pop-culture.',
-                        role: 'Analyste Game Design : benchmarking des mécaniques ludiques et modélisation des systèmes économiques.',
-                        gallery: [
-                            { img: 'Galleries/Finance/1.png', caption: 'Page 1' },
-                            { img: 'Galleries/Finance/2.png', caption: 'Page 2' },
-                            { img: 'Galleries/Finance/3.png', caption: 'Page 3' },
-                            { img: 'Galleries/Finance/4.png', caption: 'Page 4' },
-                            { img: 'Galleries/Finance/5.png', caption: 'Page 5' },
-                            { img: 'Galleries/Finance/6.png', caption: 'Page 6' },
-                            { img: 'Galleries/Finance/7.png', caption: 'Page 7' }
-                        ]
-                    },
-                    { 
-                        title: 'Données et Gouvernance', 
-                        img: 'images/MemoireIcon.png', 
-                        bgImg: 'images/MemoireIcon.png',
-                        link: 'https://drive.google.com/file/d/1WTZZiGQ0-saKYMVp91Jca3hyTSW2l52K/view?usp=sharing',
-                        linkLabel: '🔗 Lien du mémoire',
-                        skills: ['Data Governance', 'Research', 'Documentation'],
-                        desc: 'Mémoire universitaire d\'analyse sur les enjeux politiques, éthiques et la souveraineté des données dans le paysage numérique contemporain.',
-                        role: 'Chercheur & Auteur : recueil de données, entretiens qualitatifs et synthèse réflexive.',
-                        gallery: [
-                            { img: 'images/MemoireIcon.png', caption: 'Couverture du mémoire' }
+                            { img: 'Galleries/VideoGameDiscriminations/8.png', caption: 'Page 8' }
                         ]
                     }
                 ]
             }
         ];
 
+        // LOGIQUE DE NAVIGATION ENTRE DOMAINES
         let currentDomainIndex = 0;
-        let currentProjectGallery = [];
-        let currentLightboxIndex = 0;
 
-        // BOUTONS & MODALES MAIN
-        const contactTopBtn = document.getElementById('contactTopBtn');
-        const contactModal = document.getElementById('contactModal');
-        const closeContactBtn = document.getElementById('closeContactBtn');
+        function updateStage() {
+            const domain = domains[currentDomainIndex];
+            document.getElementById('domainTitle').textContent = domain.title;
 
-        contactTopBtn.addEventListener('click', () => contactModal.classList.add('active'));
-        closeContactBtn.addEventListener('click', () => contactModal.classList.remove('active'));
+            const prevIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
+            const nextIndex = (currentDomainIndex + 1) % domains.length;
 
-        const openProjectsBtn = document.getElementById('openProjectsBtn');
-        const projectsStage = document.getElementById('projectsStage');
-        const backToMenuBtn = document.getElementById('backToMenuBtn');
-        const mainMenu = document.getElementById('mainMenu');
+            document.getElementById('prevDomainLabel').textContent = `Vers ${domains[prevIndex].title}`;
+            document.getElementById('nextDomainLabel').textContent = `Vers ${domains[nextIndex].title}`;
 
-        openProjectsBtn.addEventListener('click', () => {
-            document.body.classList.add('curtains-closed');
-            setTimeout(() => {
-                mainMenu.classList.add('hidden');
-                titleContainer.classList.add('hidden');
-                projectsStage.classList.add('active');
-                renderDomain(currentDomainIndex);
-                document.body.classList.remove('curtains-closed');
-            }, 600);
-        });
-
-        backToMenuBtn.addEventListener('click', () => {
-            document.body.classList.add('curtains-closed');
-            setTimeout(() => {
-                projectsStage.classList.remove('active');
-                mainMenu.classList.remove('hidden');
-                titleContainer.classList.remove('hidden');
-                document.body.classList.remove('curtains-closed');
-            }, 600);
-        });
-
-        const demoReelBtn = document.getElementById('demoReelBtn');
-        const videoModal = document.getElementById('videoModal');
-        const closeVideoBtn = document.getElementById('closeVideoBtn');
-        const youtubeIframe = document.getElementById('youtubeIframe');
-
-        demoReelBtn.addEventListener('click', () => videoModal.classList.add('active'));
-        closeVideoBtn.addEventListener('click', () => {
-            videoModal.classList.remove('active');
-            if (youtubeIframe) youtubeIframe.src = youtubeIframe.src;
-        });
-
-        const aboutBtn = document.getElementById('aboutBtn');
-        const charSheetModal = document.getElementById('charSheetModal');
-        const closeCharSheetBtn = document.getElementById('closeCharSheetBtn');
-
-        aboutBtn.addEventListener('click', () => charSheetModal.classList.add('active'));
-        closeCharSheetBtn.addEventListener('click', () => charSheetModal.classList.remove('active'));
-
-        // NAVIGATION STAGE DOMAINES
-        const prevDomainBtn = document.getElementById('prevDomainBtn');
-        const nextDomainBtn = document.getElementById('nextDomainBtn');
-        const domainTitle = document.getElementById('domainTitle');
-        const prevDomainLabel = document.getElementById('prevDomainLabel');
-        const nextDomainLabel = document.getElementById('nextDomainLabel');
-        const projectsGrid = document.getElementById('projectsGrid');
-        const stageBgPreview = document.getElementById('stageBgPreview');
-
-        function renderDomain(index) {
-            const domain = domains[index];
-            domainTitle.textContent = domain.title;
-
-            const prevIndex = (index - 1 + domains.length) % domains.length;
-            const nextIndex = (index + 1) % domains.length;
-
-            prevDomainLabel.textContent = `Vers ${domains[prevIndex].title}`;
-            nextDomainLabel.textContent = `Vers ${domains[nextIndex].title}`;
-
-            projectsGrid.innerHTML = '';
+            const grid = document.getElementById('projectsGrid');
+            grid.innerHTML = '';
 
             domain.projects.forEach((proj) => {
                 const bubble = document.createElement('div');
                 bubble.className = 'project-bubble';
-
-                const img = document.createElement('img');
-                img.src = proj.img;
-                img.alt = proj.title;
-
-                const titleBox = document.createElement('div');
-                titleBox.className = 'bubble-title';
-                titleBox.textContent = proj.title;
-
-                bubble.appendChild(img);
-                bubble.appendChild(titleBox);
+                bubble.innerHTML = `
+                    <img src="${proj.img}" alt="${proj.title}" onerror="this.src='https://via.placeholder.com/170/1a0033/00f0ff?text=${encodeURIComponent(proj.title)}'">
+                    <div class="bubble-title">${proj.title}</div>
+                `;
 
                 bubble.addEventListener('mouseenter', () => {
-                    if (proj.bgImg) {
-                        stageBgPreview.style.backgroundImage = `url('${proj.bgImg}')`;
-                        stageBgPreview.classList.add('active');
-                    }
+                    const bgPreview = document.getElementById('stageBgPreview');
+                    bgPreview.style.backgroundImage = `url('${proj.bgImg || proj.img}')`;
+                    bgPreview.classList.add('active');
                 });
 
                 bubble.addEventListener('mouseleave', () => {
-                    stageBgPreview.classList.remove('active');
+                    document.getElementById('stageBgPreview').classList.remove('active');
                 });
 
                 bubble.addEventListener('click', () => openProjectModal(proj));
 
-                projectsGrid.appendChild(bubble);
+                grid.appendChild(bubble);
             });
         }
 
-        prevDomainBtn.addEventListener('click', () => {
+        // GESTION DES BOUTONS DE NAVIGATION DU STAGE
+        document.getElementById('prevDomainBtn').addEventListener('click', () => {
             currentDomainIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
-            renderDomain(currentDomainIndex);
+            updateStage();
         });
 
-        nextDomainBtn.addEventListener('click', () => {
+        document.getElementById('nextDomainBtn').addEventListener('click', () => {
             currentDomainIndex = (currentDomainIndex + 1) % domains.length;
-            renderDomain(currentDomainIndex);
+            updateStage();
         });
 
-        // MODAL DETAIL PROJET ET CARROUSEL
-        const projectDetailModal = document.getElementById('projectDetailModal');
-        const closeProjectDetailBtn = document.getElementById('closeProjectDetailBtn');
-        const modalProjectTitle = document.getElementById('modalProjectTitle');
-        const modalProjectSkills = document.getElementById('modalProjectSkills');
-        const modalProjectDesc = document.getElementById('modalProjectDesc');
-        const modalProjectRole = document.getElementById('modalProjectRole');
-        const modalProjectLinkBox = document.getElementById('modalProjectLinkBox');
-        const modalProjectGallery = document.getElementById('modalProjectGallery');
+        document.getElementById('openProjectsBtn').addEventListener('click', () => {
+            document.body.classList.add('curtains-closed');
+            setTimeout(() => {
+                document.getElementById('mainMenu').classList.add('hidden');
+                document.getElementById('titleContainer').classList.add('hidden');
+                document.getElementById('projectsStage').classList.add('active');
+                updateStage();
+                setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
+            }, 600);
+        });
 
-        closeProjectDetailBtn.addEventListener('click', () => projectDetailModal.classList.remove('active'));
+        document.getElementById('backToMenuBtn').addEventListener('click', () => {
+            document.body.classList.add('curtains-closed');
+            setTimeout(() => {
+                document.getElementById('projectsStage').classList.remove('active');
+                document.getElementById('mainMenu').classList.remove('hidden');
+                document.getElementById('titleContainer').classList.remove('hidden');
+                setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
+            }, 600);
+        });
 
-        function openProjectModal(proj) {
-            modalProjectTitle.textContent = proj.title;
+        // MODALE ABOUT ME ET DEMO REEL
+        document.getElementById('aboutBtn').addEventListener('click', () => {
+            document.getElementById('charSheetModal').classList.add('active');
+        });
 
-            modalProjectSkills.innerHTML = '';
-            proj.skills.forEach(skill => {
+        document.getElementById('closeCharSheetBtn').addEventListener('click', () => {
+            document.getElementById('charSheetModal').classList.remove('active');
+        });
+
+        document.getElementById('demoReelBtn').addEventListener('click', () => {
+            document.getElementById('videoModal').classList.add('active');
+        });
+
+        document.getElementById('closeVideoBtn').addEventListener('click', () => {
+            document.getElementById('videoModal').classList.remove('active');
+            const iframe = document.getElementById('youtubeIframe');
+            if (iframe) iframe.src = iframe.src;
+        });
+
+        // LOGIQUE DES DETAIL PROJET ET LIGHTBOX
+        let currentGalleryItems = [];
+        let currentGalleryIndex = 0;
+
+        function openProjectModal(project) {
+            document.getElementById('modalProjectTitle').textContent = project.title;
+
+            const skillsList = document.getElementById('modalProjectSkills');
+            skillsList.innerHTML = '';
+            project.skills.forEach(skill => {
                 const badge = document.createElement('span');
                 badge.className = 'project-skill-badge';
                 badge.textContent = skill;
-                modalProjectSkills.appendChild(badge);
+                skillsList.appendChild(badge);
             });
 
-            modalProjectDesc.textContent = proj.desc || '';
-            modalProjectRole.textContent = proj.role || '';
+            document.getElementById('modalProjectDesc').textContent = project.desc;
+            document.getElementById('modalProjectRole').textContent = project.role;
 
-            modalProjectLinkBox.innerHTML = '';
-            if (proj.link) {
-                const a = document.createElement('a');
-                a.className = 'project-link-btn';
-                a.href = proj.link;
-                a.target = '_blank';
-                a.textContent = proj.linkLabel || '🔗 Voir le lien';
-                modalProjectLinkBox.appendChild(a);
-            }
-
-            modalProjectGallery.innerHTML = '';
-            currentProjectGallery = proj.gallery || [];
-
-            if (currentProjectGallery.length > 0) {
-                const carouselContainer = document.createElement('div');
-                carouselContainer.className = 'carousel-container';
-
-                currentProjectGallery.forEach((item, idx) => {
-                    const galleryItem = document.createElement('div');
-                    galleryItem.className = `gallery-item ${idx === 0 ? 'active' : ''}`;
-                    galleryItem.dataset.index = idx;
-
-                    const mediaWrapper = document.createElement('div');
-                    mediaWrapper.className = 'gallery-media';
-
-                    const embedUrl = getYouTubeEmbedUrl(item.img);
-
-                    if (embedUrl) {
-                        mediaWrapper.classList.add('is-video');
-                        const iframe = document.createElement('iframe');
-                        iframe.src = embedUrl;
-                        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-                        iframe.allowFullscreen = true;
-                        mediaWrapper.appendChild(iframe);
-                    } else if (item.img.endsWith('.mp4') || item.img.endsWith('.webm')) {
-                        mediaWrapper.classList.add('is-video');
-                        const video = document.createElement('video');
-                        video.src = item.img;
-                        video.controls = true;
-                        mediaWrapper.appendChild(video);
-                    } else {
-                        const img = document.createElement('img');
-                        img.src = item.img;
-                        img.alt = item.caption || proj.title;
-                        mediaWrapper.appendChild(img);
-
-                        mediaWrapper.addEventListener('click', () => openLightbox(idx));
-                    }
-
-                    const caption = document.createElement('div');
-                    caption.className = 'gallery-caption';
-                    caption.textContent = item.caption || '';
-
-                    galleryItem.appendChild(mediaWrapper);
-                    galleryItem.appendChild(caption);
-                    carouselContainer.appendChild(galleryItem);
-                });
-
-                if (currentProjectGallery.length > 1) {
-                    const controls = document.createElement('div');
-                    controls.className = 'carousel-controls';
-
-                    const prevBtn = document.createElement('button');
-                    prevBtn.className = 'carousel-btn';
-                    prevBtn.textContent = '◄ Précédent';
-
-                    const counter = document.createElement('span');
-                    counter.className = 'carousel-counter';
-                    counter.textContent = `1 / ${currentProjectGallery.length}`;
-
-                    const nextBtn = document.createElement('button');
-                    nextBtn.className = 'carousel-btn';
-                    nextBtn.textContent = 'Suivant ►';
-
-                    let curIdx = 0;
-
-                    function updateCarousel(newIdx) {
-                        const items = carouselContainer.querySelectorAll('.gallery-item');
-                        items[curIdx].classList.remove('active');
-                        curIdx = (newIdx + items.length) % items.length;
-                        items[curIdx].classList.add('active');
-                        counter.textContent = `${curIdx + 1} / ${items.length}`;
-                    }
-
-                    prevBtn.addEventListener('click', () => updateCarousel(curIdx - 1));
-                    nextBtn.addEventListener('click', () => updateCarousel(curIdx + 1));
-
-                    controls.appendChild(prevBtn);
-                    controls.appendChild(counter);
-                    controls.appendChild(nextBtn);
-                    carouselContainer.appendChild(controls);
-                }
-
-                modalProjectGallery.appendChild(carouselContainer);
-            }
-
-            projectDetailModal.classList.add('active');
-        }
-
-        // LIGHTBOX MODAL
-        const lightboxModal = document.getElementById('lightboxModal');
-        const closeLightboxBtn = document.getElementById('closeLightboxBtn');
-        const lightboxMediaWrapper = document.getElementById('lightboxMediaWrapper');
-        const lightboxCaption = document.getElementById('lightboxCaption');
-        const lightboxPrevBtn = document.getElementById('lightboxPrevBtn');
-        const lightboxNextBtn = document.getElementById('lightboxNextBtn');
-
-        closeLightboxBtn.addEventListener('click', () => lightboxModal.classList.remove('active'));
-
-        function openLightbox(idx) {
-            currentLightboxIndex = idx;
-            renderLightboxMedia();
-            lightboxModal.classList.add('active');
-        }
-
-        function renderLightboxMedia() {
-            lightboxMediaWrapper.innerHTML = '';
-            const item = currentProjectGallery[currentLightboxIndex];
-            if (!item) return;
-
-            const embedUrl = getYouTubeEmbedUrl(item.img);
-
-            if (embedUrl) {
-                const iframe = document.createElement('iframe');
-                iframe.src = embedUrl;
-                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-                iframe.allowFullscreen = true;
-                lightboxMediaWrapper.appendChild(iframe);
-            } else if (item.img.endsWith('.mp4') || item.img.endsWith('.webm')) {
-                const video = document.createElement('video');
-                video.src = item.img;
-                video.controls = true;
-                video.autoplay = true;
-                lightboxMediaWrapper.appendChild(video);
+            const linkBox = document.getElementById('modalProjectLinkBox');
+            if (project.link) {
+                linkBox.innerHTML = `<a href="${project.link}" target="_blank" class="project-link-btn">${project.linkLabel || '🔗 Voir le projet'}</a>`;
             } else {
-                const img = document.createElement('img');
-                img.src = item.img;
-                lightboxMediaWrapper.appendChild(img);
+                linkBox.innerHTML = '';
             }
 
-            lightboxCaption.textContent = item.caption || '';
+            currentGalleryItems = project.gallery || [];
+            currentGalleryIndex = 0;
+
+            renderCarousel();
+            document.getElementById('projectDetailModal').classList.add('active');
         }
 
-        lightboxPrevBtn.addEventListener('click', () => {
-            currentLightboxIndex = (currentLightboxIndex - 1 + currentProjectGallery.length) % currentProjectGallery.length;
-            renderLightboxMedia();
+        document.getElementById('closeProjectDetailBtn').addEventListener('click', () => {
+            document.getElementById('projectDetailModal').classList.remove('active');
         });
 
-        lightboxNextBtn.addEventListener('click', () => {
-            currentLightboxIndex = (currentLightboxIndex + 1) % currentProjectGallery.length;
-            renderLightboxMedia();
+        function renderCarousel() {
+            const galleryCol = document.getElementById('modalProjectGallery');
+            galleryCol.innerHTML = '';
+
+            if (currentGalleryItems.length === 0) {
+                galleryCol.innerHTML = '<p style="color:#888;">Aucun média disponible.</p>';
+                return;
+            }
+
+            const container = document.createElement('div');
+            container.className = 'carousel-container';
+
+            currentGalleryItems.forEach((item, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = `gallery-item ${index === currentGalleryIndex ? 'active' : ''}`;
+
+                const mediaBox = document.createElement('div');
+                mediaBox.className = 'gallery-media';
+
+                const ytUrl = getYouTubeEmbedUrl(item.img);
+                if (ytUrl) {
+                    mediaBox.classList.add('is-video');
+                    mediaBox.innerHTML = `<iframe src="${ytUrl}" allowfullscreen></iframe>`;
+                } else if (item.img.endsWith('.mp4')) {
+                    mediaBox.classList.add('is-video');
+                    mediaBox.innerHTML = `<video src="${item.img}" controls></video>`;
+                } else {
+                    mediaBox.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu'}" onerror="this.src='https://via.placeholder.com/500x300/1a0033/00f0ff?text=IMAGE+INDISPONIBLE'">`;
+                    mediaBox.addEventListener('click', () => openLightbox(index));
+                }
+
+                const caption = document.createElement('div');
+                caption.className = 'gallery-caption';
+                caption.textContent = item.caption || '';
+
+                galleryItem.appendChild(mediaBox);
+                galleryItem.appendChild(caption);
+                container.appendChild(galleryItem);
+            });
+
+            if (currentGalleryItems.length > 1) {
+                const controls = document.createElement('div');
+                controls.className = 'carousel-controls';
+
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'carousel-btn';
+                prevBtn.textContent = '◄ Précédent';
+                prevBtn.addEventListener('click', () => {
+                    currentGalleryIndex = (currentGalleryIndex - 1 + currentGalleryItems.length) % currentGalleryItems.length;
+                    renderCarousel();
+                });
+
+                const counter = document.createElement('span');
+                counter.className = 'carousel-counter';
+                counter.textContent = `${currentGalleryIndex + 1} / ${currentGalleryItems.length}`;
+
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'carousel-btn';
+                nextBtn.textContent = 'Suivant ►';
+                nextBtn.addEventListener('click', () => {
+                    currentGalleryIndex = (currentGalleryIndex + 1) % currentGalleryItems.length;
+                    renderCarousel();
+                });
+
+                controls.appendChild(prevBtn);
+                controls.appendChild(counter);
+                controls.appendChild(nextBtn);
+                container.appendChild(controls);
+            }
+
+            galleryCol.appendChild(container);
+        }
+
+        // LOGIQUE LIGHTBOX
+        function openLightbox(index) {
+            currentGalleryIndex = index;
+            updateLightboxContent();
+            document.getElementById('lightboxModal').classList.add('active');
+        }
+
+        function updateLightboxContent() {
+            const item = currentGalleryItems[currentGalleryIndex];
+            const wrapper = document.getElementById('lightboxMediaWrapper');
+            const caption = document.getElementById('lightboxCaption');
+
+            wrapper.innerHTML = '';
+            caption.textContent = item.caption || '';
+
+            const ytUrl = getYouTubeEmbedUrl(item.img);
+            if (ytUrl) {
+                wrapper.innerHTML = `<iframe src="${ytUrl}" allowfullscreen></iframe>`;
+            } else if (item.img.endsWith('.mp4')) {
+                wrapper.innerHTML = `<video src="${item.img}" controls autoplay></video>`;
+            } else {
+                wrapper.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu'}">`;
+            }
+        }
+
+        document.getElementById('closeLightboxBtn').addEventListener('click', () => {
+            document.getElementById('lightboxModal').classList.remove('active');
+            document.getElementById('lightboxMediaWrapper').innerHTML = '';
+        });
+
+        document.getElementById('lightboxPrevBtn').addEventListener('click', () => {
+            currentGalleryIndex = (currentGalleryIndex - 1 + currentGalleryItems.length) % currentGalleryItems.length;
+            updateLightboxContent();
+        });
+
+        document.getElementById('lightboxNextBtn').addEventListener('click', () => {
+            currentGalleryIndex = (currentGalleryIndex + 1) % currentGalleryItems.length;
+            updateLightboxContent();
         });
     </script>
 </body>
