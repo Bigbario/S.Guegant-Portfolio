@@ -1075,10 +1075,7 @@
             <button class="close-btn" id="closeContactBtn">FERMER [X]</button>
             <h2 style="font-family:'Orbitron'; color:#00f0ff; font-size:2rem; border-bottom: 2px solid rgba(0,240,255,0.4); padding-bottom:10px;">CONTACT ME</h2>
             
-            <form class="contact-form" action="https://formspree.io/f/samgueg@gmx.fr" method="POST">
-                <label for="email">VOTRE EMAIL</label>
-                <input type="email" id="email" name="email" placeholder="votre.email@domaine.com" required>
-
+            <form class="contact-form" id="contactForm">
                 <label for="subject">SUJET</label>
                 <input type="text" id="subject" name="subject" placeholder="Sujet de votre message" required>
 
@@ -1787,13 +1784,23 @@
             updateStage();
         });
 
-        // MODALES
+        // MODALES & CONTACT MAILTO
         const contactTopBtn = document.getElementById('contactTopBtn');
         const contactModal = document.getElementById('contactModal');
         const closeContactBtn = document.getElementById('closeContactBtn');
+        const contactForm = document.getElementById('contactForm');
 
         contactTopBtn.addEventListener('click', () => contactModal.classList.add('active'));
         closeContactBtn.addEventListener('click', () => contactModal.classList.remove('active'));
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            const mailtoUri = `mailto:samgueg@gmx.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoUri;
+        });
 
         const demoReelBtn = document.getElementById('demoReelBtn');
         const videoModal = document.getElementById('videoModal');
