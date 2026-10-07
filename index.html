@@ -1853,10 +1853,16 @@
             updateLightboxContent();
         });
 
-        closeLightboxBtn.addEventListener('click', () => {
-            lightboxModal.classList.remove('active');
-            lightboxMediaWrapper.innerHTML = '';
-        });
+       closeLightboxBtn.addEventListener('click', () => {
+          lightboxModal.classList.remove('active');
+          lightboxMediaWrapper.innerHTML = ''; // Coupe la vidéo en vider la div
+        });         
+          lightboxModal.addEventListener('click', (e) => {
+              if (e.target === lightboxModal) {
+                lightboxModal.classList.remove('active');
+                lightboxMediaWrapper.innerHTML = ''; // Coupe aussi la vidéo
+              }
+            });
 
         // EFFET DE SLASH AU CLIC
         window.addEventListener('click', (e) => {
