@@ -528,7 +528,6 @@
         .stat-bar-container { width: 100%; height: 10px; background: rgba(255, 255, 255, 0.1); border-radius: 5px; overflow: hidden; border: 1px solid rgba(180, 50, 255, 0.4); }
         .stat-bar-fill { height: 100%; background: linear-gradient(90deg, #8a2be2, #00f0ff); box-shadow: 0 0 10px #00f0ff; }
 
-        /* --- SCORE S DORÉ OSU STYLE MODIFIÉ POUR PLUS DE LISIBILITÉ --- */
         .osu-s-grade {
             font-family: 'Orbitron', 'Montserrat', sans-serif;
             font-weight: 900;
@@ -695,19 +694,18 @@
             transition: border-color 0.2s ease;
         }
         .gallery-media img,
-            .gallery-media video,
-            .gallery-media iframe {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-            }
+        .gallery-media video,
+        .gallery-media iframe {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
 
         .gallery-media:hover {
             border-color: #00f0ff;
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
         }
 
-        /* Affichage conditionnel de lextension Clic pour agrandir uniquement sur les images */
         .gallery-media::after {
             content: '🔍 Clic pour agrandir';
             position: absolute;
@@ -729,7 +727,6 @@
             opacity: 1;
         }
 
-        /* DÉSACTIVER "CLIC POUR AGRANDIR" LORSQUE C'EST UNE VIDÉO */
         .gallery-media.is-video::after {
             display: none !important;
         }
@@ -923,14 +920,12 @@
 </head>
 <body>
 
-    <!-- Éléments HUD de décoration -->
     <div class="bg-grid"></div>
     <div class="hud-corner top-left"></div>
     <div class="hud-corner top-right"></div>
     <div class="hud-corner bottom-left"></div>
     <div class="hud-corner bottom-right"></div>
 
-    <!-- Curseur Personnage Animé -->
     <div id="custom-cursor"></div>
 
     <canvas id="effectsCanvas"></canvas>
@@ -1080,9 +1075,7 @@
                         <div class="project-overview" id="modalProjectDesc"></div>
                 
                         <h3>Rôle sur le projet</h3>
-                        <div class="project-role-text" id="modalProjectRole">
-                            <!-- Vous pourrez remplir dynamiquement ou ajouter du texte ici -->
-                        </div>
+                        <div class="project-role-text" id="modalProjectRole"></div>
                     </div>
                 
                     <div class="project-link-box" id="modalProjectLinkBox"></div>
@@ -1096,7 +1089,7 @@
         </div>
     </div>
 
-    <!-- MODAL LIGHTBOX (AFFICHER EN GRAND) -->
+    <!-- MODAL LIGHTBOX -->
     <div class="lightbox-modal" id="lightboxModal">
         <div class="lightbox-container">
             <button class="close-btn" id="closeLightboxBtn">FERMER [X]</button>
@@ -1240,7 +1233,7 @@
             return videoId ? `https://www.youtube.com/embed/${videoId}?enablejsapi=1` : null;
         }
 
-        // DATA PROJETS AVEC CHEMINS DE GALERIE ET NOMS DE DOSSIER CORRIGÉS
+        // DATA PROJETS
         const domains = [
             {
                 id: 'level_design',
@@ -1745,9 +1738,10 @@
                     
                     let mediaHTML = '';
                     if (ytUrl) {
-                        mediaHTML = `<div class="gallery-media is-video"><iframe src="${ytUrl}" allowfullscreen></iframe></div>`;
+                        const autoYtUrl = ytUrl + (ytUrl.includes('?') ? '&' : '?') + 'autoplay=1&mute=1';
+                        mediaHTML = `<div class="gallery-media is-video"><iframe src="${autoYtUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
                     } else if (item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm')) {
-                        mediaHTML = `<div class="gallery-media is-video"><video src="${item.img}" controls></video></div>`;
+                        mediaHTML = `<div class="gallery-media is-video"><video src="${item.img}" autoplay muted loop playsinline controls></video></div>`;
                     } else {
                         mediaHTML = `<div class="gallery-media"><img src="${item.img}" alt="${item.caption || 'Aperçu'}" onerror="this.src='https://via.placeholder.com/600x380/1a0033/00f0ff?text=Image+Indisponible'"></div>`;
                     }
@@ -1757,7 +1751,6 @@
                         <div class="gallery-caption">${item.caption || ''}</div>
                     `;
 
-                    // Clic pour ouvrir en grande taille (Lightbox) uniquement si ce n'est pas une vidéo
                     const mediaBox = gItem.querySelector('.gallery-media');
                     if (!isVideo) {
                         mediaBox.addEventListener('click', () => openLightbox(idx));
@@ -1845,9 +1838,10 @@
             lightboxMediaWrapper.innerHTML = '';
             const ytUrl = getYouTubeEmbedUrl(item.img);
             if (ytUrl) {
-                lightboxMediaWrapper.innerHTML = `<iframe src="${ytUrl}" allowfullscreen></iframe>`;
+                const autoYtUrl = ytUrl + (ytUrl.includes('?') ? '&' : '?') + 'autoplay=1&mute=1';
+                lightboxMediaWrapper.innerHTML = `<iframe src="${autoYtUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             } else if (item.img.toLowerCase().endsWith('.mp4') || item.img.toLowerCase().endsWith('.webm')) {
-                lightboxMediaWrapper.innerHTML = `<video src="${item.img}" controls autoplay></video>`;
+                lightboxMediaWrapper.innerHTML = `<video src="${item.img}" controls autoplay muted loop playsinline></video>`;
             } else {
                 lightboxMediaWrapper.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu Plein Écran'}">`;
             }
@@ -1865,16 +1859,25 @@
             updateLightboxContent();
         });
 
-       closeLightboxBtn.addEventListener('click', () => {
-          lightboxModal.classList.remove('active');
-          lightboxMediaWrapper.innerHTML = ''; // Coupe la vidéo en vider la div
-        });         
-          lightboxModal.addEventListener('click', (e) => {
-              if (e.target === lightboxModal) {
-                lightboxModal.classList.remove('active');
-                lightboxMediaWrapper.innerHTML = ''; // Coupe aussi la vidéo
-              }
+        closeLightboxBtn.addEventListener('click', () => {
+            lightboxModal.classList.remove('active');
+            lightboxMediaWrapper.innerHTML = '';
+        });
+
+        // FERMETURE DES MODALES AU CLIC À L'EXTÉRIEUR DU CADRE
+        [videoModal, charSheetModal, projectDetailModal, lightboxModal].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+
+                    if (modal === videoModal) {
+                        closeVideo();
+                    } else if (modal === lightboxModal) {
+                        lightboxMediaWrapper.innerHTML = '';
+                    }
+                }
             });
+        });
 
         // EFFET DE SLASH AU CLIC
         window.addEventListener('click', (e) => {
