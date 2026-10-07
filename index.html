@@ -36,6 +36,96 @@
             cursor: pointer;
         }
 
+        /* --- BOUTON CONTACT (HAUT DROITE) --- */
+        .contact-top-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            z-index: 15;
+            background: linear-gradient(135deg, rgba(140, 30, 255, 0.4), rgba(40, 5, 60, 0.8));
+            border: 2px solid #00f0ff;
+            color: #00f0ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 8px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            transition: all 0.25s ease;
+        }
+
+        .contact-top-btn:hover {
+            background: #00f0ff;
+            color: #0b021a;
+            box-shadow: 0 0 25px #00f0ff;
+            transform: translateY(-2px);
+        }
+
+        /* --- FORMULAIRE DE CONTACT (MODALE) --- */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .contact-form label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: #00f0ff;
+            letter-spacing: 1px;
+            margin-bottom: -5px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            background: rgba(35, 12, 65, 0.6);
+            border: 1px solid rgba(180, 50, 255, 0.6);
+            border-radius: 8px;
+            padding: 12px;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #00f0ff;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(140, 30, 255, 0.6));
+            border: 2px solid #00f0ff;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 12px;
+            border-radius: 8px;
+            letter-spacing: 1.5px;
+            margin-top: 10px;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        }
+
+        .submit-btn:hover {
+            background: #00f0ff;
+            color: #0b021a;
+            box-shadow: 0 0 25px #00f0ff;
+            transform: translateY(-2px);
+        }
+
         /* --- CURSEUR PERSONNAGE --- */
         #custom-cursor {
             position: fixed;
@@ -359,7 +449,7 @@
         .arrow-icon { font-size: 1.6rem; color: #00f0ff; }
 
         /* --- MODALES --- */
-        .video-modal-overlay, .char-sheet-modal, .project-detail-modal, .lightbox-modal {
+        .video-modal-overlay, .char-sheet-modal, .project-detail-modal, .lightbox-modal, .contact-modal {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
@@ -374,7 +464,7 @@
             transition: opacity 0.3s ease;
         }
 
-        .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active {
+        .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active {
             opacity: 1;
             pointer-events: auto;
         }
@@ -418,20 +508,27 @@
             transform: translateX(-50%) scale(1.05);
         }
 
-        .char-sheet-container {
+        .char-sheet-container, .contact-modal-container {
             width: 90vw;
-            max-width: 1200px;
+            max-width: 700px;
             max-height: 88vh;
-            background: rgba(22, 8, 42, 0.94);
-            border: 2px solid rgba(190, 80, 255, 0.8);
+            background: rgba(22, 8, 42, 0.96);
+            border: 2px solid rgba(0, 240, 255, 0.8);
             border-radius: 16px;
-            box-shadow: 0 0 50px rgba(160, 30, 255, 0.5);
-            padding: 60px 30px 30px 30px;
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.4);
+            padding: 60px 35px 35px 35px;
             position: relative;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 20px;
+        }
+
+        .char-sheet-container {
+            max-width: 1200px;
+            border-color: rgba(190, 80, 255, 0.8);
+            box-shadow: 0 0 50px rgba(160, 30, 255, 0.5);
+            padding: 60px 30px 30px 30px;
         }
 
         .char-header {
@@ -920,6 +1017,8 @@
 </head>
 <body>
 
+    <button class="contact-top-btn" id="contactTopBtn">CONTACT ME</button>
+
     <div class="bg-grid"></div>
     <div class="hud-corner top-left"></div>
     <div class="hud-corner top-right"></div>
@@ -967,6 +1066,27 @@
                 <span id="nextDomainLabel">Vers Documents</span>
                 <span class="arrow-icon">►</span>
             </button>
+        </div>
+    </div>
+
+    <!-- MODAL CONTACT ME -->
+    <div class="contact-modal" id="contactModal">
+        <div class="contact-modal-container">
+            <button class="close-btn" id="closeContactBtn">FERMER [X]</button>
+            <h2 style="font-family:'Orbitron'; color:#00f0ff; font-size:2rem; border-bottom: 2px solid rgba(0,240,255,0.4); padding-bottom:10px;">CONTACT ME</h2>
+            
+            <form class="contact-form" action="https://formspree.io/f/samgueg@gmx.fr" method="POST">
+                <label for="email">VOTRE EMAIL</label>
+                <input type="email" id="email" name="email" placeholder="votre.email@domaine.com" required>
+
+                <label for="subject">SUJET</label>
+                <input type="text" id="subject" name="subject" placeholder="Sujet de votre message" required>
+
+                <label for="message">MESSAGE</label>
+                <textarea id="message" name="message" placeholder="Votre message..." required></textarea>
+
+                <button type="submit" class="submit-btn">ENVOYER</button>
+            </form>
         </div>
     </div>
 
@@ -1668,6 +1788,13 @@
         });
 
         // MODALES
+        const contactTopBtn = document.getElementById('contactTopBtn');
+        const contactModal = document.getElementById('contactModal');
+        const closeContactBtn = document.getElementById('closeContactBtn');
+
+        contactTopBtn.addEventListener('click', () => contactModal.classList.add('active'));
+        closeContactBtn.addEventListener('click', () => contactModal.classList.remove('active'));
+
         const demoReelBtn = document.getElementById('demoReelBtn');
         const videoModal = document.getElementById('videoModal');
         const closeVideoBtn = document.getElementById('closeVideoBtn');
