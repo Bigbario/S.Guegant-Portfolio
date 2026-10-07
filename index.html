@@ -133,17 +133,17 @@
             left: 0;
             width: 32px;
             height: 32px;
-            background-image: url('assets/cursors/mouseIconIdle.png');
+            background-image: url('assets/cursors/MouseIconIdle.png');
             background-size: 96px 32px; /* 3 images x 32px de large */
             background-repeat: no-repeat;
             pointer-events: none;
             z-index: 999999;
-            transform: translate(-50%, -50%); /* Centré exactement sur la position du pointeur */
+            transform: translate(-50%, -50%); /* Centré sur le pointeur */
             display: block;
-            animation: walkAnim 0.6s steps(3) infinite;
+            animation: mouseIdleAnim 0.6s steps(3) infinite;
         }
 
-        @keyframes walkAnim {
+        @keyframes mouseIdleAnim {
             from { background-position: 0px 0px; }
             to { background-position: -96px 0px; }
         }
@@ -796,6 +796,7 @@
             position: relative;
             transition: border-color 0.2s ease;
         }
+
         .gallery-media img,
         .gallery-media video,
         .gallery-media iframe {
