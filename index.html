@@ -1888,6 +1888,41 @@
             document.body.appendChild(slash);
             setTimeout(() => slash.remove(), 250);
         });
-    </script>
+    </script>  
+
+        <div id="custom-cursor"></div>
+        
+        <style>
+          html, body, a, button, input {
+            cursor: none !important;
+          }
+        
+          #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            pointer-events: none;
+            z-index: 99999;
+            background-image: url('MouseIconIdle.png');
+            background-size: 96px 32px;
+            animation: cursorIdle 0.6s steps(3) infinite;
+          }
+        
+          @keyframes cursorIdle {
+            from { background-position: 0px 0; }
+            to { background-position: -96px 0; }
+          }
+        </style>
+        
+        <!-- 3. Le script EN DERNIER -->
+        <script>
+          const cursor = document.getElementById('custom-cursor');
+          window.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+          });
+        </script>
+    
 </body>
 </html>
