@@ -1276,10 +1276,13 @@
             { modal: document.getElementById('projectDetailModal'), containerClass: 'project-modal-container' },
             { modal: document.getElementById('lightboxModal'), containerClass: 'lightbox-container' }
         ];
-
+        
         modalsWithContainers.forEach(({ modal, containerClass }) => {
             if (modal) {
                 modal.addEventListener('click', (e) => {
+                    // Empêche la fermeture si on clique sur un bouton de carrousel ou à l'intérieur du conteneur
+                    if (e.target.closest('.carousel-btn')) return;
+        
                     if (!e.target.closest(`.${containerClass}`)) {
                         modal.classList.remove('active');
                         if (modal.id === 'videoModal') {
