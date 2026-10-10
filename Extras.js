@@ -25,9 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     cvBtn.textContent = "📄 MON CV";
     topBarContainer.appendChild(cvBtn);
 
-    // Bouton Contact (Mailto)
-    const contactBtn = document.createElement('a');
-    contactBtn.href = "mailto:samgueg@gmx.fr?subject=Contact%20depuis%20le%20portfolio&body=Bonjour%20Samuel,%0A%0AJe%20te%20contacte%20suite%20à%20la%20visite%20de%20ton%20portfolio...";
+    // Bouton Contact
+    const contactBtn = document.createElement('button');
     contactBtn.className = "contact-top-btn";
     contactBtn.style.position = "static";
     contactBtn.textContent = "✉️ CONTACT";
@@ -36,7 +35,72 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(topBarContainer);
 
 
-    // B. SÉLECTEUR DE COULEUR DE FOND (CLIQUABLE SUR TOUT LE BLOC)
+    // B. CRÉATION DE LA MODALE DE CONTACT SUR MESURE
+    const modalHTML = `
+        <div class="contact-modal-container" style="position: relative;">
+            <button class="close-btn" id="closeContactExtraBtn">FERMER [X]</button>
+            <h2 style="font-family: 'Orbitron', sans-serif; color: #00f0ff; font-size: 1.8rem; border-bottom: 2px solid rgba(0, 240, 255, 0.4); padding-bottom: 10px;">ME CONTACTER</h2>
+            
+            <p style="font-size: 0.9rem; color: #d1c4e9;">Destinataire : <strong style="color: #00f0ff;">samgueg@gmx.fr</strong></p>
+
+            <form class="contact-form" id="contactExtraForm">
+                <label for="extraEmail">VOTRE ADRESSE E-MAIL</label>
+                <input type="email" id="extraEmail" placeholder="votre.email@exemple.com" required>
+
+                <label for="extraSubject">SUJET DU MESSAGE</label>
+                <input type="text" id="extraSubject" placeholder="Proposition d'alternance / projet..." required>
+
+                <label for="extraMessage">VOTRE MESSAGE</label>
+                <textarea id="extraMessage" placeholder="Écrivez votre message ici..." required></textarea>
+
+                <button type="submit" class="submit-btn">ENVOYER LE MESSAGE ➔</button>
+            </form>
+        </div>
+    `;
+
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'contact-modal';
+    modalOverlay.id = 'contactExtraModal';
+    modalOverlay.innerHTML = modalHTML;
+    document.body.appendChild(modalOverlay);
+
+    // Événements d'ouverture / fermeture de la modale contact
+    contactBtn.addEventListener('click', () => {
+        modalOverlay.classList.add('active');
+    });
+
+    const closeBtn = document.getElementById('closeContactExtraBtn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+        });
+    }
+
+    modalOverlay.addEventListener('click', (e) => {
+        if (!e.target.closest('.contact-modal-container')) {
+            modalOverlay.classList.remove('active');
+        }
+    });
+
+    // Gestion de l'envoi du formulaire
+    const form = document.getElementById('contactExtraForm');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const senderEmail = document.getElementById('extraEmail').value;
+            const subject = document.getElementById('extraSubject').value;
+            const message = document.getElementById('extraMessage').value;
+
+            const bodyContent = `De: ${senderEmail}\n\nMessage:\n${message}`;
+            const mailtoUrl = `mailto:samgueg@gmx.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyContent)}`;
+            
+            window.location.href = mailtoUrl;
+            modalOverlay.classList.remove('active');
+        });
+    }
+
+
+    // C. SÉLECTEUR DE COULEUR DE FOND
     const colorPickerContainer = document.createElement('div');
     colorPickerContainer.style.cssText = `
         position: fixed;
@@ -65,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(colorPickerContainer);
 
     const colorPicker = document.getElementById('hudColorPicker');
-
     colorPickerContainer.addEventListener('click', () => {
         colorPicker.click();
     });
@@ -104,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // C. RACCOURCI CLAVIER (ÉCHAP)
+    // D. RACCOURCI CLAVIER (ÉCHAP)
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             const activeModals = document.querySelectorAll('.video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active');
@@ -119,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // D. SON DE CLIC RÉTRO TRÈS DOUX & FEUTRÉ
+    // E. SON DE CLIC RÉTRO FEUTRÉ
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playUiBeep() {
         try {
