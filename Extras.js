@@ -4,11 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ----------------------------------------------------
-    // 1. INJECTION DES BOUTONS DU HAUT (CV & FILTRES) & DU SÉLECTEUR DE COULEUR
-    // ----------------------------------------------------
-
-    // A. Bouton CV en haut à droite (à côté ou à la place du bouton contact selon ta préférence)
+    // A. AJOUT DU BOUTON CV EN HAUT À DROITE
     const topBarContainer = document.createElement('div');
     topBarContainer.style.cssText = `
         position: absolute;
@@ -29,21 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     topBarContainer.appendChild(cvBtn);
     document.body.appendChild(topBarContainer);
 
-    // B. Bouton de filtrage des projets (visible sur la scène des projets ou dans le menu)
-    const filterBtn = document.createElement('button');
-    filterBtn.id = "globalFilterBtn";
-    filterBtn.className = "contact-top-btn";
-    filterBtn.style.cssText = `
-        position: absolute;
-        top: 25px;
-        left: 25px;
-        z-index: 15;
-        display: none; 
-    `;
-    filterBtn.textContent = "🔍 FILTRER PAR TAG";
-    document.body.appendChild(filterBtn);
 
-    // C. Sélecteur de couleur discret en bas à droite
+    // B. SÉLECTEUR DE COULEUR EN BAS À DROITE
     const colorPickerContainer = document.createElement('div');
     colorPickerContainer.style.cssText = `
         position: fixed;
@@ -68,13 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.body.appendChild(colorPickerContainer);
 
-    // Logique du sélecteur de couleur (change les bordures et lueurs néon à la volée)
     const colorPicker = document.getElementById('hudColorPicker');
     colorPicker.addEventListener('input', (e) => {
         const val = e.target.value;
-        document.documentElement.style.setProperty('--neon-main', val);
-        
-        // Applique dynamiquement la couleur sur les éléments clés
         const styleDyn = document.getElementById('dynamicThemeStyle') || document.createElement('style');
         styleDyn.id = 'dynamicThemeStyle';
         styleDyn.innerHTML = `
@@ -85,10 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // ----------------------------------------------------
-    // 2. GESTION DES RACCOURCIS CLAVIER & AUDIO CLICS
-    // ----------------------------------------------------
-
+    // C. RACCOURCI CLAVIER (ÉCHAP)
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             const activeModals = document.querySelectorAll('.video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active');
@@ -98,58 +74,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     const iframe = document.getElementById('youtubeIframe');
                     if (iframe) iframe.src = iframe.src;
                 }
-                if (modal.id === 'lightboxModal') {
-                    const wrapper = document.getElementById('lightboxMediaWrapper');
-                    if (wrapper) wrapper.innerHTML = '';
-                }
             });
         }
     });
 
-    // Support tactile / mobile
-    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-        const styleTag = document.createElement('style');
-        styleTag.innerHTML = `body, button, a, .project-bubble, .gallery-media { cursor: auto !important; } #custom-cursor { display: none !important; }`;
-        document.head.appendChild(styleTag);
-    }
 
-    // Générateur de sons UI rétro (Web Audio API)
+    // D. SONS RÉTRO AU CLIC
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playUiBeep(freq = 587.33, type = 'triangle', duration = 0.06) {
+    function playUiBeep() {
         try {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = type;
-            osc.frequency.value = freq;
+            osc.type = 'triangle';
+            osc.frequency.value = 650;
             gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.07);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
-            osc.stop(audioCtx.currentTime + duration);
+            osc.stop(audioCtx.currentTime + 0.07);
         } catch (e) {}
     }
 
-    // Ajout des sons sur TOUS les clics de boutons, bulles et liens
     document.addEventListener('click', (e) => {
         if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.project-bubble')) {
-            playUiBeep(650, 'triangle', 0.07);
+            playUiBeep();
         }
     });
-
-
-    // ----------------------------------------------------
-    // 3. AFFICHAGE CONDITIONNEL DU BOUTON FILTRE (QUAND ON EST DANS LES PROJETS)
-    // ----------------------------------------------------
-    const observer = new MutationObserver(() => {
-        const projectsStage = document.getElementById('projectsStage');
-        if (projectsStage && projectsStage.classList.contains('active')) {
-            filterBtn.style.display = 'block';
-        } else {
-            filterBtn.style.display = 'none';
-        }
-    });
-    observer.observe(document.getElementById('projectsStage'), { attributes: true, attributeFilter: ['class'] });
 
 });
