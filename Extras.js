@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(topBarContainer);
 
 
-    // B. SÉLECTEUR DE COULEUR DE FOND (DEPLACÉ EN BAS À GAUCHE)
+    // B. SÉLECTEUR DE COULEUR DE FOND (CLIQUABLE SUR TOUT LE BLOC)
     const colorPickerContainer = document.createElement('div');
     colorPickerContainer.style.cssText = `
         position: fixed;
@@ -35,23 +35,33 @@ document.addEventListener('DOMContentLoaded', () => {
         z-index: 999;
         display: flex;
         align-items: center;
-        gap: 8px;
-        background: rgba(11, 2, 26, 0.85);
-        border: 1px solid rgba(0, 240, 255, 0.4);
-        padding: 6px 12px;
+        gap: 10px;
+        background: rgba(11, 2, 26, 0.9);
+        border: 1px solid rgba(0, 240, 255, 0.5);
+        padding: 8px 14px;
         border-radius: 8px;
         backdrop-filter: blur(6px);
         font-family: 'Orbitron', sans-serif;
         font-size: 0.75rem;
         color: #00f0ff;
+        cursor: pointer;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        transition: all 0.2s ease;
     `;
     colorPickerContainer.innerHTML = `
-        <span>THEME BG:</span>
-        <input type="color" id="hudColorPicker" value="#8c1eff" style="cursor: pointer; border: none; width: 22px; height: 22px; background: none;">
+        <span>THEME BG</span>
+        <input type="color" id="hudColorPicker" value="#8c1eff" style="cursor: pointer; border: none; width: 24px; height: 24px; background: none; pointer-events: none;">
     `;
     document.body.appendChild(colorPickerContainer);
 
-    // Fonction de conversion Hex -> RGB pour générer les dégradés
+    const colorPicker = document.getElementById('hudColorPicker');
+
+    // Permet d'ouvrir le sélecteur en cliquant n'importe où sur le bouton/widget
+    colorPickerContainer.addEventListener('click', () => {
+        colorPicker.click();
+    });
+
+    // Fonction de conversion Hex -> RGB pour les dégradés
     function hexToRgb(hex) {
         let c = hex.replace('#', '');
         if (c.length === 3) c = c.split('').map(x => x + x).join('');
@@ -59,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
     }
 
-    const colorPicker = document.getElementById('hudColorPicker');
     colorPicker.addEventListener('input', (e) => {
         const hex = e.target.value;
         const rgb = hexToRgb(hex);
@@ -111,12 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             
-            // Onde sinusoïdale très douce et fréquence basse (style clic feutré UI)
             osc.type = 'sine';
             osc.frequency.setValueAtTime(320, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.04);
             
-            // Volume très bas (0.012) pour être agréable
             gain.gain.setValueAtTime(0.012, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.04);
             
