@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // A. BOUTON CV EN HAUT À DROITE
+    // A. CONTENEUR DES BOUTONS DU HAUT (CV & CONTACT)
     const topBarContainer = document.createElement('div');
     topBarContainer.style.cssText = `
         position: absolute;
@@ -12,10 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
         right: 155px;
         z-index: 15;
         display: flex;
-        gap: 15px;
+        gap: 12px;
         align-items: center;
     `;
     
+    // Bouton CV
     const cvBtn = document.createElement('a');
     cvBtn.href = "https://drive.google.com/file/d/1NDAKqytWr7U1Gritd7IpsqdXnHcfKrBD/view?usp=sharing";
     cvBtn.target = "_blank";
@@ -23,6 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
     cvBtn.style.position = "static";
     cvBtn.textContent = "📄 MON CV";
     topBarContainer.appendChild(cvBtn);
+
+    // Bouton Contact (Mailto)
+    const contactBtn = document.createElement('a');
+    contactBtn.href = "mailto:samgueg@gmx.fr?subject=Contact%20depuis%20le%20portfolio&body=Bonjour%20Samuel,%0A%0AJe%20te%20contacte%20suite%20à%20la%20visite%20de%20ton%20portfolio...";
+    contactBtn.className = "contact-top-btn";
+    contactBtn.style.position = "static";
+    contactBtn.textContent = "✉️ CONTACT";
+    topBarContainer.appendChild(contactBtn);
+
     document.body.appendChild(topBarContainer);
 
 
@@ -56,12 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const colorPicker = document.getElementById('hudColorPicker');
 
-    // Permet d'ouvrir le sélecteur en cliquant n'importe où sur le bouton/widget
     colorPickerContainer.addEventListener('click', () => {
         colorPicker.click();
     });
 
-    // Fonction de conversion Hex -> RGB pour les dégradés
     function hexToRgb(hex) {
         let c = hex.replace('#', '');
         if (c.length === 3) c = c.split('').map(x => x + x).join('');
