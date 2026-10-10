@@ -85,8 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // C. SÉLECTEUR DE COULEUR DE FOND
+    // C. SÉLECTEUR DE COULEUR DE FOND (VISIBLE UNIQUEMENT SUR LA HOME)
     const colorPickerContainer = document.createElement('div');
+    colorPickerContainer.id = 'themePickerWidget';
     colorPickerContainer.style.cssText = `
         position: fixed;
         bottom: 20px;
@@ -105,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         color: #00f0ff;
         cursor: pointer;
         box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
-        transition: all 0.2s ease;
+        transition: opacity 0.3s ease, transform 0.3s ease;
     `;
     colorPickerContainer.innerHTML = `
         <span>THEME BG</span>
@@ -150,6 +151,26 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.head.appendChild(styleDyn);
     });
+
+    // Observer les changements de scène pour masquer / afficher le sélecteur de thème
+    const projectsStage = document.getElementById('projectsStage');
+    if (projectsStage) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    const isProjectsActive = projectsStage.classList.contains('active');
+                    if (isProjectsActive) {
+                        colorPickerContainer.style.opacity = '0';
+                        colorPickerContainer.style.pointerEvents = 'none';
+                    } else {
+                        colorPickerContainer.style.opacity = '1';
+                        colorPickerContainer.style.pointerEvents = 'auto';
+                    }
+                }
+            });
+        });
+        observer.observe(projectsStage, { attributes: true });
+    }
 
 
     // D. RACCOURCI CLAVIER (ÉCHAP)
