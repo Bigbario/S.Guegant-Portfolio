@@ -492,8 +492,7 @@
         .close-btn {
             position: absolute;
             top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 20px; /* Positionne le bouton à droite */
             color: #ffffff;
             font-family: 'Orbitron', sans-serif;
             font-size: 0.95rem;
@@ -511,7 +510,7 @@
         .close-btn:hover {
             background: #ff2a6d;
             box-shadow: 0 0 30px #ff2a6d;
-            transform: translateX(-50%) scale(1.05);
+            transform: scale(1.05); /* Zoom au survol (sans décalage horizontal) */
         }
 
         .char-sheet-container, .contact-modal-container {
