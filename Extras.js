@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - Améliorations, UI, Thèmes, Sons & Formspree
+// EXTRAS.JS - Améliorations, UI, Thèmes, Sons & Formspree Natif
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(topBarContainer);
 
 
-    // B. CRÉATION DE LA MODALE DE CONTACT FORMSPREE
+    // B. CRÉATION DE LA MODALE DE CONTACT FORMSPREE (METHODE NATIVE)
     const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnpjvbgp";
 
     const modalHTML = `
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             <p style="font-size: 0.9rem; color: #d1c4e9;">Envoyer un message direct à <strong style="color: #00f0ff;">Samuel Guegant</strong></p>
 
-            <form class="contact-form" id="contactExtraForm">
+            <form class="contact-form" id="contactExtraForm" action="${FORMSPREE_ENDPOINT}" method="POST">
                 <label for="extraEmail">VOTRE ADRESSE E-MAIL</label>
                 <input type="email" name="email" id="extraEmail" placeholder="votre.email@exemple.com" required>
 
@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <textarea name="message" id="extraMessage" placeholder="Écrivez votre message ici..." required></textarea>
 
                 <button type="submit" class="submit-btn" id="submitFormBtn">ENVOYER LE MESSAGE ➔</button>
-                <p id="formStatusMsg" style="font-family: 'Orbitron', sans-serif; font-size: 0.85rem; margin-top: 10px; text-align: center; display: none;"></p>
             </form>
         </div>
     `;
@@ -84,52 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
             modalOverlay.classList.remove('active');
         }
     });
-
-    // Envoi asynchrone AJAX via Formspree
-    const form = document.getElementById('contactExtraForm');
-    const submitBtn = document.getElementById('submitFormBtn');
-    const statusMsg = document.getElementById('formStatusMsg');
-
-    if (form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = "ENVOI EN COURS...";
-            statusMsg.style.display = "none";
-
-            const formData = new FormData(form);
-
-            try {
-                const response = await fetch(FORMSPREE_ENDPOINT, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
-                });
-
-                if (response.ok) {
-                    statusMsg.style.color = "#39ff14";
-                    statusMsg.textContent = "✔ Message envoyé avec succès ! Je vous répondrai rapidement.";
-                    statusMsg.style.display = "block";
-                    form.reset();
-                    setTimeout(() => {
-                        modalOverlay.classList.remove('active');
-                        statusMsg.style.display = "none";
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = "ENVOYER LE MESSAGE ➔";
-                    }, 2500);
-                } else {
-                    throw new Error("Erreur réseau");
-                }
-            } catch (error) {
-                statusMsg.style.color = "#ff2a6d";
-                statusMsg.textContent = "✖ Une erreur est survenue. Réessayez ou écrivez à samgueg@gmx.fr";
-                statusMsg.style.display = "block";
-                submitBtn.disabled = false;
-                submitBtn.textContent = "ENVOYER LE MESSAGE ➔";
-            }
-        });
-    }
 
 
     // C. SÉLECTEUR DE COULEUR DE FOND
