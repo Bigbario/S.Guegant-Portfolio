@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - Améliorations, UI, Thèmes & Sons
+// EXTRAS.JS - Améliorations, UI, Thèmes, Sons & Formspree
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -35,25 +35,28 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(topBarContainer);
 
 
-    // B. CRÉATION DE LA MODALE DE CONTACT SUR MESURE
+    // B. CRÉATION DE LA MODALE DE CONTACT FORMSPREE
+    const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnpjvbgp";
+
     const modalHTML = `
         <div class="contact-modal-container" style="position: relative;">
             <button class="close-btn" id="closeContactExtraBtn">FERMER [X]</button>
             <h2 style="font-family: 'Orbitron', sans-serif; color: #00f0ff; font-size: 1.8rem; border-bottom: 2px solid rgba(0, 240, 255, 0.4); padding-bottom: 10px;">ME CONTACTER</h2>
             
-            <p style="font-size: 0.9rem; color: #d1c4e9;">Destinataire : <strong style="color: #00f0ff;">samgueg@gmx.fr</strong></p>
+            <p style="font-size: 0.9rem; color: #d1c4e9;">Envoyer un message direct à <strong style="color: #00f0ff;">Samuel Guegant</strong></p>
 
             <form class="contact-form" id="contactExtraForm">
                 <label for="extraEmail">VOTRE ADRESSE E-MAIL</label>
-                <input type="email" id="extraEmail" placeholder="votre.email@exemple.com" required>
+                <input type="email" name="email" id="extraEmail" placeholder="votre.email@exemple.com" required>
 
                 <label for="extraSubject">SUJET DU MESSAGE</label>
-                <input type="text" id="extraSubject" placeholder="Proposition d'alternance / projet..." required>
+                <input type="text" name="subject" id="extraSubject" placeholder="Proposition d'alternance / projet..." required>
 
                 <label for="extraMessage">VOTRE MESSAGE</label>
-                <textarea id="extraMessage" placeholder="Écrivez votre message ici..." required></textarea>
+                <textarea name="message" id="extraMessage" placeholder="Écrivez votre message ici..." required></textarea>
 
-                <button type="submit" class="submit-btn">ENVOYER LE MESSAGE ➔</button>
+                <button type="submit" class="submit-btn" id="submitFormBtn">ENVOYER LE MESSAGE ➔</button>
+                <p id="formStatusMsg" style="font-family: 'Orbitron', sans-serif; font-size: 0.85rem; margin-top: 10px; text-align: center; display: none;"></p>
             </form>
         </div>
     `;
@@ -64,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalOverlay.innerHTML = modalHTML;
     document.body.appendChild(modalOverlay);
 
-    // Événements d'ouverture / fermeture de la modale contact
+    // Ouverture / Fermeture de la modale
     contactBtn.addEventListener('click', () => {
         modalOverlay.classList.add('active');
     });
@@ -82,20 +85,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Gestion de l'envoi du formulaire
+    // Envoi asynchrone AJAX via Formspree
     const form = document.getElementById('contactExtraForm');
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const senderEmail = document.getElementById('extraEmail').value;
-            const subject = document.getElementById('extraSubject').value;
-            const message = document.getElementById('extraMessage').value;
+    const submitBtn = document.getElementById('submitFormBtn');
+    const statusMsg = document.getElementById('formStatusMsg');
 
-            const bodyContent = `De: ${senderEmail}\n\nMessage:\n${message}`;
-            const mailtoUrl = `mailto:samgueg@gmx.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyContent)}`;
-            
-            window.location.href = mailtoUrl;
-            modalOverlay.classList.remove('active');
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "ENVOI EN COURS...";
+            statusMsg.style.display = "none";
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(FORMSPREE_ENDPOINT, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    statusMsg.style.color = "#39ff14";
+                    statusMsg.textContent = "✔ Message envoyé avec succès ! Je vous répondrai rapidement.";
+                    statusMsg.style.display = "block";
+                    form.reset();
+                    setTimeout(() => {
+                        modalOverlay.classList.remove('active');
+                        statusMsg.style.display = "none";
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = "ENVOYER LE MESSAGE ➔";
+                    }, 2500);
+                } else {
+                    throw new Error("Erreur réseau");
+                }
+            } catch (error) {
+                statusMsg.style.color = "#ff2a6d";
+                statusMsg.textContent = "✖ Une erreur est survenue. Réessayez ou écrivez à samgueg@gmx.fr";
+                statusMsg.style.display = "block";
+                submitBtn.disabled = false;
+                submitBtn.textContent = "ENVOYER LE MESSAGE ➔";
+            }
         });
     }
 
