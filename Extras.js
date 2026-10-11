@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes, Tooltips & Modale CV
+// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Fusées Interactives
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.body.appendChild(cvModalOverlay);
 
-    // Ouverture / Fermeture de la modale CV
     cvBtn.addEventListener('click', () => {
         cvModalOverlay.classList.add('active');
     });
@@ -105,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     modalOverlay.innerHTML = modalHTML;
     document.body.appendChild(modalOverlay);
 
-    // Ouverture / Fermeture de la modale Contact
     contactBtn.addEventListener('click', () => {
         modalOverlay.classList.add('active');
     });
@@ -191,7 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.head.appendChild(styleDyn);
     });
 
-    // Observer pour le sélecteur de thème
     const projectsStage = document.getElementById('projectsStage');
     if (projectsStage) {
         const observer = new MutationObserver((mutations) => {
@@ -259,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // G. EFFETS DE SURVOL (PAILLETTES & POPUP EXTERNE HAUT-DROITE)
+    // G. EFFETS DE SURVOL (PAILLETTES & TOOLTIPS)
     // ==========================================
 
     const tooltipsData = [
@@ -315,6 +312,17 @@ document.addEventListener('DOMContentLoaded', () => {
             0% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
             100% { opacity: 0; transform: translate(calc(-50% + ${(Math.random() - 0.5) * 60}px), calc(-50% + ${(Math.random() - 0.5) * 60}px)) scale(0) rotate(180deg); }
         }
+        @keyframes screenShake {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-6px, 4px); }
+            40% { transform: translate(6px, -4px); }
+            60% { transform: translate(-4px, -2px); }
+            80% { transform: translate(4px, 2px); }
+            100% { transform: translate(0, 0); }
+        }
+        .shake-screen {
+            animation: screenShake 0.3s ease-in-out;
+        }
     `;
     document.head.appendChild(sparkleStyle);
 
@@ -353,5 +361,131 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sparkleInterval) clearInterval(sparkleInterval);
         });
     });
+
+
+    // ==========================================
+    // H. FUSÉES ALÉATOIRES PÉRIODIQUES & EXPLOSIONS
+    // ==========================================
+
+    function triggerScreenShake() {
+        document.body.classList.add('shake-screen');
+        setTimeout(() => {
+            document.body.classList.remove('shake-screen');
+        }, 300);
+    }
+
+    function createExplosionConfetti(x, y) {
+        const confettiCount = 18;
+        for (let i = 0; i < confettiCount; i++) {
+            const confetti = document.createElement('div');
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 80 + 30;
+            const tx = Math.cos(angle) * speed;
+            const ty = Math.sin(angle) * speed;
+
+            confetti.style.cssText = `
+                position: fixed;
+                left: ${x}px;
+                top: ${y}px;
+                width: ${Math.random() * 8 + 4}px;
+                height: ${Math.random() * 8 + 4}px;
+                background: ${Math.random() > 0.5 ? '#00f0ff' : (Math.random() > 0.5 ? '#d488ff' : '#ffd700')};
+                box-shadow: 0 0 8px #ffffff;
+                border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+                pointer-events: none;
+                z-index: 99999;
+                transition: transform 0.5s cubic-bezier(0.15, 0.85, 0.35, 1.2), opacity 0.5s ease-in;
+            `;
+            document.body.appendChild(confetti);
+
+            requestAnimationFrame(() => {
+                confetti.style.transform = `translate(${tx}px, ${ty}px) rotate(${Math.random() * 360}deg) scale(0.3)`;
+                confetti.style.opacity = '0';
+            });
+
+            setTimeout(() => confetti.remove(), 500);
+        }
+    }
+
+    function spawnRocket() {
+        // Ne spawn pas si une modale est ouverte pour éviter les interférences visuelles
+        if (document.querySelector('.contact-modal.active, .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, #cvModal.active')) {
+            return;
+        }
+
+        const rocket = document.createElement('div');
+        const startX = Math.random() * (window.innerWidth - 100) + 50;
+        
+        rocket.innerHTML = '🚀';
+        rocket.style.cssText = `
+            position: fixed;
+            left: ${startX}px;
+            bottom: -40px;
+            font-size: 1.6rem;
+            pointer-events: auto;
+            cursor: pointer;
+            z-index: 9998;
+            user-select: none;
+            transition: transform 0.1s;
+            filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.8));
+        `;
+        document.body.appendChild(rocket);
+
+        let currentY = -40;
+        let currentX = startX;
+        const speedY = Math.random() * 1.5 + 1.2; // Vitesse de montée
+        const wobbleSpeed = Math.random() * 0.03 + 0.01;
+        const wobbleAmplitude = Math.random() * 30 + 10;
+        let startTime = Date.now();
+
+        let isAlive = true;
+
+        // Clic sur la fusée en vol -> Explosion + Shake
+        rocket.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!isAlive) return;
+            isAlive = false;
+
+            const rect = rocket.getBoundingClientRect();
+            createExplosionConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            triggerScreenShake();
+            playUiBeep();
+            rocket.remove();
+        });
+
+        function animateRocket() {
+            if (!isAlive) return;
+
+            let elapsed = (Date.now() - startTime) / 1000;
+            currentY += speedY;
+            let currentXPos = currentX + Math.sin(elapsed * wobbleAmplitude * 0.1) * 15;
+
+            rocket.style.bottom = `${currentY}px`;
+            rocket.style.left = `${currentXPos}px`;
+
+            // Si elle sort de l'écran par le haut
+            if (currentY > window.innerHeight + 60) {
+                isAlive = false;
+                rocket.remove();
+                return;
+            }
+
+            requestAnimationFrame(animateRocket);
+        }
+
+        requestAnimationFrame(animateRocket);
+    }
+
+    // Lancement périodique d'une fusée toutes les 4 à 8 secondes (discret et aléatoire)
+    function scheduleNextRocket() {
+        const randomDelay = Math.random() * 4000 + 4000; // Entre 4s et 8s
+        setTimeout(() => {
+            spawnRocket();
+            scheduleNextRocket();
+        }, randomDelay);
+    }
+
+    // Démarrer le cycle des fusées après 3 secondes
+    setTimeout(scheduleNextRocket, 3000);
 
 });
