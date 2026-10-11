@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Fusées Droites avec Onde
+// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Fusées Équilibrées avec Onde
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // H. FUSÉES DROITES, ONDES DE COULEUR & EXPLOSIONS
+    // H. FUSÉES (DROITES, FRéquence ÉQUILIBRÉE) & ONDE DE COULEUR
     // ==========================================
 
     function triggerScreenShake() {
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
     }
 
-    // Effet d'onde de couleur qui se propage du point d'explosion vers les côtés
+    // Onde de couleur qui s'étend vers les deux côtés à partir du point d'impact
     function createColorWave(x, y) {
         const wave = document.createElement('div');
         wave.style.cssText = `
@@ -384,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
             width: 10px;
             height: 10px;
             border: 3px solid #00f0ff;
-            box-shadow: 0 0 20px #00f0ff, inset 0 0 10px #d488ff;
+            box-shadow: 0 0 25px #00f0ff, inset 0 0 15px #d488ff;
             border-radius: 50%;
             pointer-events: none;
             z-index: 9998;
@@ -394,11 +394,10 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.body.appendChild(wave);
 
-        // Calculer la taille nécessaire pour couvrir l'écran de part et d'autre
         const maxDist = Math.max(window.innerWidth, window.innerHeight) * 1.5;
 
         requestAnimationFrame(() => {
-            wave.style.transform = `translate(-50%, -50%) scale(${maxDist / 5})`;
+            wave.style.transform = `translate(-50%, -50%) scale(${maxDist / 6})`;
             wave.style.opacity = '0';
         });
 
@@ -447,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const startX = Math.random() * (window.innerWidth - 100) + 50;
         
         rocket.innerHTML = '🚀';
-        // Rotation -90deg pour que l'emoji fusée pointe bien vers le haut
+        // Fusée orientée strictement vers le haut (rotation de -90deg)
         rocket.style.cssText = `
             position: fixed;
             left: ${startX}px;
@@ -463,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(rocket);
 
         let currentY = -40;
-        const speedY = Math.random() * 1.8 + 1.5; // Vitesse de montée bien droite
+        const speedY = Math.random() * 1.5 + 1.2; // Vitesse de montée stable
         let isAlive = true;
 
         rocket.addEventListener('click', (e) => {
@@ -500,15 +499,15 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animateRocket);
     }
 
-    // Apparition plus régulière (toutes les 2 à 4 secondes)
+    // Fréquence modérée et équilibrée (toutes les 4 à 8 secondes)
     function scheduleNextRocket() {
-        const randomDelay = Math.random() * 2000 + 2000; // Entre 2s et 4s
+        const randomDelay = Math.random() * 4000 + 4000; // Entre 4s et 8s
         setTimeout(() => {
             spawnRocket();
             scheduleNextRocket();
         }, randomDelay);
     }
 
-    setTimeout(scheduleNextRocket, 2500);
+    setTimeout(scheduleNextRocket, 3000);
 
 });
