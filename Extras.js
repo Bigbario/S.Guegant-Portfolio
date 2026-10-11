@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Anneau Fin et Rapide
+// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Fusées Restreintes au Menu
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -198,6 +198,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (isProjectsActive) {
                         colorPickerContainer.style.opacity = '0';
                         colorPickerContainer.style.pointerEvents = 'none';
+                        // Supprimer toute fusée active lors du passage aux projets
+                        const activeRockets = document.querySelectorAll('.extra-rocket');
+                        activeRockets.forEach(r => r.remove());
                     } else {
                         colorPickerContainer.style.opacity = '1';
                         colorPickerContainer.style.pointerEvents = 'auto';
@@ -387,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // H. DÉFORMATION ESPACE-TEMPS & ANNEAU FIN MULTICOLORE ET RAPIDE
+    // H. DÉFORMATION ESPACE-TEMPS & FUSÉES (STRICTEMENT SUR LE MENU PRINCIPAL)
     // ==========================================
 
     const svgFilterHTML = `
@@ -408,7 +411,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const displacement = document.getElementById('spacetimeDisplacement');
         bgGrid.style.filter = "url('#spacetimeDistortion')";
 
-        // Anneau très fin (1.5px de bordure) et discret
         const ring = document.createElement('div');
         ring.style.cssText = `
             position: fixed;
@@ -429,7 +431,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let maxScale = 120;
         if (displacement) displacement.setAttribute('scale', maxScale);
 
-        // Durée raccourcie à 900 ms pour que l'effet passe rapidement
         let duration = 900;
         let startTime = performance.now();
 
@@ -505,13 +506,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let nextRocketTimeout = null;
 
     function spawnRocket(immediate = false) {
-        if (activeRocketCount >= 1 || document.querySelector('.contact-modal.active, .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, #cvModal.active')) {
+        const isProjectsActive = projectsStage && projectsStage.classList.contains('active');
+        const isModalActive = document.querySelector('.contact-modal.active, .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, #cvModal.active');
+
+        // Condition stricte : NE PAS faire de spawn si la page projets est ouverte ou si une modale est affichée
+        if (isProjectsActive || isModalActive || activeRocketCount >= 1) {
             if (!immediate) scheduleNextRocket();
             return;
         }
 
         activeRocketCount++;
         const rocket = document.createElement('div');
+        rocket.className = 'extra-rocket';
         const startX = Math.random() * (window.innerWidth - 120) + 60;
         
         rocket.innerHTML = '🚀';
@@ -565,6 +571,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function animateRocket() {
             if (!isAlive) return;
+
+            // Annuler la fusée immédiatement si l'utilisateur quitte le menu principal pour les projets
+            if (projectsStage && projectsStage.classList.contains('active')) {
+                destroyRocket(false);
+                return;
+            }
 
             currentY += speedY;
             rocket.style.bottom = `${currentY}px`;
