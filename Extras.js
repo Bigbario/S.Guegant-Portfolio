@@ -66,11 +66,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 width: 100% !important;
                 padding: 15px 10px 0 10px !important;
                 justify-content: center !important;
-                flex-wrap: wrap !important;
+                flex-direction: column !important; /* Empile les boutons proprement */
+                gap: 8px !important;
             }
             .contact-top-btn {
-                font-size: 0.75rem !important;
-                padding: 8px 12px !important;
+                width: 85% !important;
+                max-width: 250px !important;
+                text-align: center !important;
+                font-size: 0.8rem !important;
+                padding: 10px !important;
             }
 
             /* 5. Stage des Projets & Grille Mobile */
