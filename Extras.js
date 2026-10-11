@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Fusées Équilibrées avec Onde
+// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Fusées Douces
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // D. SÉLECTEUR DE COULEUR DE FOND
+    // D. SÉLECTEUR DE COULEUR DE FOND (AVEC CURSEUR MASQUÉ)
     const colorPickerContainer = document.createElement('div');
     colorPickerContainer.id = 'themePickerWidget';
     colorPickerContainer.style.cssText = `
@@ -141,13 +141,13 @@ document.addEventListener('DOMContentLoaded', () => {
         font-family: 'Orbitron', sans-serif;
         font-size: 0.75rem;
         color: #00f0ff;
-        cursor: pointer;
+        cursor: none !important;
         box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
         transition: opacity 0.3s ease, transform 0.3s ease;
     `;
     colorPickerContainer.innerHTML = `
         <span>THEME BG</span>
-        <input type="color" id="hudColorPicker" value="#8c1eff" style="cursor: pointer; border: none; width: 24px; height: 24px; background: none; pointer-events: none;">
+        <input type="color" id="hudColorPicker" value="#8c1eff" style="cursor: none !important; border: none; width: 24px; height: 24px; background: none; pointer-events: none;">
     `;
     document.body.appendChild(colorPickerContainer);
 
@@ -224,8 +224,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // F. SON DE CLIC RÉTRO FEUTRÉ
+    // F. SONS (CLIC RÉTRO & EXPLOSION FUSÉE)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
     function playUiBeep() {
         try {
             if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -245,6 +246,29 @@ document.addEventListener('DOMContentLoaded', () => {
             
             osc.start();
             osc.stop(audioCtx.currentTime + 0.04);
+        } catch (e) {}
+    }
+
+    // Son d'explosion spécifique pour les fusées
+    function playExplosionSound() {
+        try {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.25);
+
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.25);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.25);
         } catch (e) {}
     }
 
@@ -364,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // H. FUSÉES (DROITES, FRéquence ÉQUILIBRÉE) & ONDE DE COULEUR
+    // H. FUSÉES (DROITES, DOUCES & CURSEUR MASQUÉ) & ONDE DOUCE
     // ==========================================
 
     function triggerScreenShake() {
@@ -374,42 +398,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
     }
 
-    // Onde de couleur qui s'étend vers les deux côtés à partir du point d'impact
-    function createColorWave(x, y) {
+    // Onde de couleur plus douce et subtile qui se propage vers les côtés
+    function createSoftColorWave(x, y) {
         const wave = document.createElement('div');
         wave.style.cssText = `
             position: fixed;
             left: ${x}px;
             top: ${y}px;
-            width: 10px;
-            height: 10px;
-            border: 3px solid #00f0ff;
-            box-shadow: 0 0 25px #00f0ff, inset 0 0 15px #d488ff;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 240, 255, 0.6);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(212, 136, 255, 0.2);
             border-radius: 50%;
             pointer-events: none;
             z-index: 9998;
             transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-            transition: transform 0.6s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 0.6s ease-out;
+            opacity: 0.8;
+            transition: transform 0.8s cubic-bezier(0.1, 0.7, 0.1, 1), opacity 0.8s ease-out;
         `;
         document.body.appendChild(wave);
 
         const maxDist = Math.max(window.innerWidth, window.innerHeight) * 1.5;
 
         requestAnimationFrame(() => {
-            wave.style.transform = `translate(-50%, -50%) scale(${maxDist / 6})`;
+            wave.style.transform = `translate(-50%, -50%) scale(${maxDist / 4})`;
             wave.style.opacity = '0';
         });
 
-        setTimeout(() => wave.remove(), 600);
+        setTimeout(() => wave.remove(), 800);
     }
 
     function createExplosionConfetti(x, y) {
-        const confettiCount = 20;
+        const confettiCount = 18;
         for (let i = 0; i < confettiCount; i++) {
             const confetti = document.createElement('div');
             const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 90 + 35;
+            const speed = Math.random() * 80 + 30;
             const tx = Math.cos(angle) * speed;
             const ty = Math.sin(angle) * speed;
 
@@ -417,10 +441,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 position: fixed;
                 left: ${x}px;
                 top: ${y}px;
-                width: ${Math.random() * 8 + 4}px;
-                height: ${Math.random() * 8 + 4}px;
+                width: ${Math.random() * 7 + 3}px;
+                height: ${Math.random() * 7 + 3}px;
                 background: ${Math.random() > 0.5 ? '#00f0ff' : (Math.random() > 0.5 ? '#d488ff' : '#ffd700')};
-                box-shadow: 0 0 8px #ffffff;
+                box-shadow: 0 0 6px #ffffff;
                 border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
                 pointer-events: none;
                 z-index: 99999;
@@ -446,14 +470,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const startX = Math.random() * (window.innerWidth - 100) + 50;
         
         rocket.innerHTML = '🚀';
-        // Fusée orientée strictement vers le haut (rotation de -90deg)
+        // Fusée orientée strictement vers le haut avec curseur masqué
         rocket.style.cssText = `
             position: fixed;
             left: ${startX}px;
             bottom: -40px;
             font-size: 1.5rem;
             pointer-events: auto;
-            cursor: pointer;
+            cursor: none !important;
             z-index: 9997;
             user-select: none;
             transform: rotate(-90deg);
@@ -462,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(rocket);
 
         let currentY = -40;
-        const speedY = Math.random() * 1.5 + 1.2; // Vitesse de montée stable
+        const speedY = Math.random() * 1.5 + 1.2;
         let isAlive = true;
 
         rocket.addEventListener('click', (e) => {
@@ -474,10 +498,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const cx = rect.left + rect.width / 2;
             const cy = rect.top + rect.height / 2;
 
-            createColorWave(cx, cy);
+            createSoftColorWave(cx, cy);
             createExplosionConfetti(cx, cy);
             triggerScreenShake();
-            playUiBeep();
+            playExplosionSound();
             rocket.remove();
         });
 
@@ -499,9 +523,9 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animateRocket);
     }
 
-    // Fréquence modérée et équilibrée (toutes les 4 à 8 secondes)
+    // Fréquence équilibrée (toutes les 4 à 8 secondes)
     function scheduleNextRocket() {
-        const randomDelay = Math.random() * 4000 + 4000; // Entre 4s et 8s
+        const randomDelay = Math.random() * 4000 + 4000;
         setTimeout(() => {
             spawnRocket();
             scheduleNextRocket();
