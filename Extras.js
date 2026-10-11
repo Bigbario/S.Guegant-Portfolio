@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Effets & Tooltips Fixes
+// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes & Tooltips fixes
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -220,16 +220,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // F. EFFETS DE SURVOL (PAILLETTES & POPUP FIXE HAUT-DROITE)
+    // F. EFFETS DE SURVOL (PAILLETTES & POPUP HAUT-DROITE)
     // ==========================================
 
-    // S'assurer que le menu parent autorise le positionnement absolu des infobulles
-    const mainMenu = document.getElementById('mainMenu');
-    if (mainMenu) {
-        mainMenu.style.position = 'relative';
-    }
-
-    // Données des tooltips et liaisons avec les boutons du menu
+    // Données des infobulles par bouton
     const tooltipsData = [
         { selector: '.btn-projets', text: "Liste de quelques projets que j'ai pu réaliser" },
         { selector: '.btn-demo', text: "Vidéo de présentation de certains de mes projets." },
@@ -257,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => sparkle.remove(), 600);
     }
 
-    // CSS dynamique pour les animations
+    // CSS dynamique pour l'animation des paillettes et la position relative des boutons
     const customStyle = document.createElement('style');
     customStyle.innerHTML = `
         @keyframes sparkleAnim {
@@ -265,25 +259,24 @@ document.addEventListener('DOMContentLoaded', () => {
             100% { opacity: 0; transform: translate(calc(-50% + ${(Math.random() - 0.5) * 60}px), calc(-50% + ${(Math.random() - 0.5) * 60}px)) scale(0) rotate(180deg); }
         }
         .menu-btn {
-            position: relative; /* Nécessaire pour positionner l'infobulle par rapport au bouton */
+            position: relative !important;
         }
     `;
     document.head.appendChild(customStyle);
 
-    // Configuration et injection des tooltips fixes en haut à droite de chaque bouton
+    // Initialisation des infobulles et des effets de survol
     tooltipsData.forEach(item => {
         const btn = document.querySelector(item.selector);
         if (!btn) return;
 
-        // Création de l'infobulle propre à ce bouton
+        // Création de l'infobulle attachée à l'élément
         const tooltip = document.createElement('div');
-        tooltip.className = 'element-tooltip';
         tooltip.textContent = item.text;
         tooltip.style.cssText = `
             position: absolute;
-            top: -12px;
-            right: -15px;
-            transform: translate(100%, -50%) scale(0.9);
+            top: 0;
+            right: 0;
+            transform: translate(15px, -50%) scale(0.9);
             background: rgba(15, 3, 35, 0.95);
             border: 1px solid #00f0ff;
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), inset 0 0 10px rgba(180, 50, 255, 0.3);
@@ -304,11 +297,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let sparkleInterval = null;
 
         btn.addEventListener('mouseenter', () => {
-            // Afficher l'infobulle en haut à droite du bouton
+            // Afficher l'infobulle en haut à droite
             tooltip.style.opacity = '1';
-            tooltip.style.transform = 'translate(100%, -50%) scale(1)';
+            tooltip.style.transform = 'translate(15px, -50%) scale(1)';
 
-            // Lancer les paillettes autour du bouton
+            // Générer des paillettes en continu autour du bouton
             sparkleInterval = setInterval(() => {
                 const rect = btn.getBoundingClientRect();
                 const rx = rect.left + Math.random() * rect.width;
@@ -326,8 +319,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('mouseleave', () => {
             // Masquer l'infobulle
             tooltip.style.opacity = '0';
-            tooltip.style.transform = 'translate(100%, -50%) scale(0.9)';
-            
+            tooltip.style.transform = 'translate(15px, -50%) scale(0.9)';
+
             if (sparkleInterval) clearInterval(sparkleInterval);
         });
     });
