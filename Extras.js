@@ -1,29 +1,228 @@
 // ==========================================
-// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Fusées Restreintes au Menu
+// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV, Vidéos par Thème & Fusées Restreintes au Menu
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // A. CONTENEUR DES BOUTONS DU HAUT (CV & CONTACT)
+    // A. CONTENEUR DES BOUTONS DU HAUT (VIDÉOS, CV & CONTACT)
     const topBarContainer = document.createElement('div');
     topBarContainer.style.cssText = `
         position: absolute;
         top: 25px;
-        right: 155px;
+        right: 25px;
         z-index: 15;
         display: flex;
         gap: 12px;
         align-items: center;
     `;
     
-    // Bouton CV
+    // 1. Bouton Vidéos avec Liste Déroulante par Thème
+    const videoDropdownWrapper = document.createElement('div');
+    videoDropdownWrapper.style.cssText = `
+        position: relative;
+        display: inline-block;
+    `;
+
+    const videoDropdownBtn = document.createElement('button');
+    videoDropdownBtn.className = "contact-top-btn";
+    videoDropdownBtn.style.position = "static";
+    videoDropdownBtn.innerHTML = "🎬 VIDÉOS ▼";
+    videoDropdownWrapper.appendChild(videoDropdownBtn);
+
+    // Contenu de la liste déroulante principale (Thèmes)
+    const dropdownMenu = document.createElement('div');
+    dropdownMenu.style.cssText = `
+        display: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        background: rgba(15, 3, 35, 0.98);
+        border: 2px solid #00f0ff;
+        border-radius: 8px;
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+        min-width: 240px;
+        z-index: 1000;
+        backdrop-filter: blur(6px);
+        overflow: hidden;
+    `;
+
+    // Définition des 3 thèmes et de leurs listes de vidéos
+    const videoThemes = [
+        {
+            title: "🎞️ Trailers",
+            videos: [
+                { name: "Trailer 1", url: "https://youtu.be/Wj6ApHOwUqg" },
+                { name: "Trailer 2", url: "https://youtu.be/P_WHjH_yi3I" },
+                { name: "The Unseelie Court Trailer", url: "https://youtu.be/hk353Cy4Huw" },
+                { name: "FlipIt Trailer", url: "https://youtu.be/M2mBmCmd5LU" },
+                { name: "Trailer 5", url: "https://youtu.be/vQxWOf6QIAw" },
+                { name: "Trailer 6", url: "https://youtu.be/nb3zCLr5TnM" }
+            ]
+        },
+        {
+            title: "🗺️ RPG Maker Map Timelapse",
+            videos: [
+                { name: "Timelapse 1", url: "https://youtu.be/a2bUaBWah_A" },
+                { name: "Timelapse 2", url: "https://youtu.be/3ZlE5SEOLiE" },
+                { name: "Timelapse 3", url: "https://youtu.be/cjRbIqoNsZo" },
+                { name: "RPG Maker MV Timelapse", url: "https://youtu.be/MGyzw5mewII" },
+                { name: "Timelapse 5", url: "https://youtu.be/zHT0c7xg9MQ" },
+                { name: "Timelapse 6", url: "https://youtu.be/7yKQ_D_bSx8" },
+                { name: "Timelapse 7", url: "https://youtu.be/UlvPPSAcnoE" },
+                { name: "Timelapse 8", url: "https://youtu.be/27OE5Dp3D14" }
+            ]
+        },
+        {
+            title: "🎮 Walkthrough & Others",
+            videos: [
+                { name: "Walkthrough 1", url: "https://youtu.be/ATCY-amVKQc" },
+                { name: "Walkthrough 2", url: "https://youtu.be/y1OSUefHp_4" },
+                { name: "Walkthrough 3", url: "https://youtu.be/WHcZmxElsiw" },
+                { name: "Blockout 3D Walkthrough", url: "https://youtu.be/HWfIMcgbHo0" },
+                { name: "Portal Level Walkthrough", url: "https://youtu.be/0MizN12rNUk" }
+            ]
+        }
+    ];
+
+    // Fonction utilitaire pour transformer une URL YouTube classique en embed propre
+    function convertToEmbedUrl(url) {
+        let videoId = "";
+        if (url.includes('youtu.be/')) {
+            videoId = url.split('youtu.be/')[1].split('?')[0];
+        } else if (url.includes('watch?v=')) {
+            videoId = url.split('v=')[1].split('&')[0];
+        }
+        return videoId ? `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1` : url;
+    }
+
+    videoThemes.forEach(theme => {
+        const themeContainer = document.createElement('div');
+        themeContainer.style.cssText = `
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        `;
+
+        const themeHeader = document.createElement('div');
+        themeHeader.textContent = theme.title;
+        themeHeader.style.cssText = `
+            padding: 12px 16px;
+            color: #00f0ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            background: rgba(140, 30, 255, 0.15);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        `;
+        themeHeader.innerHTML += ` <span style="font-size: 0.7rem;">▶</span>`;
+
+        const subList = document.createElement('div');
+        subList.style.cssText = `
+            display: none;
+            background: rgba(10, 2, 25, 0.95);
+            padding-left: 10px;
+        `;
+
+        theme.videos.forEach((vid, idx) => {
+            const vidLink = document.createElement('a');
+            vidLink.href = "#";
+            vidLink.textContent = `• ${vid.name}`;
+            vidLink.style.cssText = `
+                display: block;
+                padding: 10px 14px;
+                color: #ffffff;
+                font-family: 'Montserrat', sans-serif;
+                font-size: 0.82rem;
+                text-decoration: none;
+                transition: all 0.2s;
+            `;
+            vidLink.addEventListener('mouseenter', () => {
+                vidLink.style.color = '#00f0ff';
+                vidLink.style.paddingLeft = '18px';
+            });
+            vidLink.addEventListener('mouseleave', () => {
+                vidLink.style.color = '#ffffff';
+                vidLink.style.paddingLeft = '14px';
+            });
+            vidLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                dropdownMenu.style.display = 'none';
+                
+                // Ouvre la vidéo dans la modale vidéo existante ou en crée une
+                openCustomVideoModal(convertToEmbedUrl(vid.url));
+            });
+            subList.appendChild(vidLink);
+        });
+
+        // Dérouler/Enrouler les sous-catégories de vidéos au survol ou clic
+        themeHeader.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = subList.style.display === 'block';
+            // Fermer les autres sous-listes
+            dropdownMenu.querySelectorAll('div > div:nth-child(2)').forEach(sl => sl.style.display = 'none');
+            subList.style.display = isOpen ? 'none' : 'block';
+        });
+
+        themeContainer.appendChild(themeHeader);
+        themeContainer.appendChild(subList);
+        dropdownMenu.appendChild(themeContainer);
+    });
+
+    videoDropdownWrapper.appendChild(dropdownMenu);
+    topBarContainer.appendChild(videoDropdownWrapper);
+
+    // Afficher/Cacher le menu déroulant principal au clic sur le bouton Vidéos
+    videoDropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isVisible = dropdownMenu.style.display === 'block';
+        dropdownMenu.style.display = isVisible ? 'none' : 'block';
+    });
+
+    // Fermer le menu si on clique en dehors
+    document.addEventListener('click', () => {
+        dropdownMenu.style.display = 'none';
+    });
+
+    // Fonction pour ouvrir la modale vidéo dédiée
+    function openCustomVideoModal(embedUrl) {
+        let modal = document.getElementById('extraVideoModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.className = 'video-modal-overlay';
+            modal.id = 'extraVideoModal';
+            modal.innerHTML = `
+                <div class="video-container">
+                    <button class="close-btn" id="closeExtraVidModal">FERMER [X]</button>
+                    <iframe id="extraYoutubeIframe" src="" title="Video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            modal.querySelector('#closeExtraVidModal').addEventListener('click', () => {
+                modal.classList.remove('active');
+                modal.querySelector('iframe').src = '';
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (!e.target.closest('.video-container')) {
+                    modal.classList.remove('active');
+                    modal.querySelector('iframe').src = '';
+                }
+            });
+        }
+        modal.querySelector('iframe').src = embedUrl;
+        modal.classList.add('active');
+    }
+
+    // 2. Bouton CV
     const cvBtn = document.createElement('button');
     cvBtn.className = "contact-top-btn";
     cvBtn.style.position = "static";
     cvBtn.textContent = "📄 MON CV";
     topBarContainer.appendChild(cvBtn);
 
-    // Bouton Contact
+    // 3. Bouton Contact
     const contactBtn = document.createElement('button');
     contactBtn.className = "contact-top-btn";
     contactBtn.style.position = "static";
@@ -198,7 +397,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (isProjectsActive) {
                         colorPickerContainer.style.opacity = '0';
                         colorPickerContainer.style.pointerEvents = 'none';
-                        // Supprimer toute fusée active lors du passage aux projets
                         const activeRockets = document.querySelectorAll('.extra-rocket');
                         activeRockets.forEach(r => r.remove());
                     } else {
@@ -218,10 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const activeModals = document.querySelectorAll('.video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active, #cvModal.active');
             activeModals.forEach(modal => {
                 modal.classList.remove('active');
-                if (modal.id === 'videoModal') {
-                    const iframe = document.getElementById('youtubeIframe');
-                    if (iframe) iframe.src = iframe.src;
-                }
+                const iframe = modal.querySelector('iframe');
+                if (iframe) iframe.src = iframe.src;
             });
         }
     });
@@ -509,7 +705,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const isProjectsActive = projectsStage && projectsStage.classList.contains('active');
         const isModalActive = document.querySelector('.contact-modal.active, .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, #cvModal.active');
 
-        // Condition stricte : NE PAS faire de spawn si la page projets est ouverte ou si une modale est affichée
         if (isProjectsActive || isModalActive || activeRocketCount >= 1) {
             if (!immediate) scheduleNextRocket();
             return;
@@ -572,7 +767,6 @@ document.addEventListener('DOMContentLoaded', () => {
         function animateRocket() {
             if (!isAlive) return;
 
-            // Annuler la fusée immédiatement si l'utilisateur quitte le menu principal pour les projets
             if (projectsStage && projectsStage.classList.contains('active')) {
                 destroyRocket(false);
                 return;
