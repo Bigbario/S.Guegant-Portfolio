@@ -342,8 +342,8 @@
         .cone-viewport {
             position: relative;
             width: 100%;
-            max-width: 1300px;
-            height: 70vh;
+            max-width: 1450px;
+            height: 75vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -355,12 +355,12 @@
             position: relative;
             z-index: 5;
             width: 100%;
-            max-width: 1150px;
+            max-width: 1350px;
             height: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
-            gap: 30px;
+            gap: 35px;
             justify-items: center;
             align-items: center;
             transition: opacity 0.3s;
@@ -368,8 +368,8 @@
 
         .project-bubble {
             width: 100%;
-            max-width: 530px;
-            height: 230px;
+            max-width: 630px;
+            height: 275px;
             background: rgba(25, 8, 50, 0.85);
             border: 2px solid #00f0ff;
             box-shadow: 0 0 25px rgba(0, 240, 255, 0.35), inset 0 0 15px rgba(180, 50, 255, 0.25);
@@ -381,8 +381,8 @@
             overflow: hidden;
             color: #fff;
             clip-path: polygon(25px 0%, 100% 0%, calc(100% - 25px) 100%, 0% 100%);
-            padding: 15px;
-            gap: 20px;
+            padding: 20px;
+            gap: 25px;
         }
 
         .project-bubble:nth-child(1) { transform: perspective(800px) rotateY(2deg) translateY(-5px); }
@@ -390,15 +390,15 @@
         .project-bubble:nth-child(3) { transform: perspective(800px) rotateY(2deg) translateY(5px); }
         .project-bubble:nth-child(4) { transform: perspective(800px) rotateY(-2deg) translateY(-5px); }
 
-        /* Conteneur d'image pour garder le ratio entier sans crop */
+        /* Cadre image agrandi pour éviter tout crop tout en gardant l'harmonie */
         .project-bubble img {
-            width: 210px;
-            height: 180px;
-            object-fit: contain; /* Évite le crop en affichant l'image entière */
-            background: rgba(10, 2, 25, 0.6);
+            width: 250px;
+            height: 220px;
+            object-fit: contain;
+            background: rgba(10, 2, 25, 0.4);
             border-radius: 6px;
             border: 1px solid rgba(0, 240, 255, 0.4);
-            padding: 5px;
+            padding: 4px;
             opacity: 0.9;
             transition: opacity 0.3s, transform 0.3s;
         }
@@ -406,30 +406,29 @@
         .project-bubble-content {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            flex-grow: l;
+            gap: 10px;
+            flex-grow: 1;
             z-index: 2;
-            width: calc(100% - 230px);
+            width: calc(100% - 275px);
         }
 
         .project-bubble .bubble-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.15rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #00f0ff;
             text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
             letter-spacing: 1px;
         }
 
-        /* Style pour le tag du moteur de jeu */
         .engine-tag {
             display: inline-block;
             background: rgba(140, 30, 255, 0.35);
             border: 1px solid rgba(190, 80, 255, 0.7);
             color: #e0b0ff;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
-            padding: 3px 10px;
+            font-size: 0.78rem;
+            padding: 4px 10px;
             border-radius: 4px;
             letter-spacing: 0.5px;
             width: fit-content;
@@ -437,9 +436,9 @@
 
         .project-bubble .bubble-desc {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #d1c4e9;
-            line-height: 1.35;
+            line-height: 1.45;
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
@@ -458,7 +457,6 @@
             opacity: 1; 
             transform: scale(1.03); 
             border-color: #00f0ff;
-        }
         }
 
         .stage-nav-bar {
