@@ -29,11 +29,11 @@
             font-family: 'Montserrat', sans-serif;
             color: #ffffff;
             position: relative;
-            cursor: none; /* Masque le curseur système par défaut */
+            cursor: none;
         }
 
         button, a, .project-bubble, .gallery-media, input, textarea {
-            cursor: none; /* Conserve l'utilisation du curseur personnalisé */
+            cursor: none;
         }
 
         /* --- BOUTON CONTACT (HAUT DROITE) --- */
@@ -126,7 +126,7 @@
             transform: translateY(-2px);
         }
 
-        /* --- CURSEUR PERSONNAGE (ANIMÉ PAR SPRITESHEET) --- */
+        /* --- CURSEUR PERSONNAGE --- */
         #custom-cursor {
             position: fixed;
             top: 0;
@@ -134,11 +134,11 @@
             width: 32px;
             height: 32px;
             background-image: url('images/MouseIconIdle.png');
-            background-size: 96px 32px; /* 3 images x 32px de large */
+            background-size: 96px 32px;
             background-repeat: no-repeat;
             pointer-events: none;
             z-index: 999999;
-            transform: translate(-50%, -50%); /* Centré sur le pointeur */
+            transform: translate(-50%, -50%);
             display: block;
             animation: mouseIdleAnim 0.6s steps(3) infinite;
         }
@@ -148,7 +148,6 @@
             to { background-position: -96px 0px; }
         }
 
-        /* Canvas pour particules */
         #effectsCanvas {
             position: absolute;
             top: 0;
@@ -240,6 +239,38 @@
             transform: scale(1.05) translateY(-2px);
             box-shadow: 0 0 35px rgba(200, 80, 255, 0.85), inset 0 0 20px rgba(255, 255, 255, 0.5);
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+        }
+
+        /* --- MENU SÉLECTION PROJETS (NOUVELLE PAGE) --- */
+        #projectMenuSelection {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            background: rgba(11, 2, 26, 0.95);
+        }
+
+        #projectMenuSelection.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .project-selection-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 90%;
+            max-width: 650px;
         }
 
         /* --- RIDEAUX --- */
@@ -390,7 +421,6 @@
         .project-bubble:nth-child(3) { transform: perspective(800px) rotateY(2deg) translateY(5px); }
         .project-bubble:nth-child(4) { transform: perspective(800px) rotateY(-2deg) translateY(-5px); }
 
-        /* Cadre image agrandi pour éviter tout crop tout en gardant l'harmonie */
         .project-bubble img {
             width: 250px;
             height: 220px;
@@ -459,39 +489,35 @@
             border-color: #00f0ff;
         }
 
-        .stage-nav-bar {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-            padding: 0 40px;
-        }
-
-        .nav-arrow-btn {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(30, 8, 60, 0.7);
-            border: 2px solid rgba(190, 80, 255, 0.7);
-            padding: 12px 28px;
-            border-radius: 50px;
-            color: #ffffff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            transition: all 0.25s;
-            box-shadow: 0 0 20px rgba(180, 50, 255, 0.3);
-        }
-
-        .nav-arrow-btn:hover {
-            background: rgba(180, 50, 255, 0.8);
-            border-color: #00f0ff;
+        /* --- FLÈCHES LATÉRALES DU STAGE (AU MILIEU DE L'ÉCRAN) --- */
+        .stage-nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(30, 8, 60, 0.85);
+            border: 2px solid #00f0ff;
             color: #00f0ff;
-            box-shadow: 0 0 30px #00f0ff;
-            transform: translateY(-3px);
+            font-size: 1.8rem;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s;
+            z-index: 20;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
         }
 
-        .arrow-icon { font-size: 1.6rem; color: #00f0ff; }
+        .stage-nav-arrow:hover {
+            background: #00f0ff;
+            color: #0b021a;
+            box-shadow: 0 0 35px #00f0ff;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .stage-prev-arrow { left: 20px; }
+        .stage-next-arrow { right: 20px; }
 
         /* --- MODALES --- */
         .video-modal-overlay, .char-sheet-modal, .project-detail-modal, .lightbox-modal, .contact-modal {
@@ -531,7 +557,7 @@
         .close-btn {
             position: absolute;
             top: 15px;
-            right: 20px; /* Positionne le bouton à droite */
+            right: 20px;
             color: #ffffff;
             font-family: 'Orbitron', sans-serif;
             font-size: 0.95rem;
@@ -549,7 +575,7 @@
         .close-btn:hover {
             background: #ff2a6d;
             box-shadow: 0 0 30px #ff2a6d;
-            transform: scale(1.05); /* Zoom au survol (sans décalage horizontal) */
+            transform: scale(1.05);
         }
 
         .char-sheet-container, .contact-modal-container {
@@ -802,7 +828,42 @@
             gap: 20px;
         }
 
-        /* --- CARROUSEL DANS LA MODALE --- */
+        /* --- FLÈCHES DE NAVIGATION ENTRE PROJETS DANS LA MODALE --- */
+        .modal-project-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(30, 8, 60, 0.85);
+            border: 2px solid #00f0ff;
+            color: #00f0ff;
+            font-size: 1.8rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s;
+            z-index: 9500;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        .modal-project-nav-btn:hover {
+            background: #00f0ff;
+            color: #0b021a;
+            box-shadow: 0 0 35px #00f0ff;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .modal-prev-project { left: -25px; }
+        .modal-next-project { right: -25px; }
+
+        @media (max-width: 1300px) {
+            .modal-prev-project { left: 10px; }
+            .modal-next-project { right: 10px; }
+        }
+
+        /* --- CARROUSEL --- */
         .carousel-container {
             position: relative;
             width: 100%;
@@ -876,24 +937,6 @@
 
         .gallery-media.is-video::after {
             display: none !important;
-        }
-
-        .gallery-media img {
-            max-width: 100%;
-            max-height: 380px;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            display: block;
-        }
-
-        .gallery-media video, .gallery-media iframe {
-            width: 100%;
-            height: 300px;
-            max-height: 380px;
-            border-radius: 4px;
-            border: none;
-            outline: none;
         }
 
         .gallery-caption {
@@ -1018,7 +1061,6 @@
             .lightbox-next { right: 10px; }
         }
 
-        /* --- DÉCORATION HUD EN FOND --- */
         .bg-grid {
             position: absolute;
             inset: 0;
@@ -1044,7 +1086,6 @@
         .hud-corner.bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
         .hud-corner.bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
 
-        /* EFFET SLASH AU CLIC */
         .slash-effect {
             position: fixed;
             pointer-events: none;
@@ -1067,7 +1108,6 @@
 </head>
 <body>
 
-
     <div class="bg-grid"></div>
     <div class="hud-corner top-left"></div>
     <div class="hud-corner top-right"></div>
@@ -1075,7 +1115,6 @@
     <div class="hud-corner bottom-right"></div>
 
     <div id="custom-cursor"></div>
-
     <canvas id="effectsCanvas"></canvas>
 
     <div class="curtain left"></div>
@@ -1086,11 +1125,22 @@
         <h2 class="subtitle">Portfolio</h2>
     </div>
 
+    <!-- MENU PRINCIPAL -->
     <nav class="game-menu" id="mainMenu">
-        <button class="menu-btn btn-projets" id="openProjectsBtn">PROJETS</button>
+        <button class="menu-btn btn-projets" id="openProjectsMenuBtn">PROJETS</button>
         <button class="menu-btn btn-demo" id="demoReelBtn">DEMO REEL</button>
         <button class="menu-btn btn-about" id="aboutBtn">ABOUT ME</button>
     </nav>
+
+    <!-- SOUS-MENU DE SÉLECTION DU TYPE DE PROJET -->
+    <div id="projectMenuSelection">
+        <div class="project-selection-container">
+            <button class="menu-btn btn-projets" id="selectGdProgBtn">GD & PROG</button>
+            <button class="menu-btn btn-projets" id="selectLdBtn">LEVEL DESIGN</button>
+            <button class="menu-btn btn-projets" id="selectDocsBtn">DOCUMENTS</button>
+            <button class="back-menu-btn" id="backToMainFromSelectBtn" style="margin-top: 15px; width: 100%; text-align: center;">← RETOUR</button>
+        </div>
+    </div>
 
     <!-- SCÈNE DES PROJETS -->
     <div id="projectsStage">
@@ -1106,16 +1156,9 @@
             <div class="projects-grid" id="projectsGrid"></div>
         </div>
 
-        <div class="stage-nav-bar">
-            <button class="nav-arrow-btn" id="prevDomainBtn">
-                <span class="arrow-icon">◄</span>
-                <span id="prevDomainLabel">Vers Level Design</span>
-            </button>
-            <button class="nav-arrow-btn" id="nextDomainBtn">
-                <span id="nextDomainLabel">Vers Documents</span>
-                <span class="arrow-icon">►</span>
-            </button>
-        </div>
+        <!-- Flèches du stage déplacées au milieu des côtés de l'écran -->
+        <button class="stage-nav-arrow stage-prev-arrow" id="prevDomainBtn">◄</button>
+        <button class="stage-nav-arrow stage-next-arrow" id="nextDomainBtn">►</button>
     </div>
 
     <!-- MODAL DEMO REEL -->
@@ -1209,7 +1252,11 @@
 
     <!-- MODAL DETAIL PROJET -->
     <div class="project-detail-modal" id="projectDetailModal">
-        <div class="project-modal-container">
+        <div class="project-modal-container" style="position: relative;">
+            <!-- Flèches de navigation de projet dans la modale -->
+            <button class="modal-project-nav-btn modal-prev-project" id="modalPrevProjectBtn">&#9668;</button>
+            <button class="modal-project-nav-btn modal-next-project" id="modalNextProjectBtn">&#9658;</button>
+
             <button class="close-btn" id="closeProjectDetailBtn">FERMER [X]</button>
             <h2 id="modalProjectTitle" style="font-family:'Orbitron'; color:#00f0ff; font-size:2.2rem; border-bottom: 2px solid rgba(0,240,255,0.4); padding-bottom:10px;">PROJET</h2>
             
@@ -1249,7 +1296,6 @@
     </div>
 
     <script>
-        // SUIVI DU CURSEUR
         const customCursor = document.getElementById('custom-cursor');
         if (customCursor) {
             document.addEventListener('mousemove', (e) => {
@@ -1258,40 +1304,7 @@
             });
         }
 
-        // ENVOI FORMULAIRE DE CONTACT VIA MAILTO
-        const contactForm = document.getElementById('contactForm');
-        if (contactForm) {
-            contactForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const email = document.getElementById('email').value;
-                const subject = document.getElementById('subject').value;
-                const message = document.getElementById('message').value;
-
-                const mailtoUrl = `mailto:samgueg@gmx.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("De: " + email + "\n\n" + message)}`;
-                window.location.href = mailtoUrl;
-                
-                document.getElementById('contactModal').classList.remove('active');
-            });
-        }
-
-        // OUVERTURE DU FORMULAIRE DE CONTACT
-        const contactTopBtn = document.getElementById('contactTopBtn');
-        if (contactTopBtn) {
-            contactTopBtn.addEventListener('click', () => {
-                document.getElementById('contactModal').classList.add('active');
-            });
-        }
-
-        const closeContactBtn = document.getElementById('closeContactBtn');
-        if (closeContactBtn) {
-            closeContactBtn.addEventListener('click', () => {
-                document.getElementById('contactModal').classList.remove('active');
-            });
-        }
-
-        // FERMETURE DES MODALES AU CLIC À L'EXTÉRIEUR DU CONTENU
         const modalsWithContainers = [
-            { modal: document.getElementById('contactModal'), containerClass: 'contact-modal-container' },
             { modal: document.getElementById('videoModal'), containerClass: 'video-container' },
             { modal: document.getElementById('charSheetModal'), containerClass: 'char-sheet-container' },
             { modal: document.getElementById('projectDetailModal'), containerClass: 'project-modal-container' },
@@ -1301,21 +1314,18 @@
         modalsWithContainers.forEach(({ modal, containerClass }) => {
             if (modal) {
                 modal.addEventListener('click', (e) => {
-                    // Empêche la fermeture si on clique sur un bouton de carrousel ou à l'intérieur du conteneur
-                    if (e.target.closest('.carousel-btn')) return;
-        
+                    if (e.target.closest('.carousel-btn') || e.target.closest('.modal-project-nav-btn')) return;
                     if (!e.target.closest(`.${containerClass}`)) {
                         modal.classList.remove('active');
                         if (modal.id === 'videoModal') {
                             const iframe = document.getElementById('youtubeIframe');
-                            if (iframe) iframe.src = iframe.src; // Stopper la vidéo
+                            if (iframe) iframe.src = iframe.src;
                         }
                     }
                 });
             }
         });
 
-        // EFFET DE SLASH AU CLIC
         window.addEventListener('click', (e) => {
             const slash = document.createElement('div');
             slash.className = 'slash-effect';
@@ -1325,7 +1335,6 @@
             setTimeout(() => slash.remove(), 220);
         });
 
-        // CANVAS PARTICULES
         const canvas = document.getElementById('effectsCanvas');
         const ctx = canvas.getContext('2d');
         let width, height;
@@ -1336,7 +1345,6 @@
         window.addEventListener('resize', resize);
         resize();
 
-        // PARTICULES DE FOND
         const bgParticles = [];
         for (let i = 0; i < 45; i++) {
             bgParticles.push({
@@ -1371,7 +1379,6 @@
             }
         }
 
-        // ANIMATION TITRE
         const titleContainer = document.getElementById('titleContainer');
         let titleState = 'fade_in';
         let titleTimer = 0;
@@ -1434,7 +1441,6 @@
         }
         animate();
 
-        // FONCTION UTILITAIRE YOUTUBE
         function getYouTubeEmbedUrl(url) {
             if (!url) return null;
             let videoId = null;
@@ -1448,8 +1454,90 @@
             return videoId ? `https://www.youtube.com/embed/${videoId}?enablejsapi=1` : null;
         }
 
-        // DATA PROJETS
         const domains = [
+            {
+                id: 'gd_prog',
+                title: 'GD & PROG',
+                projects: [
+                    { 
+                        title: 'Echoes of Above', 
+                        img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', 
+                        bgImg: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg',
+                        engine: 'Unreal Engine 5',
+                        link: 'https://store.steampowered.com/app/4196130/Echoes_of_Above/',
+                        linkLabel: '🎮 PAGE STEAM DE ECHOES OF ABOVE',
+                        skills: ['Game Design', 'Level Design', 'Puzzle Design', 'Encounter Design', 'Integration', 'Programming', 'Management'],
+                        desc: '<strong>Twin-Stick Shooter</strong> inspiré de la culture <strong>Khmère</strong>, couplant des phases <strong>d\'exploration</strong>, de <strong>combat</strong> et de <strong>puzzle</strong>. Jeu commercialisé et disponible sur <strong>Steam</strong>.',
+                        role: 'Concernant le game design général sur ce projet, je me suis chargé de la <strong>conception du système de jeu</strong> et des <strong>mécaniques secondaires</strong>, particuièrement <strong>l\'Ultimate</strong> du personnage et le système de <strong>sphère</strong>. Mais également le <strong>prototypage</strong> et <strong>l\'équilibrage</strong>, ainsi que la gestion du <strong>QA</strong>.',
+                        gallery: [
+                            { img: 'Galleries/Echoes of Above/Flèchestutostrikegif.gif', caption: 'Design tutorialisation USP' },
+                            { img: 'Galleries/Echoes of Above/ProtoAscenseur.gif', caption: 'Prototype Ascenseur' },
+                            { img: 'Galleries/Echoes of Above/QTESpinner.gif', caption: 'Prototype tutoriel Ennemi 2' },
+                            { img: 'Galleries/Echoes of Above/Tutorial Video.gif', caption: 'Design tutorialisation par vidéo' },
+                        ]
+                    },
+                    { 
+                        title: 'The Unseelie Court', 
+                        img: 'images/The UnseelieCourt.png', 
+                        bgImg: 'images/The UnseelieCourt.png',
+                        engine: 'Unreal Engine 5',
+                        link: 'https://youtu.be/hk353Cy4Huw',
+                        linkLabel: '🔗 Lien du trailer',
+                        skills: ['Game Design', 'Level Design', 'Narrative Design', 'World Design'],
+                        desc: '<strong>Puzzle Game</strong> et jeu <strong>d\'exploration</strong>, réalisé sur <strong>Unreal Engine 5</strong> mettant en avant la dimension de l\'Unseelie du <strong>folklore celtique</strong>',
+                        role: '<strong>Conception</strong> et <strong>greyboxing</strong> de la <strong>seconde Île</strong> du jeu ainsi que de nombreux <strong>puzzles</strong>. Contribution aux <strong>arcs narratifs</strong> et à la <strong>conceptualisation de l\'USP</strong>.',
+                        gallery: [
+                            { img: 'https://youtu.be/hk353Cy4Huw', caption: 'Trailer Unseelie Court' },
+                            { img: 'Galleries/Unseelie Court/Screenshot_Campfire.png', caption: 'Mise en avant de la narration environnementale' },
+                            { img: 'Galleries/Unseelie Court/Screenshot_DrunkenHideout.png', caption: 'Narration environnementale et collectible' },
+                            { img: 'Galleries/Unseelie Court/Screenshot_Nav1.png', caption: 'Contribution au retake de la phase de navigation' },
+                            { img: 'Galleries/Unseelie Court/Screenshot_PuzzleIsland2.png', caption: 'Conception Puzzle 2' },
+                            { img: 'Galleries/Unseelie Court/Screenshot_River.png', caption: 'Conception Puzzle 1' },
+                            { img: 'Galleries/Unseelie Court/Screenshot_UnseelieBoats.png', caption: 'Suivi du système de retour dans le temps' },
+                        ]
+                    },
+                    { 
+                        title: 'FlipIt', 
+                        img: 'images/FlipIt.png', 
+                        bgImg: 'images/FlipIt.png',
+                        engine: 'Unreal Engine 5',
+                        link: 'https://youtu.be/M2mBmCmd5LU',
+                        linkLabel: '🔗 Lien du trailer',
+                        skills: ['Game Design', 'Programming', 'Balancing', 'HUD System'],
+                        desc: '<strong>Sandbox</strong> jouable d\'un prototype de jeu <strong>casual</strong> en <strong>multiversus</strong>, développé sur <strong>Unreal Engine 5</strong>.',
+                        role: 'Conception des différentes <strong>mécaniques de jeu</strong> et <strong>briques de gameplay</strong> ainsi que <strong>programmation complète du prototype</strong>.',
+                        gallery: [
+                            { img: 'https://youtu.be/M2mBmCmd5LU', caption: 'Trailer' },
+                            { img: 'Galleries/FlipIt_Screenshots/BallJump VS Rope.png', caption: 'Aperçu Combat' },
+                            { img: 'Galleries/FlipIt_Screenshots/DoubleBallJumpImpact.png', caption: 'Aperçu utilisation de compétence' },
+                            { img: 'Galleries/FlipIt_Screenshots/DualBegin.png', caption: 'Aperçu Duel' },
+                            { img: 'Galleries/FlipIt_Screenshots/GameLaunch.png', caption: 'Lancement du jeu' },
+                            { img: 'Galleries/FlipIt_Screenshots/Kill.png', caption: 'Aperçu Kill' },
+                            { img: 'Galleries/FlipIt_Screenshots/LevelSelection.png', caption: 'Sélection de niveau' },
+                        ]
+                    },
+                    { 
+                        title: 'RPG Maker Games', 
+                        img: 'images/RPGMakerGameIcon.png', 
+                        bgImg: 'images/RPGMakerGameIcon.png',
+                        engine: 'Rpg Maker MV',
+                        link: 'https://youtu.be/MGyzw5mewII',
+                        linkLabel: '🔗 Lien Map Timelapse',
+                        skills: ['Game Design', 'Level Design', 'World Design', 'Narrative Design', 'Balancing', 'Programming'],
+                        desc: 'Réalisation de multiples jeux sur <strong>RPG Maker MV</strong> et développement de <strong>plugins personnalisés</strong> via JavaScript.',
+                        role: 'Conception complète des mondes, du <strong>level design</strong>, de la <strong>narration</strong>, des <strong>systèmes de combat</strong> ou encore de <strong>l\'équilibrage</strong>, ainsi que de la <strong>programmation</strong> des systèmes qui en découlent.',
+                        gallery: [
+                            { img: 'Galleries/Rpg Maker/RPG Maker MV.mp4', caption: 'Démonstration Vidéo des systèmes' },
+                            { img: 'Galleries/Rpg Maker/JumpQTE.gif', caption: 'Système de combat Jump QTE' },
+                            { img: 'Galleries/Rpg Maker/LaserQTE.gif', caption: 'Système de combat rythme QTE' },
+                            { img: 'Galleries/Rpg Maker/QuestionsQTE.gif', caption: 'Système de combat Questions' },
+                            { img: 'Galleries/Rpg Maker/SchmupOpti.gif', caption: 'Mini-jeu Shmup' },
+                            { img: 'Galleries/Rpg Maker/SpaceInvadersOpti.gif', caption: 'Mini-jeu Space Invaders' },
+                            { img: 'Galleries/Rpg Maker/UIUlti.gif', caption: 'Système de combat général & Ultimate UI placeholder' },
+                        ]
+                    }
+                ]
+            },
             {
                 id: 'level_design',
                 title: 'LEVEL DESIGN',
@@ -1592,89 +1680,6 @@
                 ]
             },
             {
-                id: 'gd_prog',
-                title: 'GD & PROG',
-                projects: [
-                    { 
-                        title: 'Echoes of Above', 
-                        img: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg', 
-                        bgImg: 'images/ECHOESOFABOVE_A0_PAYSAGE_CMYK.jpg',
-                        engine: 'Unreal Engine 5',
-                        link: 'https://store.steampowered.com/app/4196130/Echoes_of_Above/',
-                        linkLabel: '🎮 PAGE STEAM DE ECHOES OF ABOVE',
-                        skills: ['Game Design', 'Level Design', 'Puzzle Design', 'Encounter Design', 'Integration', 'Programming', 'Management'],
-                        desc: '<strong>Twin-Stick Shooter</strong> inspiré de la culture <strong>Khmère</strong>, couplant des phases <strong>d\'exploration</strong>, de <strong>combat</strong> et de <strong>puzzle</strong>. Jeu commercialisé et disponible sur <strong>Steam</strong>.',
-                        role: 'Concernant le game design général sur ce projet, je me suis chargé de la <strong>conception du système de jeu</strong> et des <strong>mécaniques secondaires</strong>, particuièrement <strong>l\'Ultimate</strong> du personnage et le système de <strong>sphère</strong>. Mais également le <strong>prototypage</strong> et <strong>l\'équilibrage</strong>, ainsi que la gestion du <strong>QA</strong>.',
-                        gallery: [
-                            { img: 'Galleries/Echoes of Above/Flèchestutostrikegif.gif', caption: 'Design tutorialisation USP' },
-                            { img: 'Galleries/Echoes of Above/ProtoAscenseur.gif', caption: 'Prototype Ascenseur' },
-                            { img: 'Galleries/Echoes of Above/QTESpinner.gif', caption: 'Prototype tutoriel Ennemi 2' },
-                            { img: 'Galleries/Echoes of Above/Tutorial Video.gif', caption: 'Design tutorialisation par vidéo' },
-                        ]
-                    },
-                    { 
-                        title: 'The Unseelie Court', 
-                        img: 'images/The UnseelieCourt.png', 
-                        bgImg: 'images/The UnseelieCourt.png',
-                        engine: 'Unreal Engine 5',
-                        link: 'https://youtu.be/hk353Cy4Huw',
-                        linkLabel: '🔗 Lien du trailer',
-                        skills: ['Game Design', 'Level Design', 'Narrative Design', 'World Design'],
-                        desc: '<strong>Puzzle Game</strong> et jeu <strong>d\'exploration</strong>, réalisé sur <strong>Unreal Engine 5</strong> mettant en avant la dimension de l\'Unseelie du <strong>folklore celtique</strong>',
-                        role: '<strong>Conception</strong> et <strong>greyboxing</strong> de la <strong>seconde Île</strong> du jeu ainsi que de nombreux <strong>puzzles</strong>. Contribution aux <strong>arcs narratifs</strong> et à la <strong>conceptualisation de l\'USP</strong>.',
-                        gallery: [
-                            { img: 'https://youtu.be/hk353Cy4Huw', caption: 'Trailer Unseelie Court' },
-                            { img: 'Galleries/Unseelie Court/Screenshot_Campfire.png', caption: 'Mise en avant de la narration environnementale' },
-                            { img: 'Galleries/Unseelie Court/Screenshot_DrunkenHideout.png', caption: 'Narration environnementale et collectible' },
-                            { img: 'Galleries/Unseelie Court/Screenshot_Nav1.png', caption: 'Contribution au retake de la phase de navigation' },
-                            { img: 'Galleries/Unseelie Court/Screenshot_PuzzleIsland2.png', caption: 'Conception Puzzle 2' },
-                            { img: 'Galleries/Unseelie Court/Screenshot_River.png', caption: 'Conception Puzzle 1' },
-                            { img: 'Galleries/Unseelie Court/Screenshot_UnseelieBoats.png', caption: 'Suivi du système de retour dans le temps' },
-                        ]
-                    },
-                    { 
-                        title: 'FlipIt', 
-                        img: 'images/FlipIt.png', 
-                        bgImg: 'images/FlipIt.png',
-                        engine: 'Unreal Engine 5',
-                        link: 'https://youtu.be/M2mBmCmd5LU',
-                        linkLabel: '🔗 Lien du trailer',
-                        skills: ['Game Design', 'Programming', 'Balancing', 'HUD System'],
-                        desc: '<strong>Sandbox</strong> jouable d\'un prototype de jeu <strong>casual</strong> en <strong>multiversus</strong>, développé sur <strong>Unreal Engine 5</strong>.',
-                        role: 'Conception des différentes <strong>mécaniques de jeu</strong> et <strong>briques de gameplay</strong> ainsi que <strong>programmation complète du prototype</strong>.',
-                        gallery: [
-                            { img: 'https://youtu.be/M2mBmCmd5LU', caption: 'Trailer' },
-                            { img: 'Galleries/FlipIt_Screenshots/BallJump VS Rope.png', caption: 'Aperçu Combat' },
-                            { img: 'Galleries/FlipIt_Screenshots/DoubleBallJumpImpact.png', caption: 'Aperçu utilisation de compétence' },
-                            { img: 'Galleries/FlipIt_Screenshots/DualBegin.png', caption: 'Aperçu Duel' },
-                            { img: 'Galleries/FlipIt_Screenshots/GameLaunch.png', caption: 'Lancement du jeu' },
-                            { img: 'Galleries/FlipIt_Screenshots/Kill.png', caption: 'Aperçu Kill' },
-                            { img: 'Galleries/FlipIt_Screenshots/LevelSelection.png', caption: 'Sélection de niveau' },
-                        ]
-                    },
-                    { 
-                        title: 'RPG Maker Games', 
-                        img: 'images/RPGMakerGameIcon.png', 
-                        bgImg: 'images/RPGMakerGameIcon.png',
-                        engine: 'Rpg Maker MV',
-                        link: 'https://youtu.be/MGyzw5mewII',
-                        linkLabel: '🔗 Lien Map Timelapse',
-                        skills: ['Game Design', 'Level Design', 'World Design', 'Narrative Design', 'Balancing', 'Programming'],
-                        desc: 'Réalisation de multiples jeux sur <strong>RPG Maker MV</strong> et développement de <strong>plugins personnalisés</strong> via JavaScript.',
-                        role: 'Conception complète des mondes, du <strong>level design</strong>, de la <strong>narration</strong>, des <strong>systèmes de combat</strong> ou encore de <strong>l\'équilibrage</strong>, ainsi que de la <strong>programmation</strong> des systèmes qui en découlent.',
-                        gallery: [
-                            { img: 'Galleries/Rpg Maker/RPG Maker MV.mp4', caption: 'Démonstration Vidéo des systèmes' },
-                            { img: 'Galleries/Rpg Maker/JumpQTE.gif', caption: 'Système de combat Jump QTE' },
-                            { img: 'Galleries/Rpg Maker/LaserQTE.gif', caption: 'Système de combat rythme QTE' },
-                            { img: 'Galleries/Rpg Maker/QuestionsQTE.gif', caption: 'Système de combat Questions' },
-                            { img: 'Galleries/Rpg Maker/SchmupOpti.gif', caption: 'Mini-jeu Shmup' },
-                            { img: 'Galleries/Rpg Maker/SpaceInvadersOpti.gif', caption: 'Mini-jeu Space Invaders' },
-                            { img: 'Galleries/Rpg Maker/UIUlti.gif', caption: 'Système de combat général & Ultimate UI placeholder' },
-                        ]
-                    }
-                ]
-            },
-            {
                 id: 'documents',
                 title: 'DOCUMENTS',
                 projects: [
@@ -1785,27 +1790,20 @@
             }
         ];
 
-        // LOGIQUE DE NAVIGATION ENTRE DOMAINES
         let currentDomainIndex = 0;
+        let currentProjectIndex = 0;
 
         function updateStage() {
             const domain = domains[currentDomainIndex];
             document.getElementById('domainTitle').textContent = domain.title;
 
-            const prevIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
-            const nextIndex = (currentDomainIndex + 1) % domains.length;
-
-            document.getElementById('prevDomainLabel').textContent = `Vers ${domains[prevIndex].title}`;
-            document.getElementById('nextDomainLabel').textContent = `Vers ${domains[nextIndex].title}`;
-
             const grid = document.getElementById('projectsGrid');
             grid.innerHTML = '';
 
-            domain.projects.forEach((proj) => {
+            domain.projects.forEach((proj, projIdx) => {
                 const bubble = document.createElement('div');
                 bubble.className = 'project-bubble';
                 
-                // Génération conditionnelle du tag moteur si la propriété "engine" existe dans ton objet projet
                 const engineHtml = proj.engine ? `<span class="engine-tag">⚡ ${proj.engine}</span>` : '';
 
                 bubble.innerHTML = `
@@ -1827,13 +1825,16 @@
                     document.getElementById('stageBgPreview').classList.remove('active');
                 });
 
-                bubble.addEventListener('click', () => openProjectModal(proj));
+                bubble.addEventListener('click', () => {
+                    currentProjectIndex = projIdx;
+                    openProjectModal(proj);
+                });
 
                 grid.appendChild(bubble);
             });
         }
 
-        // GESTION DES BOUTONS DE NAVIGATION DU STAGE
+        // Navigation entre domaines
         document.getElementById('prevDomainBtn').addEventListener('click', () => {
             currentDomainIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
             updateStage();
@@ -1844,16 +1845,44 @@
             updateStage();
         });
 
-        document.getElementById('openProjectsBtn').addEventListener('click', () => {
+        // Gestion du menu PROJETS et sous-menu de choix
+        document.getElementById('openProjectsMenuBtn').addEventListener('click', () => {
             document.body.classList.add('curtains-closed');
             setTimeout(() => {
                 document.getElementById('mainMenu').classList.add('hidden');
                 document.getElementById('titleContainer').classList.add('hidden');
+                document.getElementById('projectMenuSelection').classList.add('active');
+                setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
+            }, 600);
+        });
+
+        document.getElementById('backToMainFromSelectBtn').addEventListener('click', () => {
+            document.body.classList.add('curtains-closed');
+            setTimeout(() => {
+                document.getElementById('projectMenuSelection').classList.remove('active');
+                document.getElementById('mainMenu').classList.remove('hidden');
+                document.getElementById('titleContainer').classList.remove('hidden');
+                setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
+            }, 600);
+        });
+
+        // Choix des catégories depuis le sous-menu
+        function openDomainStage(domainId) {
+            const index = domains.findIndex(d => d.id === domainId);
+            if (index !== -1) currentDomainIndex = index;
+
+            document.body.classList.add('curtains-closed');
+            setTimeout(() => {
+                document.getElementById('projectMenuSelection').classList.remove('active');
                 document.getElementById('projectsStage').classList.add('active');
                 updateStage();
                 setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
             }, 600);
-        });
+        }
+
+        document.getElementById('selectGdProgBtn').addEventListener('click', () => openDomainStage('gd_prog'));
+        document.getElementById('selectLdBtn').addEventListener('click', () => openDomainStage('level_design'));
+        document.getElementById('selectDocsBtn').addEventListener('click', () => openDomainStage('documents'));
 
         document.getElementById('backToMenuBtn').addEventListener('click', () => {
             document.body.classList.add('curtains-closed');
@@ -1865,7 +1894,6 @@
             }, 600);
         });
 
-        // MODALE ABOUT ME ET DEMO REEL
         document.getElementById('aboutBtn').addEventListener('click', () => {
             document.getElementById('charSheetModal').classList.add('active');
         });
@@ -1884,7 +1912,7 @@
             if (iframe) iframe.src = iframe.src;
         });
 
-        // LOGIQUE DES DETAIL PROJET ET LIGHTBOX
+        // MODALE DETAIL PROJET & NAVIGATION INTERNE
         let currentGalleryItems = [];
         let currentGalleryIndex = 0;
 
@@ -1921,6 +1949,43 @@
             document.getElementById('projectDetailModal').classList.remove('active');
         });
 
+        // Navigation projet précédent / suivant dans la modale
+        function navigateProject(direction) {
+            const currentDomain = domains[currentDomainIndex];
+            currentProjectIndex += direction;
+
+            if (currentProjectIndex < 0) {
+                // Changer de domaine vers le précédent
+                currentDomainIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
+                const newDomain = domains[currentDomainIndex];
+                currentProjectIndex = newDomain.projects.length - 1;
+                updateStage();
+            } else if (currentProjectIndex >= currentDomain.projects.length) {
+                // Changer de domaine vers le suivant
+                currentDomainIndex = (currentDomainIndex + 1) % domains.length;
+                currentProjectIndex = 0;
+                updateStage();
+            }
+
+            const nextProj = domains[currentDomainIndex].projects[currentProjectIndex];
+            openProjectModal(nextProj);
+        }
+
+        document.getElementById('modalPrevProjectBtn').addEventListener('click', () => navigateProject(-1));
+        document.getElementById('modalNextProjectBtn').addEventListener('click', () => navigateProject(1));
+
+        // Raccourci clavier Flèches Gauche/Droite pour naviguer entre projets dans la modale
+        window.addEventListener('keydown', (e) => {
+            const projectModal = document.getElementById('projectDetailModal');
+            if (projectModal && projectModal.classList.contains('active')) {
+                if (e.key === 'ArrowLeft') {
+                    navigateProject(-1);
+                } else if (e.key === 'ArrowRight') {
+                    navigateProject(1);
+                }
+            }
+        });
+
         function renderCarousel() {
             const galleryCol = document.getElementById('modalProjectGallery');
             galleryCol.innerHTML = '';
@@ -1933,7 +1998,6 @@
             const container = document.createElement('div');
             container.className = 'carousel-container';
 
-            // On ne récupère et n'affiche QUE l'élément actif actuel (Chargement à la demande)
             const item = currentGalleryItems[currentGalleryIndex];
 
             const galleryItem = document.createElement('div');
@@ -1945,12 +2009,10 @@
             const ytUrl = getYouTubeEmbedUrl(item.img);
             if (ytUrl) {
                 mediaBox.classList.add('is-video');
-                // Ajout de autoplay=1 et mute=1 pour forcer le lancement automatique
                 const autoYtUrl = ytUrl.includes('?') ? `${ytUrl}&autoplay=1&mute=1` : `${ytUrl}?autoplay=1&mute=1`;
                 mediaBox.innerHTML = `<iframe src="${autoYtUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             } else if (item.img.endsWith('.mp4')) {
                 mediaBox.classList.add('is-video');
-                // Ajout de autoplay et muted
                 mediaBox.innerHTML = `<video src="${item.img}" controls autoplay muted></video>`;
             } else {
                 mediaBox.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu'}" loading="lazy" onerror="this.src='https://via.placeholder.com/500x300/1a0033/00f0ff?text=IMAGE+INDISPONIBLE'">`;
@@ -1965,7 +2027,6 @@
             galleryItem.appendChild(caption);
             container.appendChild(galleryItem);
 
-            // Contrôles du carrousel (générés uniquement si plusieurs médias)
             if (currentGalleryItems.length > 1) {
                 const controls = document.createElement('div');
                 controls.className = 'carousel-controls';
@@ -1975,7 +2036,7 @@
                 prevBtn.textContent = '◄ Précédent';
                 prevBtn.addEventListener('click', () => {
                     currentGalleryIndex = (currentGalleryIndex - 1 + currentGalleryItems.length) % currentGalleryItems.length;
-                    renderCarousel(); // Recharge dynamiquement l'index précédent
+                    renderCarousel();
                 });
 
                 const counter = document.createElement('span');
@@ -1987,7 +2048,7 @@
                 nextBtn.textContent = 'Suivant ►';
                 nextBtn.addEventListener('click', () => {
                     currentGalleryIndex = (currentGalleryIndex + 1) % currentGalleryItems.length;
-                    renderCarousel(); // Recharge dynamiquement l'index suivant
+                    renderCarousel();
                 });
 
                 controls.appendChild(prevBtn);
@@ -1999,7 +2060,6 @@
             galleryCol.appendChild(container);
         }
 
-        // LOGIQUE LIGHTBOX
         function openLightbox(index) {
             currentGalleryIndex = index;
             updateLightboxContent();
@@ -2041,7 +2101,6 @@
         });
     </script>
 
-    <script src="Extras.js"></script>
-    
+    <script src="Extras (6).js"></script>
 </body>
 </html>
