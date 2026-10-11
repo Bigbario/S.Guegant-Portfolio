@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         backdrop-filter: blur(6px);
     `;
 
-    // Définition des 3 thèmes, leurs noms explicites, liens mis à jour (dont Echoes of Above)
+    // Définition des 3 thèmes avec toutes les vidéos et leurs vrais noms
     const videoThemes = [
         {
             title: "🎞️ Trailers",
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             subList.appendChild(vidLink);
         });
 
-        // Dérouler/Enrouler les sous-catégories
+        // Dérouler/Enrouler les sous-catégories au clic
         themeHeader.addEventListener('click', (e) => {
             e.stopPropagation();
             const isOpen = subList.style.display === 'block';
