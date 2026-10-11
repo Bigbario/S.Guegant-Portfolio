@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips Agrandis, Modale CV & Onde Spatio-Temporelle Pure
+// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Onde Spatio-Temporelle avec Petit Anneau Fin
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // H. DÉFORMATION ESPACE-TEMPS (ONDE LENTE ET PURE SANS ANNEAUX)
+    // H. DÉFORMATION ESPACE-TEMPS & FIN ANNEAU LUMINEUX
     // ==========================================
 
     const svgFilterHTML = `
@@ -408,10 +408,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const displacement = document.getElementById('spacetimeDisplacement');
         bgGrid.style.filter = "url('#spacetimeDistortion')";
 
+        // Création d'un tout petit anneau fin (bande lumineuse discrète) qui s'étend lentement
+        const ring = document.createElement('div');
+        ring.style.cssText = `
+            position: fixed;
+            left: ${x}px;
+            top: ${y}px;
+            width: 10px;
+            height: 10px;
+            border: 2px solid rgba(0, 240, 255, 0.8);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9996;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            transition: transform 2.0s cubic-bezier(0.1, 0.4, 0.1, 1), opacity 2.0s ease-out;
+        `;
+        document.body.appendChild(ring);
+
+        requestAnimationFrame(() => {
+            ring.style.transform = `translate(-50%, -50%) scale(55)`;
+            ring.style.opacity = '0';
+        });
+
         let maxScale = 140;
         if (displacement) displacement.setAttribute('scale', maxScale);
 
-        // Onde lente et progressive (2 secondes) pour voir la grille s'étirer et onduler en douceur
+        // Onde lente et progressive (2 secondes)
         let duration = 2000;
         let startTime = performance.now();
 
@@ -426,6 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 if (displacement) displacement.setAttribute('scale', 0);
                 bgGrid.style.filter = "none";
+                ring.remove();
             }
         }
         requestAnimationFrame(animateResorption);
