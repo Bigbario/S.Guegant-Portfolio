@@ -1,11 +1,178 @@
 // ==========================================
-// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV, Vidéos par Thème avec Miniatures & Fusées Restreintes au Menu
+// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV, Vidéos par Thème & Adaptation Mobile Dynamique
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ==========================================
+    // 0. INJECTION DES RÈGLES CSS MOBILES (RESPONSIVE)
+    // ==========================================
+    const mobileStyle = document.createElement('style');
+    mobileStyle.id = 'responsiveMobileStyle';
+    mobileStyle.innerHTML = `
+        @media (max-width: 768px) {
+            /* 1. Déblocage du scroll et réinitialisation de la taille du corps */
+            body {
+                overflow-x: hidden !important;
+                overflow-y: auto !important;
+                height: auto !important;
+                min-height: 100vh !important;
+                width: 100vw !important;
+                cursor: auto !important;
+                position: relative !important;
+            }
+            body *, button, a, .project-bubble, .gallery-media, input, textarea {
+                cursor: auto !important;
+            }
+            #custom-cursor {
+                display: none !important;
+            }
+
+            /* 2. Adaptation des titres principaux */
+            .title-container {
+                margin-top: 60px !important;
+                margin-bottom: 20px !important;
+                white-space: normal !important;
+                padding: 0 15px;
+            }
+            .main-title {
+                font-size: 2.8rem !important;
+                line-height: 1.2 !important;
+                margin-bottom: 0 !important;
+            }
+            .subtitle {
+                font-size: 1.8rem !important;
+            }
+
+            /* 3. Adaptation du Menu principal */
+            .game-menu {
+                width: 95% !important;
+                gap: 15px !important;
+                margin-bottom: 40px !important;
+            }
+            .menu-btn {
+                clip-path: none !important;
+                border-radius: 8px !important;
+            }
+            .btn-projets { font-size: 1.5rem !important; padding: 15px 0 !important; }
+            .btn-demo { font-size: 1.3rem !important; padding: 14px 0 !important; }
+            .btn-about { font-size: 1.1rem !important; padding: 12px 0 !important; }
+
+            /* 4. Repositionnement de la barre d'outils du haut */
+            .mobile-top-bar-wrapper {
+                position: relative !important;
+                top: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                padding: 15px 10px 0 10px !important;
+                justify-content: center !important;
+                flex-wrap: wrap !important;
+            }
+            .contact-top-btn {
+                font-size: 0.75rem !important;
+                padding: 8px 12px !important;
+            }
+
+            /* 5. Stage des Projets & Grille Mobile */
+            #projectsStage {
+                position: absolute !important;
+                height: auto !important;
+                min-height: 100vh !important;
+                padding: 20px 10px 40px 10px !important;
+                overflow-y: auto !important;
+            }
+            .stage-header {
+                flex-direction: column !important;
+                gap: 15px !important;
+                align-items: center !important;
+            }
+            .domain-title {
+                font-size: 1.8rem !important;
+            }
+            .cone-viewport {
+                height: auto !important;
+                max-height: none !important;
+                overflow: visible !important;
+                margin: 20px 0 !important;
+            }
+            .projects-grid {
+                grid-template-columns: 1fr !important;
+                grid-template-rows: auto !important;
+                gap: 20px !important;
+                height: auto !important;
+            }
+            .project-bubble {
+                max-width: 100% !important;
+                height: auto !important;
+                flex-direction: column !important;
+                clip-path: none !important;
+                border-radius: 12px !important;
+                padding: 15px !important;
+                transform: none !important;
+            }
+            .project-bubble:nth-child(1),
+            .project-bubble:nth-child(2),
+            .project-bubble:nth-child(3),
+            .project-bubble:nth-child(4) {
+                transform: none !important;
+            }
+            .project-bubble img {
+                width: 100% !important;
+                height: 180px !important;
+                object-fit: cover !important;
+            }
+            .project-bubble-content {
+                width: 100% !important;
+            }
+
+            /* 6. Navigation Bas de Stage */
+            .stage-nav-bar {
+                flex-direction: column !important;
+                gap: 12px !important;
+                padding: 0 10px !important;
+            }
+            .nav-arrow-btn {
+                width: 100% !important;
+                justify-content: center !important;
+                font-size: 0.9rem !important;
+                padding: 10px 16px !important;
+            }
+
+            /* 7. Adaptation des Modales */
+            .char-sheet-container, 
+            .contact-modal-container, 
+            .project-modal-container {
+                width: 95vw !important;
+                max-height: 90vh !important;
+                padding: 45px 15px 20px 15px !important;
+            }
+            .char-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .project-detail-layout {
+                grid-template-columns: 1fr !important;
+            }
+            .video-container {
+                width: 95vw !important;
+            }
+            
+            /* 8. Désactivation des effets trop lourds sur mobile */
+            #themePickerWidget {
+                bottom: 10px !important;
+                left: 10px !important;
+                padding: 4px 8px !important;
+                font-size: 0.65rem !important;
+            }
+        }
+    `;
+    document.head.appendChild(mobileStyle);
+
+
+    // ==========================================
     // A. CONTENEUR DES BOUTONS DU HAUT (VIDÉOS, CV & CONTACT)
+    // ==========================================
     const topBarContainer = document.createElement('div');
+    topBarContainer.className = 'mobile-top-bar-wrapper';
     topBarContainer.style.cssText = `
         position: absolute;
         top: 25px;
@@ -29,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
     videoDropdownBtn.innerHTML = "🎬 VIDÉOS ▼";
     videoDropdownWrapper.appendChild(videoDropdownBtn);
 
-    // Contenu de la liste déroulante principale (Thèmes)
     const dropdownMenu = document.createElement('div');
     dropdownMenu.style.cssText = `
         display: none;
@@ -47,7 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
         backdrop-filter: blur(6px);
     `;
 
-    // Définition propre des 3 thèmes avec tous les liens nettoyés et noms personnalisés
     const videoThemes = [
         {
             title: "🎞️ Trailers",
@@ -85,7 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    // Extraction propre de l'ID YouTube (gestion des caractères cachés/espaces)
     function getYouTubeVideoId(url) {
         if (!url) return "";
         const cleanUrl = url.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
@@ -158,7 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="video-title-text" style="flex-grow: 1; line-height: 1.2;">${vid.name}</span>
             `;
 
-            // RÉCUPÉRATION AUTOMATIQUE DU TITRE OFFICIEL VIA YOUTUBE oEMBED
             if (vid.url) {
                 const cleanUrl = vid.url.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
                 fetch(`https://noembed.com/embed?url=${encodeURIComponent(cleanUrl)}`)
@@ -169,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (titleSpan) titleSpan.textContent = data.title;
                         }
                     })
-                    .catch(() => {}); // En cas d'erreur réseau, garde le nom par défaut
+                    .catch(() => {});
             }
 
             vidLink.addEventListener('mouseenter', () => {
@@ -189,12 +352,10 @@ document.addEventListener('DOMContentLoaded', () => {
             subList.appendChild(vidLink);
         });
 
-        // Correction stricte de la bascule d'affichage (accordéon)
         themeHeader.addEventListener('click', (e) => {
             e.stopPropagation();
             const isOpen = subList.style.display === 'block';
             
-            // Ferme toutes les sous-listes spécifiquement via leur classe
             dropdownMenu.querySelectorAll('.video-sublist').forEach(sl => sl.style.display = 'none');
             dropdownMenu.querySelectorAll('.arrow-icon').forEach(arrow => arrow.style.transform = 'rotate(0deg)');
 
@@ -212,19 +373,16 @@ document.addEventListener('DOMContentLoaded', () => {
     videoDropdownWrapper.appendChild(dropdownMenu);
     topBarContainer.appendChild(videoDropdownWrapper);
 
-    // Afficher/Cacher le menu déroulant principal
     videoDropdownBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const isVisible = dropdownMenu.style.display === 'block';
         dropdownMenu.style.display = isVisible ? 'none' : 'block';
     });
 
-    // Fermer le menu si on clique en dehors
     document.addEventListener('click', () => {
         dropdownMenu.style.display = 'none';
     });
 
-    // Fonction pour ouvrir la modale vidéo
     function openCustomVideoModal(embedUrl) {
         let modal = document.getElementById('extraVideoModal');
         if (!modal) {
@@ -272,7 +430,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(topBarContainer);
 
 
+    // ==========================================
     // B. CRÉATION DE LA MODALE DU CV
+    // ==========================================
     const cvModalOverlay = document.createElement('div');
     cvModalOverlay.className = 'contact-modal';
     cvModalOverlay.id = 'cvModal';
@@ -312,7 +472,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // ==========================================
     // C. CRÉATION DE LA MODALE DE CONTACT FORMSPREE
+    // ==========================================
     const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnpjvbgp";
 
     const modalHTML = `
@@ -361,7 +523,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // ==========================================
     // D. SÉLECTEUR DE COULEUR DE FOND
+    // ==========================================
     const colorPickerContainer = document.createElement('div');
     colorPickerContainer.id = 'themePickerWidget';
     colorPickerContainer.style.cssText = `
@@ -380,20 +544,16 @@ document.addEventListener('DOMContentLoaded', () => {
         font-family: 'Orbitron', sans-serif;
         font-size: 0.75rem;
         color: #00f0ff;
-        cursor: none !important;
         box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
         transition: opacity 0.3s ease, transform 0.3s ease;
     `;
     colorPickerContainer.innerHTML = `
         <span>THEME BG</span>
-        <input type="color" id="hudColorPicker" value="#8c1eff" style="cursor: none !important; border: none; width: 24px; height: 24px; background: none; pointer-events: none;">
+        <input type="color" id="hudColorPicker" value="#8c1eff" style="border: none; width: 24px; height: 24px; background: none;">
     `;
     document.body.appendChild(colorPickerContainer);
 
     const colorPicker = document.getElementById('hudColorPicker');
-    colorPickerContainer.addEventListener('click', () => {
-        colorPicker.click();
-    });
 
     function hexToRgb(hex) {
         let c = hex.replace('#', '');
@@ -450,7 +610,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    // ==========================================
     // E. RACCOURCI CLAVIER (ÉCHAP)
+    // ==========================================
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             const activeModals = document.querySelectorAll('.video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active, #cvModal.active');
@@ -463,7 +625,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // ==========================================
     // F. SONS (CLIC RÉTRO & EXPLOSION FUSÉE)
+    // ==========================================
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     
     function playUiBeep() {
@@ -518,9 +682,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // G. EFFETS DE SURVOL (PAILLETTES & TOOLTIPS AGRANDIS)
+    // G. EFFETS DE SURVOL (PAILLETTES & TOOLTIPS)
     // ==========================================
-
     const tooltipsData = [
         { selector: '.btn-projets', text: "Liste de quelques projets que j'ai pu réaliser" },
         { selector: '.btn-demo', text: "Vidéo de présentation de certains de mes projets." },
@@ -588,252 +751,255 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(sparkleStyle);
 
-    tooltipsData.forEach(item => {
-        const btn = document.querySelector(item.selector);
-        if (!btn) return;
+    if (window.innerWidth > 768) {
+        tooltipsData.forEach(item => {
+            const btn = document.querySelector(item.selector);
+            if (!btn) return;
 
-        let sparkleInterval = null;
+            let sparkleInterval = null;
 
-        btn.addEventListener('mouseenter', () => {
-            globalTooltip.textContent = item.text;
-            globalTooltip.style.opacity = '1';
-            globalTooltip.style.transform = 'scale(1)';
+            btn.addEventListener('mouseenter', () => {
+                globalTooltip.textContent = item.text;
+                globalTooltip.style.opacity = '1';
+                globalTooltip.style.transform = 'scale(1)';
 
-            const rect = btn.getBoundingClientRect();
-            globalTooltip.style.left = `${rect.right + 15}px`;
-            globalTooltip.style.top = `${rect.top}px`;
+                const rect = btn.getBoundingClientRect();
+                globalTooltip.style.left = `${rect.right + 15}px`;
+                globalTooltip.style.top = `${rect.top}px`;
 
-            sparkleInterval = setInterval(() => {
-                const r = btn.getBoundingClientRect();
-                const rx = r.left + Math.random() * r.width;
-                const ry = r.top + Math.random() * r.height;
-                createSparkle(rx, ry);
-            }, 60);
+                sparkleInterval = setInterval(() => {
+                    const r = btn.getBoundingClientRect();
+                    const rx = r.left + Math.random() * r.width;
+                    const ry = r.top + Math.random() * r.height;
+                    createSparkle(rx, ry);
+                }, 60);
+            });
+
+            btn.addEventListener('mousemove', (e) => {
+                if (Math.random() < 0.3) {
+                    createSparkle(e.clientX, e.clientY);
+                }
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                globalTooltip.style.opacity = '0';
+                globalTooltip.style.transform = 'scale(0.9)';
+                if (sparkleInterval) clearInterval(sparkleInterval);
+            });
         });
-
-        btn.addEventListener('mousemove', (e) => {
-            if (Math.random() < 0.3) {
-                createSparkle(e.clientX, e.clientY);
-            }
-        });
-
-        btn.addEventListener('mouseleave', () => {
-            globalTooltip.style.opacity = '0';
-            globalTooltip.style.transform = 'scale(0.9)';
-            if (sparkleInterval) clearInterval(sparkleInterval);
-        });
-    });
+    }
 
 
     // ==========================================
-    // H. DÉFORMATION ESPACE-TEMPS & FUSÉES (STRICTEMENT SUR LE MENU PRINCIPAL)
+    // H. DÉFORMATION ESPACE-TEMPS & FUSÉES (STRICTEMENT SUR MENU PRINCIPAL PC)
     // ==========================================
-
-    const svgFilterHTML = `
-        <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
-            <filter id="spacetimeDistortion">
-                <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="3" result="noise" />
-                <feDisplacementMap id="spacetimeDisplacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-        </svg>
-    `;
-    const filterContainer = document.createElement('div');
-    filterContainer.innerHTML = svgFilterHTML;
-    document.body.appendChild(filterContainer);
-
-    const bgGrid = document.querySelector('.bg-grid') || document.body;
-
-    function triggerSpacetimeDistortion(x, y) {
-        const displacement = document.getElementById('spacetimeDisplacement');
-        bgGrid.style.filter = "url('#spacetimeDistortion')";
-
-        const ring = document.createElement('div');
-        ring.style.cssText = `
-            position: fixed;
-            left: ${x}px;
-            top: ${y}px;
-            width: 8px;
-            height: 8px;
-            border: 1.5px solid #00f0ff;
-            box-shadow: 0 0 8px #00f0ff;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9996;
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
+    if (window.innerWidth > 768) {
+        const svgFilterHTML = `
+            <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
+                <filter id="spacetimeDistortion">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="3" result="noise" />
+                    <feDisplacementMap id="spacetimeDisplacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+            </svg>
         `;
-        document.body.appendChild(ring);
+        const filterContainer = document.createElement('div');
+        filterContainer.innerHTML = svgFilterHTML;
+        document.body.appendChild(filterContainer);
 
-        let maxScale = 120;
-        if (displacement) displacement.setAttribute('scale', maxScale);
+        const bgGrid = document.querySelector('.bg-grid') || document.body;
 
-        let duration = 900;
-        let startTime = performance.now();
+        function triggerSpacetimeDistortion(x, y) {
+            const displacement = document.getElementById('spacetimeDisplacement');
+            bgGrid.style.filter = "url('#spacetimeDistortion')";
 
-        function animateResorption(now) {
-            let elapsed = now - startTime;
-            let progress = elapsed / duration;
-
-            if (progress < 1) {
-                const hue = Math.floor(progress * 360 * 1.2) % 360;
-                ring.style.borderColor = `hsl(${hue}, 100%, 70%)`;
-                ring.style.boxShadow = `0 0 10px hsl(${hue}, 100%, 70%)`;
-
-                let currentScale = maxScale * (1 - progress);
-                if (displacement) displacement.setAttribute('scale', currentScale);
-
-                requestAnimationFrame(animateResorption);
-            } else {
-                if (displacement) displacement.setAttribute('scale', 0);
-                bgGrid.style.filter = "none";
-                ring.remove();
-            }
-        }
-        requestAnimationFrame(animateResorption);
-
-        requestAnimationFrame(() => {
-            ring.style.transition = `transform 0.9s cubic-bezier(0.1, 0.5, 0.2, 1), opacity 0.9s ease-out`;
-            ring.style.transform = `translate(-50%, -50%) scale(45)`;
-            ring.style.opacity = '0';
-        });
-    }
-
-    function triggerScreenShake() {
-        document.body.classList.add('shake-screen');
-        setTimeout(() => {
-            document.body.classList.remove('shake-screen');
-        }, 350);
-    }
-
-    function createExplosionConfetti(x, y) {
-        const confettiCount = 24;
-        for (let i = 0; i < confettiCount; i++) {
-            const confetti = document.createElement('div');
-            const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 100 + 40;
-            const tx = Math.cos(angle) * speed;
-            const ty = Math.sin(angle) * speed;
-
-            confetti.style.cssText = `
+            const ring = document.createElement('div');
+            ring.style.cssText = `
                 position: fixed;
                 left: ${x}px;
                 top: ${y}px;
-                width: ${Math.random() * 8 + 4}px;
-                height: ${Math.random() * 8 + 4}px;
-                background: ${Math.random() > 0.5 ? '#00f0ff' : (Math.random() > 0.5 ? '#d488ff' : '#ffd700')};
-                box-shadow: 0 0 10px #ffffff;
-                border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+                width: 8px;
+                height: 8px;
+                border: 1.5px solid #00f0ff;
+                box-shadow: 0 0 8px #00f0ff;
+                border-radius: 50%;
                 pointer-events: none;
-                z-index: 99999;
-                transition: transform 0.6s cubic-bezier(0.15, 0.85, 0.35, 1.2), opacity 0.6s ease-in;
+                z-index: 9996;
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
             `;
-            document.body.appendChild(confetti);
+            document.body.appendChild(ring);
+
+            let maxScale = 120;
+            if (displacement) displacement.setAttribute('scale', maxScale);
+
+            let duration = 900;
+            let startTime = performance.now();
+
+            function animateResorption(now) {
+                let elapsed = now - startTime;
+                let progress = elapsed / duration;
+
+                if (progress < 1) {
+                    const hue = Math.floor(progress * 360 * 1.2) % 360;
+                    ring.style.borderColor = `hsl(${hue}, 100%, 70%)`;
+                    ring.style.boxShadow = `0 0 10px hsl(${hue}, 100%, 70%)`;
+
+                    let currentScale = maxScale * (1 - progress);
+                    if (displacement) displacement.setAttribute('scale', currentScale);
+
+                    requestAnimationFrame(animateResorption);
+                } else {
+                    if (displacement) displacement.setAttribute('scale', 0);
+                    bgGrid.style.filter = "none";
+                    ring.remove();
+                }
+            }
+            requestAnimationFrame(animateResorption);
 
             requestAnimationFrame(() => {
-                confetti.style.transform = `translate(${tx}px, ${ty}px) rotate(${Math.random() * 360}deg) scale(0.2)`;
-                confetti.style.opacity = '0';
+                ring.style.transition = `transform 0.9s cubic-bezier(0.1, 0.5, 0.2, 1), opacity 0.9s ease-out`;
+                ring.style.transform = `translate(-50%, -50%) scale(45)`;
+                ring.style.opacity = '0';
+            });
+        }
+
+        function triggerScreenShake() {
+            document.body.classList.add('shake-screen');
+            setTimeout(() => {
+                document.body.classList.remove('shake-screen');
+            }, 350);
+        }
+
+        function createExplosionConfetti(x, y) {
+            const confettiCount = 24;
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 100 + 40;
+                const tx = Math.cos(angle) * speed;
+                const ty = Math.sin(angle) * speed;
+
+                confetti.style.cssText = `
+                    position: fixed;
+                    left: ${x}px;
+                    top: ${y}px;
+                    width: ${Math.random() * 8 + 4}px;
+                    height: ${Math.random() * 8 + 4}px;
+                    background: ${Math.random() > 0.5 ? '#00f0ff' : (Math.random() > 0.5 ? '#d488ff' : '#ffd700')};
+                    box-shadow: 0 0 10px #ffffff;
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+                    pointer-events: none;
+                    z-index: 99999;
+                    transition: transform 0.6s cubic-bezier(0.15, 0.85, 0.35, 1.2), opacity 0.6s ease-in;
+                `;
+                document.body.appendChild(confetti);
+
+                requestAnimationFrame(() => {
+                    confetti.style.transform = `translate(${tx}px, ${ty}px) rotate(${Math.random() * 360}deg) scale(0.2)`;
+                    confetti.style.opacity = '0';
+                });
+
+                setTimeout(() => confetti.remove(), 600);
+            }
+        }
+
+        let activeRocketCount = 0;
+        let nextRocketTimeout = null;
+
+        function spawnRocket(immediate = false) {
+            const isProjectsActive = projectsStage && projectsStage.classList.contains('active');
+            const isModalActive = document.querySelector('.contact-modal.active, .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, #cvModal.active');
+
+            if (isProjectsActive || isModalActive || activeRocketCount >= 1) {
+                if (!immediate) scheduleNextRocket();
+                return;
+            }
+
+            activeRocketCount++;
+            const rocket = document.createElement('div');
+            rocket.className = 'extra-rocket';
+            const startX = Math.random() * (window.innerWidth - 120) + 60;
+            
+            rocket.innerHTML = '🚀';
+            rocket.style.cssText = `
+                position: fixed;
+                left: ${startX}px;
+                bottom: -50px;
+                font-size: 1.6rem;
+                pointer-events: auto;
+                cursor: none !important;
+                z-index: 9997;
+                user-select: none;
+                transform: rotate(-90deg);
+                filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.9));
+            `;
+            document.body.appendChild(rocket);
+
+            let currentY = -50;
+            const speedY = Math.random() * 1.6 + 1.4;
+            let isAlive = true;
+
+            function destroyRocket(respawnInstant = false) {
+                if (!isAlive) return;
+                isAlive = false;
+                rocket.remove();
+                activeRocketCount = Math.max(0, activeRocketCount - 1);
+
+                if (respawnInstant) {
+                    if (nextRocketTimeout) clearTimeout(nextRocketTimeout);
+                    nextRocketTimeout = setTimeout(() => spawnRocket(true), 500);
+                } else {
+                    scheduleNextRocket();
+                }
+            }
+
+            rocket.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!isAlive) return;
+
+                const rect = rocket.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+
+                triggerSpacetimeDistortion(cx, cy);
+                createExplosionConfetti(cx, cy);
+                triggerScreenShake();
+                playExplosionSound();
+                
+                destroyRocket(true);
             });
 
-            setTimeout(() => confetti.remove(), 600);
-        }
-    }
+            function animateRocket() {
+                if (!isAlive) return;
 
-    let activeRocketCount = 0;
-    let nextRocketTimeout = null;
+                if (projectsStage && projectsStage.classList.contains('active')) {
+                    destroyRocket(false);
+                    return;
+                }
 
-    function spawnRocket(immediate = false) {
-        const isProjectsActive = projectsStage && projectsStage.classList.contains('active');
-        const isModalActive = document.querySelector('.contact-modal.active, .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, #cvModal.active');
+                currentY += speedY;
+                rocket.style.bottom = `${currentY}px`;
 
-        if (isProjectsActive || isModalActive || activeRocketCount >= 1) {
-            if (!immediate) scheduleNextRocket();
-            return;
-        }
+                if (currentY > window.innerHeight + 80) {
+                    destroyRocket(false);
+                    return;
+                }
 
-        activeRocketCount++;
-        const rocket = document.createElement('div');
-        rocket.className = 'extra-rocket';
-        const startX = Math.random() * (window.innerWidth - 120) + 60;
-        
-        rocket.innerHTML = '🚀';
-        rocket.style.cssText = `
-            position: fixed;
-            left: ${startX}px;
-            bottom: -50px;
-            font-size: 1.6rem;
-            pointer-events: auto;
-            cursor: none !important;
-            z-index: 9997;
-            user-select: none;
-            transform: rotate(-90deg);
-            filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.9));
-        `;
-        document.body.appendChild(rocket);
-
-        let currentY = -50;
-        const speedY = Math.random() * 1.6 + 1.4;
-        let isAlive = true;
-
-        function destroyRocket(respawnInstant = false) {
-            if (!isAlive) return;
-            isAlive = false;
-            rocket.remove();
-            activeRocketCount = Math.max(0, activeRocketCount - 1);
-
-            if (respawnInstant) {
-                if (nextRocketTimeout) clearTimeout(nextRocketTimeout);
-                nextRocketTimeout = setTimeout(() => spawnRocket(true), 500);
-            } else {
-                scheduleNextRocket();
-            }
-        }
-
-        rocket.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (!isAlive) return;
-
-            const rect = rocket.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-
-            triggerSpacetimeDistortion(cx, cy);
-            createExplosionConfetti(cx, cy);
-            triggerScreenShake();
-            playExplosionSound();
-            
-            destroyRocket(true);
-        });
-
-        function animateRocket() {
-            if (!isAlive) return;
-
-            if (projectsStage && projectsStage.classList.contains('active')) {
-                destroyRocket(false);
-                return;
-            }
-
-            currentY += speedY;
-            rocket.style.bottom = `${currentY}px`;
-
-            if (currentY > window.innerHeight + 80) {
-                destroyRocket(false);
-                return;
+                requestAnimationFrame(animateRocket);
             }
 
             requestAnimationFrame(animateRocket);
         }
 
-        requestAnimationFrame(animateRocket);
-    }
+        function scheduleNextRocket() {
+            if (nextRocketTimeout) clearTimeout(nextRocketTimeout);
+            const randomDelay = Math.random() * 4000 + 4000;
+            nextRocketTimeout = setTimeout(() => {
+                spawnRocket();
+            }, randomDelay);
+        }
 
-    function scheduleNextRocket() {
-        if (nextRocketTimeout) clearTimeout(nextRocketTimeout);
-        const randomDelay = Math.random() * 4000 + 4000;
-        nextRocketTimeout = setTimeout(() => {
-            spawnRocket();
-        }, randomDelay);
+        setTimeout(spawnRocket, 3000);
     }
-
-    setTimeout(spawnRocket, 3000);
 
 });
