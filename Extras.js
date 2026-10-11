@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Distortion Espace-Temps Accentuee
+// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Spatiale Instantanée au Clic
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -387,10 +387,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // H. DÉFORMATION ESPACE-TEMPS PUISSANTE & CONTROLES DES FUSÉES
+    // H. DÉFORMATION ESPACE-TEMPS & FUSÉES (SPAWN INSTANTANÉ AU CLIC)
     // ==========================================
 
-    // Filtre SVG de déformation spatio-temporelle accentué
     const svgFilterHTML = `
         <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
             <filter id="spacetimeDistortion">
@@ -407,10 +406,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function triggerSpacetimeDistortion(x, y) {
         const displacement = document.getElementById('spacetimeDisplacement');
-        
         bgGrid.style.filter = "url('#spacetimeDistortion')";
 
-        // Onde de choc lumineuse et concentrique très appuyée
         const wave = document.createElement('div');
         wave.style.cssText = `
             position: fixed;
@@ -429,7 +426,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.body.appendChild(wave);
 
-        // Déformation forte de la grille
         let maxScale = 180;
         if (displacement) displacement.setAttribute('scale', maxScale);
 
@@ -438,7 +434,6 @@ document.addEventListener('DOMContentLoaded', () => {
             wave.style.opacity = '0';
         });
 
-        // Animation de résorption progressive
         let duration = 800;
         let startTime = performance.now();
 
@@ -499,13 +494,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // GESTION DU NOMBRE DE FUSÉES (MAX 1 À LA FOIS)
     let activeRocketCount = 0;
+    let nextRocketTimeout = null;
 
-    function spawnRocket() {
-        // Empêcher l'accumulation : max 1 fusée à la fois et pas sur les modales
+    function spawnRocket(immediate = false) {
         if (activeRocketCount >= 1 || document.querySelector('.contact-modal.active, .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, #cvModal.active')) {
-            scheduleNextRocket();
+            if (!immediate) scheduleNextRocket();
             return;
         }
 
@@ -532,12 +526,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const speedY = Math.random() * 1.6 + 1.4;
         let isAlive = true;
 
-        function destroyRocket() {
+        function destroyRocket(respawnInstant = false) {
             if (!isAlive) return;
             isAlive = false;
             rocket.remove();
             activeRocketCount = Math.max(0, activeRocketCount - 1);
-            scheduleNextRocket();
+
+            if (respawnInstant) {
+                // Fait apparaître une nouvelle fusée instantanément (avec un tout petit délai de 500ms)
+                if (nextRocketTimeout) clearTimeout(nextRocketTimeout);
+                nextRocketTimeout = setTimeout(() => spawnRocket(true), 500);
+            } else {
+                scheduleNextRocket();
+            }
         }
 
         rocket.addEventListener('click', (e) => {
@@ -553,7 +554,8 @@ document.addEventListener('DOMContentLoaded', () => {
             triggerScreenShake();
             playExplosionSound();
             
-            destroyRocket();
+            // true = déclenche un respawn immédiat
+            destroyRocket(true);
         });
 
         function animateRocket() {
@@ -563,7 +565,8 @@ document.addEventListener('DOMContentLoaded', () => {
             rocket.style.bottom = `${currentY}px`;
 
             if (currentY > window.innerHeight + 80) {
-                destroyRocket();
+                // false = sortie normale de l'écran, respecte le délai normal
+                destroyRocket(false);
                 return;
             }
 
@@ -574,13 +577,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function scheduleNextRocket() {
-        const randomDelay = Math.random() * 4000 + 4000; // 4 à 8 secondes entre chaque fusée
-        setTimeout(() => {
+        if (nextRocketTimeout) clearTimeout(nextRocketTimeout);
+        const randomDelay = Math.random() * 4000 + 4000; // 4 à 8 secondes
+        nextRocketTimeout = setTimeout(() => {
             spawnRocket();
         }, randomDelay);
     }
 
-    // Lancement du cycle
-    setTimeout(scheduleNextRocket, 3000);
+    // Premier lancement après 3 secondes
+    setTimeout(spawnRocket, 3000);
 
 });
