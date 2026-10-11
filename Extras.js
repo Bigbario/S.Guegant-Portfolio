@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Onde Spatio-Temporelle avec Anneau Multicolore
+// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Anneau Fin et Rapide
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // H. DÉFORMATION ESPACE-TEMPS & ANNEAU MULTICOLORE ÉVOLUTIF
+    // H. DÉFORMATION ESPACE-TEMPS & ANNEAU FIN MULTICOLORE ET RAPIDE
     // ==========================================
 
     const svgFilterHTML = `
@@ -408,16 +408,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const displacement = document.getElementById('spacetimeDisplacement');
         bgGrid.style.filter = "url('#spacetimeDistortion')";
 
-        // Création de l'anneau fin multicolore
+        // Anneau très fin (1.5px de bordure) et discret
         const ring = document.createElement('div');
         ring.style.cssText = `
             position: fixed;
             left: ${x}px;
             top: ${y}px;
-            width: 10px;
-            height: 10px;
-            border: 3px solid #00f0ff;
-            box-shadow: 0 0 12px #00f0ff;
+            width: 8px;
+            height: 8px;
+            border: 1.5px solid #00f0ff;
+            box-shadow: 0 0 8px #00f0ff;
             border-radius: 50%;
             pointer-events: none;
             z-index: 9996;
@@ -426,10 +426,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.body.appendChild(ring);
 
-        let maxScale = 140;
+        let maxScale = 120;
         if (displacement) displacement.setAttribute('scale', maxScale);
 
-        let duration = 2000;
+        // Durée raccourcie à 900 ms pour que l'effet passe rapidement
+        let duration = 900;
         let startTime = performance.now();
 
         function animateResorption(now) {
@@ -437,10 +438,9 @@ document.addEventListener('DOMContentLoaded', () => {
             let progress = elapsed / duration;
 
             if (progress < 1) {
-                // Changement de teinte dynamique au fil de l'élargissement (effet arc-en-ciel/multicolore)
-                const hue = Math.floor(progress * 360 * 1.5) % 360;
-                ring.style.borderColor = `hsl(${hue}, 100%, 65%)`;
-                ring.style.boxShadow = `0 0 15px hsl(${hue}, 100%, 65%)`;
+                const hue = Math.floor(progress * 360 * 1.2) % 360;
+                ring.style.borderColor = `hsl(${hue}, 100%, 70%)`;
+                ring.style.boxShadow = `0 0 10px hsl(${hue}, 100%, 70%)`;
 
                 let currentScale = maxScale * (1 - progress);
                 if (displacement) displacement.setAttribute('scale', currentScale);
@@ -454,10 +454,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         requestAnimationFrame(animateResorption);
 
-        // Animation CSS séparée pour élargir et estomper l'anneau en douceur
         requestAnimationFrame(() => {
-            ring.style.transition = `transform 2.0s cubic-bezier(0.1, 0.4, 0.1, 1), opacity 2.0s ease-out`;
-            ring.style.transform = `translate(-50%, -50%) scale(65)`;
+            ring.style.transition = `transform 0.9s cubic-bezier(0.1, 0.5, 0.2, 1), opacity 0.9s ease-out`;
+            ring.style.transform = `translate(-50%, -50%) scale(45)`;
             ring.style.opacity = '0';
         });
     }
