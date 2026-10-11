@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // B. CRÉATION DE LA MODALE DU CV
     const cvModalOverlay = document.createElement('div');
-    cvModalOverlay.className = 'contact-modal'; // Utilise le style des modales globales
+    cvModalOverlay.className = 'contact-modal';
     cvModalOverlay.id = 'cvModal';
     cvModalOverlay.innerHTML = `
         <div class="contact-modal-container" style="width: 85vw; max-width: 900px; height: 85vh; display: flex; flex-direction: column;">
@@ -43,11 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <h2 style="font-family: 'Orbitron', sans-serif; color: #00f0ff; font-size: 1.8rem; border-bottom: 2px solid rgba(0, 240, 255, 0.4); padding-bottom: 10px; margin-bottom: 15px;">MON CV - SAMUEL GUEGANT</h2>
             
             <div style="flex-grow: 1; width: 100%; border: 1px solid rgba(0, 240, 255, 0.5); border-radius: 8px; overflow: hidden; background: #000;">
-                <embed src="Guegant_Samuel_CV.pdf" type="application/pdf" width="100%" height="100%">
+                <embed src="Galleries/Guegant_Samuel_CV.pdf" type="application/pdf" width="100%" height="100%">
             </div>
 
             <div style="margin-top: 15px; display: flex; justify-content: flex-end;">
-                <a href="Guegant_Samuel_CV.pdf" download="Guegant_Samuel_CV.pdf" class="submit-btn" style="text-decoration: none; text-align: center; padding: 10px 20px; margin-top: 0;">
+                <a href="Galleries/Guegant_Samuel_CV.pdf" download="Guegant_Samuel_CV.pdf" class="submit-btn" style="text-decoration: none; text-align: center; padding: 10px 20px; margin-top: 0;">
                     📥 TÉLÉCHARGER LE CV ➔
                 </a>
             </div>
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // E. RACCOURCI CLAVIER (ÉCHAP)
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            const activeModals = document.querySelectorAll('.video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active');
+            const activeModals = document.querySelectorAll('.video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active, #cvModal');
             activeModals.forEach(modal => {
                 modal.classList.remove('active');
                 if (modal.id === 'videoModal') {
