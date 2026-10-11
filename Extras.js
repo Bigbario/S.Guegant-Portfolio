@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Effets & Tooltips
+// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Effets & Tooltips Fixes
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -220,40 +220,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // F. EFFETS DE SURVOL (PAILLETTES & POPUP INFOBULLE)
+    // F. EFFETS DE SURVOL (PAILLETTES & POPUP FIXE HAUT-DROITE)
     // ==========================================
 
-    // 1. Création du composant Infobulle (Tooltip)
-    const tooltip = document.createElement('div');
-    tooltip.id = 'extraHoverTooltip';
-    tooltip.style.cssText = `
-        position: fixed;
-        pointer-events: none;
-        z-index: 100000;
-        background: rgba(15, 3, 35, 0.9);
-        border: 1px solid #00f0ff;
-        box-shadow: 0 0 15px rgba(0, 240, 255, 0.5), inset 0 0 10px rgba(180, 50, 255, 0.3);
-        color: #e0b0ff;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 0.82rem;
-        padding: 8px 14px;
-        border-radius: 6px;
-        opacity: 0;
-        transform: translate(-50%, -130%);
-        transition: opacity 0.2s ease, transform 0.15s ease-out;
-        white-space: nowrap;
-        backdrop-filter: blur(4px);
-    `;
-    document.body.appendChild(tooltip);
+    // S'assurer que le menu parent autorise le positionnement absolu des infobulles
+    const mainMenu = document.getElementById('mainMenu');
+    if (mainMenu) {
+        mainMenu.style.position = 'relative';
+    }
 
-    // Textes pour chaque bouton
+    // Données des tooltips et liaisons avec les boutons du menu
     const tooltipsData = [
         { selector: '.btn-projets', text: "Liste de quelques projets que j'ai pu réaliser" },
         { selector: '.btn-demo', text: "Vidéo de présentation de certains de mes projets." },
         { selector: '.btn-about', text: "Quelques informations sur moi" }
     ];
 
-    // 2. Générateur de paillettes (Sparkles) au survol
+    // Générateur de paillettes (Sparkles)
     function createSparkle(x, y) {
         const sparkle = document.createElement('div');
         sparkle.style.cssText = `
@@ -274,29 +257,58 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => sparkle.remove(), 600);
     }
 
-    // Ajout du CSS dynamique pour l'animation des paillettes
-    const sparkleStyle = document.createElement('style');
-    sparkleStyle.innerHTML = `
+    // CSS dynamique pour les animations
+    const customStyle = document.createElement('style');
+    customStyle.innerHTML = `
         @keyframes sparkleAnim {
             0% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
             100% { opacity: 0; transform: translate(calc(-50% + ${(Math.random() - 0.5) * 60}px), calc(-50% + ${(Math.random() - 0.5) * 60}px)) scale(0) rotate(180deg); }
         }
+        .menu-btn {
+            position: relative; /* Nécessaire pour positionner l'infobulle par rapport au bouton */
+        }
     `;
-    document.head.appendChild(sparkleStyle);
+    document.head.appendChild(customStyle);
 
-    // 3. Liaison des événements de survol
+    // Configuration et injection des tooltips fixes en haut à droite de chaque bouton
     tooltipsData.forEach(item => {
         const btn = document.querySelector(item.selector);
         if (!btn) return;
 
+        // Création de l'infobulle propre à ce bouton
+        const tooltip = document.createElement('div');
+        tooltip.className = 'element-tooltip';
+        tooltip.textContent = item.text;
+        tooltip.style.cssText = `
+            position: absolute;
+            top: -12px;
+            right: -15px;
+            transform: translate(100%, -50%) scale(0.9);
+            background: rgba(15, 3, 35, 0.95);
+            border: 1px solid #00f0ff;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), inset 0 0 10px rgba(180, 50, 255, 0.3);
+            color: #e0b0ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.78rem;
+            padding: 8px 12px;
+            border-radius: 6px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+        `;
+        btn.appendChild(tooltip);
+
         let sparkleInterval = null;
 
         btn.addEventListener('mouseenter', () => {
-            // Activer la popup
-            tooltip.textContent = item.text;
+            // Afficher l'infobulle en haut à droite du bouton
             tooltip.style.opacity = '1';
+            tooltip.style.transform = 'translate(100%, -50%) scale(1)';
 
-            // Lancer la génération de paillettes en continu
+            // Lancer les paillettes autour du bouton
             sparkleInterval = setInterval(() => {
                 const rect = btn.getBoundingClientRect();
                 const rx = rect.left + Math.random() * rect.width;
@@ -306,19 +318,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         btn.addEventListener('mousemove', (e) => {
-            // La popup suit la souris
-            tooltip.style.left = `${e.clientX}px`;
-            tooltip.style.top = `${e.clientY}px`;
-            
-            // Génération ponctuelle au mouvement
             if (Math.random() < 0.3) {
                 createSparkle(e.clientX, e.clientY);
             }
         });
 
         btn.addEventListener('mouseleave', () => {
-            // Masquer la popup et stopper les paillettes
+            // Masquer l'infobulle
             tooltip.style.opacity = '0';
+            tooltip.style.transform = 'translate(100%, -50%) scale(0.9)';
+            
             if (sparkleInterval) clearInterval(sparkleInterval);
         });
     });
