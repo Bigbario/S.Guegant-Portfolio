@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Distortion Espace-Temps sur la Grille
+// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Distortion Espace-Temps Accentuee
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // D. SÉLECTEUR DE COULEUR DE FOND (AVEC CURSEUR MASQUÉ)
+    // D. SÉLECTEUR DE COULEUR DE FOND
     const colorPickerContainer = document.createElement('div');
     colorPickerContainer.id = 'themePickerWidget';
     colorPickerContainer.style.cssText = `
@@ -257,17 +257,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const gain = audioCtx.createGain();
 
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(140, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(25, audioCtx.currentTime + 0.3);
+            osc.frequency.setValueAtTime(160, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + 0.35);
 
-            gain.gain.setValueAtTime(0.09, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.35);
 
             osc.connect(gain);
             gain.connect(audioCtx.destination);
 
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.3);
+            osc.stop(audioCtx.currentTime + 0.35);
         } catch (e) {}
     }
 
@@ -337,14 +337,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         @keyframes screenShake {
             0% { transform: translate(0, 0); }
-            20% { transform: translate(-5px, 3px); }
-            40% { transform: translate(5px, -3px); }
-            60% { transform: translate(-3px, -2px); }
-            80% { transform: translate(3px, 1px); }
+            20% { transform: translate(-8px, 5px); }
+            40% { transform: translate(8px, -5px); }
+            60% { transform: translate(-5px, -3px); }
+            80% { transform: translate(5px, 2px); }
             100% { transform: translate(0, 0); }
         }
         .shake-screen {
-            animation: screenShake 0.3s ease-in-out;
+            animation: screenShake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97);
         }
     `;
     document.head.appendChild(sparkleStyle);
@@ -387,14 +387,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // H. DÉFORMATION GRAVITATIONNELLE DE LA GRILLE (GRAVITY WELL / ESPACE-TEMPS)
+    // H. DÉFORMATION ESPACE-TEMPS PUISSANTE & CONTROLES DES FUSÉES
     // ==========================================
 
-    // Injection du filtre SVG de déformation dynamique
+    // Filtre SVG de déformation spatio-temporelle accentué
     const svgFilterHTML = `
         <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
             <filter id="spacetimeDistortion">
-                <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" />
+                <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" />
                 <feDisplacementMap id="spacetimeDisplacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
             </filter>
         </svg>
@@ -403,46 +403,43 @@ document.addEventListener('DOMContentLoaded', () => {
     filterContainer.innerHTML = svgFilterHTML;
     document.body.appendChild(filterContainer);
 
-    // cibler l'élément de la grille d'arrière-plan (.bg-grid) ou le body
     const bgGrid = document.querySelector('.bg-grid') || document.body;
 
     function triggerSpacetimeDistortion(x, y) {
         const displacement = document.getElementById('spacetimeDisplacement');
         
-        // Appliquer le filtre de déformation au background
         bgGrid.style.filter = "url('#spacetimeDistortion')";
-        bgGrid.style.transition = "filter 0.05s ease";
 
-        // Créer aussi un puit de gravité visuel (creux de réseau concentrique)
-        const well = document.createElement('div');
-        well.style.cssText = `
+        // Onde de choc lumineuse et concentrique très appuyée
+        const wave = document.createElement('div');
+        wave.style.cssText = `
             position: fixed;
             left: ${x}px;
             top: ${y}px;
-            width: 10px;
-            height: 10px;
-            border: 2px dashed rgba(0, 240, 255, 0.8);
-            box-shadow: 0 0 35px rgba(0, 240, 255, 0.6), inset 0 0 20px rgba(180, 50, 255, 0.8);
+            width: 20px;
+            height: 20px;
+            border: 4px solid #00f0ff;
+            box-shadow: 0 0 35px #00f0ff, inset 0 0 25px #d488ff;
             border-radius: 50%;
             pointer-events: none;
             z-index: 9996;
             transform: translate(-50%, -50%) scale(1);
             opacity: 1;
-            transition: transform 0.6s cubic-bezier(0.05, 0.9, 0.2, 1), opacity 0.6s ease-out;
+            transition: transform 0.8s cubic-bezier(0.05, 0.8, 0.1, 1), opacity 0.8s ease-out;
         `;
-        document.body.appendChild(well);
+        document.body.appendChild(wave);
 
-        // Déformer la grille avec une onde de choc (scale monte puis redescend)
-        let scaleVal = 65;
-        if (displacement) displacement.setAttribute('scale', scaleVal);
+        // Déformation forte de la grille
+        let maxScale = 180;
+        if (displacement) displacement.setAttribute('scale', maxScale);
 
         requestAnimationFrame(() => {
-            well.style.transform = `translate(-50%, -50%) scale(28)`;
-            well.style.opacity = '0';
+            wave.style.transform = `translate(-50%, -50%) scale(60)`;
+            wave.style.opacity = '0';
         });
 
-        // Animation progressive de retour à l'espace plat (résorption du puit)
-        let duration = 600;
+        // Animation de résorption progressive
+        let duration = 800;
         let startTime = performance.now();
 
         function animateResorption(now) {
@@ -450,13 +447,13 @@ document.addEventListener('DOMContentLoaded', () => {
             let progress = elapsed / duration;
 
             if (progress < 1) {
-                let currentScale = scaleVal * (1 - progress);
+                let currentScale = maxScale * Math.cos(progress * Math.PI * 0.5);
                 if (displacement) displacement.setAttribute('scale', currentScale);
                 requestAnimationFrame(animateResorption);
             } else {
                 if (displacement) displacement.setAttribute('scale', 0);
                 bgGrid.style.filter = "none";
-                well.remove();
+                wave.remove();
             }
         }
         requestAnimationFrame(animateResorption);
@@ -466,15 +463,15 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('shake-screen');
         setTimeout(() => {
             document.body.classList.remove('shake-screen');
-        }, 300);
+        }, 350);
     }
 
     function createExplosionConfetti(x, y) {
-        const confettiCount = 18;
+        const confettiCount = 24;
         for (let i = 0; i < confettiCount; i++) {
             const confetti = document.createElement('div');
             const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 85 + 30;
+            const speed = Math.random() * 100 + 40;
             const tx = Math.cos(angle) * speed;
             const ty = Math.sin(angle) * speed;
 
@@ -482,57 +479,70 @@ document.addEventListener('DOMContentLoaded', () => {
                 position: fixed;
                 left: ${x}px;
                 top: ${y}px;
-                width: ${Math.random() * 7 + 3}px;
-                height: ${Math.random() * 7 + 3}px;
+                width: ${Math.random() * 8 + 4}px;
+                height: ${Math.random() * 8 + 4}px;
                 background: ${Math.random() > 0.5 ? '#00f0ff' : (Math.random() > 0.5 ? '#d488ff' : '#ffd700')};
-                box-shadow: 0 0 6px #ffffff;
+                box-shadow: 0 0 10px #ffffff;
                 border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
                 pointer-events: none;
                 z-index: 99999;
-                transition: transform 0.5s cubic-bezier(0.15, 0.85, 0.35, 1.2), opacity 0.5s ease-in;
+                transition: transform 0.6s cubic-bezier(0.15, 0.85, 0.35, 1.2), opacity 0.6s ease-in;
             `;
             document.body.appendChild(confetti);
 
             requestAnimationFrame(() => {
-                confetti.style.transform = `translate(${tx}px, ${ty}px) rotate(${Math.random() * 360}deg) scale(0.3)`;
+                confetti.style.transform = `translate(${tx}px, ${ty}px) rotate(${Math.random() * 360}deg) scale(0.2)`;
                 confetti.style.opacity = '0';
             });
 
-            setTimeout(() => confetti.remove(), 500);
+            setTimeout(() => confetti.remove(), 600);
         }
     }
 
+    // GESTION DU NOMBRE DE FUSÉES (MAX 1 À LA FOIS)
+    let activeRocketCount = 0;
+
     function spawnRocket() {
-        if (document.querySelector('.contact-modal.active, .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, #cvModal.active')) {
+        // Empêcher l'accumulation : max 1 fusée à la fois et pas sur les modales
+        if (activeRocketCount >= 1 || document.querySelector('.contact-modal.active, .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, #cvModal.active')) {
+            scheduleNextRocket();
             return;
         }
 
+        activeRocketCount++;
         const rocket = document.createElement('div');
-        const startX = Math.random() * (window.innerWidth - 100) + 50;
+        const startX = Math.random() * (window.innerWidth - 120) + 60;
         
         rocket.innerHTML = '🚀';
         rocket.style.cssText = `
             position: fixed;
             left: ${startX}px;
-            bottom: -40px;
-            font-size: 1.5rem;
+            bottom: -50px;
+            font-size: 1.6rem;
             pointer-events: auto;
             cursor: none !important;
             z-index: 9997;
             user-select: none;
             transform: rotate(-90deg);
-            filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.8));
+            filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.9));
         `;
         document.body.appendChild(rocket);
 
-        let currentY = -40;
-        const speedY = Math.random() * 1.5 + 1.2;
+        let currentY = -50;
+        const speedY = Math.random() * 1.6 + 1.4;
         let isAlive = true;
+
+        function destroyRocket() {
+            if (!isAlive) return;
+            isAlive = false;
+            rocket.remove();
+            activeRocketCount = Math.max(0, activeRocketCount - 1);
+            scheduleNextRocket();
+        }
 
         rocket.addEventListener('click', (e) => {
             e.stopPropagation();
             if (!isAlive) return;
-            isAlive = false;
 
             const rect = rocket.getBoundingClientRect();
             const cx = rect.left + rect.width / 2;
@@ -542,7 +552,8 @@ document.addEventListener('DOMContentLoaded', () => {
             createExplosionConfetti(cx, cy);
             triggerScreenShake();
             playExplosionSound();
-            rocket.remove();
+            
+            destroyRocket();
         });
 
         function animateRocket() {
@@ -551,9 +562,8 @@ document.addEventListener('DOMContentLoaded', () => {
             currentY += speedY;
             rocket.style.bottom = `${currentY}px`;
 
-            if (currentY > window.innerHeight + 60) {
-                isAlive = false;
-                rocket.remove();
+            if (currentY > window.innerHeight + 80) {
+                destroyRocket();
                 return;
             }
 
@@ -563,15 +573,14 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animateRocket);
     }
 
-    // Fréquence modérée (toutes les 4 à 8 secondes)
     function scheduleNextRocket() {
-        const randomDelay = Math.random() * 4000 + 4000;
+        const randomDelay = Math.random() * 4000 + 4000; // 4 à 8 secondes entre chaque fusée
         setTimeout(() => {
             spawnRocket();
-            scheduleNextRocket();
         }, randomDelay);
     }
 
+    // Lancement du cycle
     setTimeout(scheduleNextRocket, 3000);
 
 });
