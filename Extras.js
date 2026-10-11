@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Onde Spatio-Temporelle avec Petit Anneau Fin
+// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Onde Spatio-Temporelle avec Anneau Multicolore
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // H. DÉFORMATION ESPACE-TEMPS & FIN ANNEAU LUMINEUX
+    // H. DÉFORMATION ESPACE-TEMPS & ANNEAU MULTICOLORE ÉVOLUTIF
     // ==========================================
 
     const svgFilterHTML = `
@@ -408,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const displacement = document.getElementById('spacetimeDisplacement');
         bgGrid.style.filter = "url('#spacetimeDistortion')";
 
-        // Création d'un tout petit anneau fin (bande lumineuse discrète) qui s'étend lentement
+        // Création de l'anneau fin multicolore
         const ring = document.createElement('div');
         ring.style.cssText = `
             position: fixed;
@@ -416,26 +416,19 @@ document.addEventListener('DOMContentLoaded', () => {
             top: ${y}px;
             width: 10px;
             height: 10px;
-            border: 2px solid rgba(0, 240, 255, 0.8);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            border: 3px solid #00f0ff;
+            box-shadow: 0 0 12px #00f0ff;
             border-radius: 50%;
             pointer-events: none;
             z-index: 9996;
             transform: translate(-50%, -50%) scale(1);
             opacity: 1;
-            transition: transform 2.0s cubic-bezier(0.1, 0.4, 0.1, 1), opacity 2.0s ease-out;
         `;
         document.body.appendChild(ring);
-
-        requestAnimationFrame(() => {
-            ring.style.transform = `translate(-50%, -50%) scale(55)`;
-            ring.style.opacity = '0';
-        });
 
         let maxScale = 140;
         if (displacement) displacement.setAttribute('scale', maxScale);
 
-        // Onde lente et progressive (2 secondes)
         let duration = 2000;
         let startTime = performance.now();
 
@@ -444,8 +437,14 @@ document.addEventListener('DOMContentLoaded', () => {
             let progress = elapsed / duration;
 
             if (progress < 1) {
+                // Changement de teinte dynamique au fil de l'élargissement (effet arc-en-ciel/multicolore)
+                const hue = Math.floor(progress * 360 * 1.5) % 360;
+                ring.style.borderColor = `hsl(${hue}, 100%, 65%)`;
+                ring.style.boxShadow = `0 0 15px hsl(${hue}, 100%, 65%)`;
+
                 let currentScale = maxScale * (1 - progress);
                 if (displacement) displacement.setAttribute('scale', currentScale);
+
                 requestAnimationFrame(animateResorption);
             } else {
                 if (displacement) displacement.setAttribute('scale', 0);
@@ -454,6 +453,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         requestAnimationFrame(animateResorption);
+
+        // Animation CSS séparée pour élargir et estomper l'anneau en douceur
+        requestAnimationFrame(() => {
+            ring.style.transition = `transform 2.0s cubic-bezier(0.1, 0.4, 0.1, 1), opacity 2.0s ease-out`;
+            ring.style.transform = `translate(-50%, -50%) scale(65)`;
+            ring.style.opacity = '0';
+        });
     }
 
     function triggerScreenShake() {
