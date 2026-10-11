@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips Agrandis, Modale CV & Onde Spatio-Temporelle Lente
+// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips Agrandis, Modale CV & Onde Spatio-Temporelle Pure
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -387,13 +387,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // H. DÉFORMATION ESPACE-TEMPS (ONDE LENTE & PROGRESSIVE)
+    // H. DÉFORMATION ESPACE-TEMPS (ONDE LENTE ET PURE SANS ANNEAUX)
     // ==========================================
 
     const svgFilterHTML = `
         <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
             <filter id="spacetimeDistortion">
-                <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise" />
+                <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="3" result="noise" />
                 <feDisplacementMap id="spacetimeDisplacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
             </filter>
         </svg>
@@ -408,34 +408,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const displacement = document.getElementById('spacetimeDisplacement');
         bgGrid.style.filter = "url('#spacetimeDistortion')";
 
-        const wave = document.createElement('div');
-        wave.style.cssText = `
-            position: fixed;
-            left: ${x}px;
-            top: ${y}px;
-            width: 20px;
-            height: 20px;
-            border: 4px solid #00f0ff;
-            box-shadow: 0 0 45px #00f0ff, inset 0 0 30px #d488ff;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9996;
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-            transition: transform 1.8s cubic-bezier(0.1, 0.4, 0.1, 1), opacity 1.8s ease-out;
-        `;
-        document.body.appendChild(wave);
-
-        let maxScale = 160;
+        let maxScale = 140;
         if (displacement) displacement.setAttribute('scale', maxScale);
 
-        requestAnimationFrame(() => {
-            wave.style.transform = `translate(-50%, -50%) scale(85)`;
-            wave.style.opacity = '0';
-        });
-
-        // Onde lente : durée augmentée à 1800 ms (1.8 seconde) pour bien voir la propagation
-        let duration = 1800;
+        // Onde lente et progressive (2 secondes) pour voir la grille s'étirer et onduler en douceur
+        let duration = 2000;
         let startTime = performance.now();
 
         function animateResorption(now) {
@@ -449,7 +426,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 if (displacement) displacement.setAttribute('scale', 0);
                 bgGrid.style.filter = "none";
-                wave.remove();
             }
         }
         requestAnimationFrame(animateResorption);
