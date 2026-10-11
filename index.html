@@ -1868,34 +1868,36 @@
             const container = document.createElement('div');
             container.className = 'carousel-container';
 
-            currentGalleryItems.forEach((item, index) => {
-                const galleryItem = document.createElement('div');
-                galleryItem.className = `gallery-item ${index === currentGalleryIndex ? 'active' : ''}`;
+            // On ne récupère et n'affiche QUE l'élément actif actuel (Chargement à la demande)
+            const item = currentGalleryItems[currentGalleryIndex];
 
-                const mediaBox = document.createElement('div');
-                mediaBox.className = 'gallery-media';
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item active';
 
-                const ytUrl = getYouTubeEmbedUrl(item.img);
-                if (ytUrl) {
-                    mediaBox.classList.add('is-video');
-                    mediaBox.innerHTML = `<iframe src="${ytUrl}" allowfullscreen></iframe>`;
-                } else if (item.img.endsWith('.mp4')) {
-                    mediaBox.classList.add('is-video');
-                    mediaBox.innerHTML = `<video src="${item.img}" controls></video>`;
-                } else {
-                    mediaBox.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu'}" onerror="this.src='https://via.placeholder.com/500x300/1a0033/00f0ff?text=IMAGE+INDISPONIBLE'">`;
-                    mediaBox.addEventListener('click', () => openLightbox(index));
-                }
+            const mediaBox = document.createElement('div');
+            mediaBox.className = 'gallery-media';
 
-                const caption = document.createElement('div');
-                caption.className = 'gallery-caption';
-                caption.textContent = item.caption || '';
+            const ytUrl = getYouTubeEmbedUrl(item.img);
+            if (ytUrl) {
+                mediaBox.classList.add('is-video');
+                mediaBox.innerHTML = `<iframe src="${ytUrl}" allowfullscreen></iframe>`;
+            } else if (item.img.endsWith('.mp4')) {
+                mediaBox.classList.add('is-video');
+                mediaBox.innerHTML = `<video src="${item.img}" controls></video>`;
+            } else {
+                mediaBox.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu'}" loading="lazy" onerror="this.src='https://via.placeholder.com/500x300/1a0033/00f0ff?text=IMAGE+INDISPONIBLE'">`;
+                mediaBox.addEventListener('click', () => openLightbox(currentGalleryIndex));
+            }
 
-                galleryItem.appendChild(mediaBox);
-                galleryItem.appendChild(caption);
-                container.appendChild(galleryItem);
-            });
+            const caption = document.createElement('div');
+            caption.className = 'gallery-caption';
+            caption.textContent = item.caption || '';
 
+            galleryItem.appendChild(mediaBox);
+            galleryItem.appendChild(caption);
+            container.appendChild(galleryItem);
+
+            // Contrôles du carrousel (générés uniquement si plusieurs médias)
             if (currentGalleryItems.length > 1) {
                 const controls = document.createElement('div');
                 controls.className = 'carousel-controls';
@@ -1905,7 +1907,7 @@
                 prevBtn.textContent = '◄ Précédent';
                 prevBtn.addEventListener('click', () => {
                     currentGalleryIndex = (currentGalleryIndex - 1 + currentGalleryItems.length) % currentGalleryItems.length;
-                    renderCarousel();
+                    renderCarousel(); // Recharge dynamiquement l'index précédent
                 });
 
                 const counter = document.createElement('span');
@@ -1917,7 +1919,7 @@
                 nextBtn.textContent = 'Suivant ►';
                 nextBtn.addEventListener('click', () => {
                     currentGalleryIndex = (currentGalleryIndex + 1) % currentGalleryItems.length;
-                    renderCarousel();
+                    renderCarousel(); // Recharge dynamiquement l'index suivant
                 });
 
                 controls.appendChild(prevBtn);
