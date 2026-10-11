@@ -155,8 +155,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             vidLink.innerHTML = `
                 <img src="${thumbnailUrl}" alt="${vid.name}" style="width: 64px; height: 38px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(0, 240, 255, 0.4);" onerror="this.style.display='none'">
-                <span style="flex-grow: 1; line-height: 1.2;">${vid.name}</span>
+                <span class="video-title-text" style="flex-grow: 1; line-height: 1.2;">${vid.name}</span>
             `;
+
+            // RÉCUPÉRATION AUTOMATIQUE DU TITRE OFFICIEL VIA YOUTUBE oEMBED
+            if (vid.url) {
+                const cleanUrl = vid.url.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
+                fetch(`https://noembed.com/embed?url=${encodeURIComponent(cleanUrl)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.title) {
+                            const titleSpan = vidLink.querySelector('.video-title-text');
+                            if (titleSpan) titleSpan.textContent = data.title;
+                        }
+                    })
+                    .catch(() => {}); // En cas d'erreur réseau, garde le nom par défaut
+            }
 
             vidLink.addEventListener('mouseenter', () => {
                 vidLink.style.background = 'rgba(0, 240, 255, 0.15)';
