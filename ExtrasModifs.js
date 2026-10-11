@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS-MODIFS.JS - Version corrigée et complète
+// EXTRAS-MODIFS.JS - Version corrigée et stable
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -36,10 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
             max-width: 650px;
         }
 
-        /* Cache l'ancienne barre de nav du bas du stage */
         .stage-nav-bar { display: none !important; }
 
-        /* Flèches du stage sur les côtés au milieu de l'écran */
         .stage-nav-arrow {
             position: absolute;
             top: 50%;
@@ -68,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .stage-prev-arrow { left: 20px; }
         .stage-next-arrow { right: 20px; }
 
-        /* Flèches de navigation de projet dans la modale */
         .modal-project-nav-btn {
             position: absolute;
             top: 50%;
@@ -103,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(modifsStyle);
 
-
     // 2. Création de la page intermédiaire de sélection des projets
     const projectMenuSelection = document.createElement('div');
     projectMenuSelection.id = 'projectMenuSelection';
@@ -117,16 +113,15 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.body.appendChild(projectMenuSelection);
 
-    // Interception du bouton "PROJETS" du menu principal
+    // Interception propre du bouton "PROJETS" du menu principal
     const openProjectsBtn = document.getElementById('openProjectsBtn');
     const mainMenu = document.getElementById('mainMenu');
     const titleContainer = document.getElementById('titleContainer');
+    const projectsStage = document.getElementById('projectsStage');
 
     if (openProjectsBtn) {
-        const newOpenBtn = openProjectsBtn.cloneNode(true);
-        openProjectsBtn.parentNode.replaceChild(newOpenBtn, openProjectsBtn);
-
-        newOpenBtn.addEventListener('click', () => {
+        openProjectsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             document.body.classList.add('curtains-closed');
             setTimeout(() => {
                 if (mainMenu) mainMenu.classList.add('hidden');
@@ -137,37 +132,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    document.getElementById('backToMainFromSelectBtn').addEventListener('click', () => {
-        document.body.classList.add('curtains-closed');
-        setTimeout(() => {
-            projectMenuSelection.classList.remove('active');
-            if (mainMenu) mainMenu.classList.remove('hidden');
-            if (titleContainer) titleContainer.classList.remove('hidden');
-            setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
-        }, 600);
-    });
+    const backBtnSelect = document.getElementById('backToMainFromSelectBtn');
+    if (backBtnSelect) {
+        backBtnSelect.addEventListener('click', () => {
+            document.body.classList.add('curtains-closed');
+            setTimeout(() => {
+                projectMenuSelection.classList.remove('active');
+                if (mainMenu) mainMenu.classList.remove('hidden');
+                if (titleContainer) titleContainer.classList.remove('hidden');
+                setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
+            }, 600);
+        });
+    }
 
-    const projectsStage = document.getElementById('projectsStage');
-    
     function openDomainStageDirect(domainId) {
         if (typeof domains === 'undefined') return;
         
         const index = domains.findIndex(d => d.id === domainId);
         if (index !== -1) {
-            window.currentDomainIndex = index;
-            if (typeof currentDomainIndex !== 'undefined') currentDomainIndex = index;
+            currentDomainIndex = index;
         }
 
         document.body.classList.add('curtains-closed');
         setTimeout(() => {
             projectMenuSelection.classList.remove('active');
-            if (projectsStage) projectsStage.classList.add('active');
+            if (projectsStage) projectsStage.classList.add('ask-visible', 'active');
 
-            // Appel sécurisé de la fonction updateStage globale
+            // Appel direct de la fonction updateStage globale du fichier HTML
             if (typeof window.updateStage === 'function') {
                 window.updateStage();
-            } else if (typeof updateStage === 'function') {
-                updateStage();
             }
 
             setTimeout(() => {
@@ -176,16 +169,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 600);
     }
 
-    document.getElementById('selectGdProgBtn').addEventListener('click', () => openDomainStageDirect('gd_prog'));
-    document.getElementById('selectLdBtn').addEventListener('click', () => openDomainStageDirect('level_design'));
-    document.getElementById('selectDocsBtn').addEventListener('click', () => openDomainStageDirect('documents'));
+    const btnGd = document.getElementById('selectGdProgBtn');
+    const btnLd = document.getElementById('selectLdBtn');
+    const btnDocs = document.getElementById('selectDocsBtn');
 
+    if (btnGd) btnGd.addEventListener('click', () => openDomainStageDirect('gd_prog'));
+    if (btnLd) btnLd.addEventListener('click', () => openDomainStageDirect('level_design'));
+    if (btnDocs) btnDocs.addEventListener('click', () => openDomainStageDirect('documents'));
 
-    // 3. Repositionnement des flèches du stage au milieu de l'écran
+    // 3. Gestion des flèches latérales du stage
     if (projectsStage) {
-        const oldNavBar = projectsStage.querySelector('.stage-nav-bar');
-        if (oldNavBar) oldNavBar.remove();
-
         const prevStageBtn = document.createElement('button');
         prevStageBtn.className = 'stage-nav-arrow stage-prev-arrow';
         prevStageBtn.innerHTML = '◄';
@@ -198,99 +191,18 @@ document.addEventListener('DOMContentLoaded', () => {
         projectsStage.appendChild(nextStageBtn);
 
         prevStageBtn.addEventListener('click', () => {
-            if (typeof domains !== 'undefined') {
-                let currIdx = typeof currentDomainIndex !== 'undefined' ? currentDomainIndex : (window.currentDomainIndex || 0);
-                currIdx = (currIdx - 1 + domains.length) % domains.length;
-                currentDomainIndex = currIdx;
-                window.currentDomainIndex = currIdx;
-                if (typeof window.updateStage === 'function') window.updateStage();
-                else if (typeof updateStage === 'function') updateStage();
+            if (typeof domains !== 'undefined' && typeof window.updateStage === 'function') {
+                currentDomainIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
+                window.updateStage();
             }
         });
 
         nextStageBtn.addEventListener('click', () => {
-            if (typeof domains !== 'undefined') {
-                let currIdx = typeof currentDomainIndex !== 'undefined' ? currentDomainIndex : (window.currentDomainIndex || 0);
-                currIdx = (currIdx + 1) % domains.length;
-                currentDomainIndex = currIdx;
-                window.currentDomainIndex = currIdx;
-                if (typeof window.updateStage === 'function') window.updateStage();
-                else if (typeof updateStage === 'function') updateStage();
+            if (typeof domains !== 'undefined' && typeof window.updateStage === 'function') {
+                currentDomainIndex = (currentDomainIndex + 1) % domains.length;
+                window.updateStage();
             }
         });
-    }
-
-
-    // 4. Flèches de navigation entre projets à l'intérieur de la modale
-    const projectDetailModal = document.getElementById('projectDetailModal');
-    if (projectDetailModal) {
-        const modalContainer = projectDetailModal.querySelector('.project-modal-container');
-        if (modalContainer) {
-            modalContainer.style.position = 'relative';
-
-            const prevProjBtn = document.createElement('button');
-            prevProjBtn.className = 'modal-project-nav-btn modal-prev-project';
-            prevProjBtn.innerHTML = '◄';
-
-            const nextProjBtn = document.createElement('button');
-            nextProjBtn.className = 'modal-project-nav-btn modal-next-project';
-            nextProjBtn.innerHTML = '►';
-
-            modalContainer.appendChild(prevProjBtn);
-            modalContainer.appendChild(nextProjBtn);
-
-            let globalProjectIndex = 0;
-
-            document.addEventListener('click', (e) => {
-                const bubble = e.target.closest('.project-bubble');
-                if (bubble && typeof domains !== 'undefined') {
-                    const grid = bubble.parentNode;
-                    const bubbles = Array.from(grid.children);
-                    const localIdx = bubbles.indexOf(bubble);
-                    if (localIdx !== -1) {
-                        globalProjectIndex = localIdx;
-                    }
-                }
-            });
-
-            function navigateProjectModal(direction) {
-                if (typeof domains === 'undefined' || typeof openProjectModal !== 'function') return;
-                
-                let currDomainIdx = typeof currentDomainIndex !== 'undefined' ? currentDomainIndex : (window.currentDomainIndex || 0);
-                const currentDomain = domains[currDomainIdx];
-                globalProjectIndex += direction;
-
-                if (globalProjectIndex < 0) {
-                    currDomainIdx = (currDomainIdx - 1 + domains.length) % domains.length;
-                    currentDomainIndex = currDomainIdx;
-                    window.currentDomainIndex = currDomainIdx;
-                    const newDomain = domains[currDomainIdx];
-                    globalProjectIndex = newDomain.projects.length - 1;
-                    if (typeof window.updateStage === 'function') window.updateStage();
-                    else if (typeof updateStage === 'function') updateStage();
-                } else if (globalProjectIndex >= currentDomain.projects.length) {
-                    currDomainIdx = (currDomainIdx + 1) % domains.length;
-                    currentDomainIndex = currDomainIdx;
-                    window.currentDomainIndex = currDomainIdx;
-                    globalProjectIndex = 0;
-                    if (typeof window.updateStage === 'function') window.updateStage();
-                    else if (typeof updateStage === 'function') updateStage();
-                }
-
-                const nextProj = domains[currentDomainIndex].projects[globalProjectIndex];
-                openProjectModal(nextProj);
-            }
-
-            prevProjBtn.addEventListener('click', () => navigateProjectModal(-1));
-            nextProjBtn.addEventListener('click', () => navigateProjectModal(1));
-
-            window.addEventListener('keydown', (e) => {
-                if (projectDetailModal.classList.contains('active')) {
-                    if (e.key === 'ArrowLeft') navigateProjectModal(-1);
-                    if (e.key === 'ArrowRight') navigateProjectModal(1);
-                }
-            });
-        }
     }
 
 });
