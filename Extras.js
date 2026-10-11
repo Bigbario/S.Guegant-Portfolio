@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes & Tooltips fixes
+// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes & Tooltips externes
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -220,15 +220,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // F. EFFETS DE SURVOL (PAILLETTES & POPUP HAUT-DROITE)
+    // F. EFFETS DE SURVOL (PAILLETTES & POPUP EXTERNE HAUT-DROITE)
     // ==========================================
 
-    // Données des infobulles par bouton
     const tooltipsData = [
         { selector: '.btn-projets', text: "Liste de quelques projets que j'ai pu réaliser" },
         { selector: '.btn-demo', text: "Vidéo de présentation de certains de mes projets." },
         { selector: '.btn-about', text: "Quelques informations sur moi" }
     ];
+
+    // Création d'une infobulle unique globale placée directement dans le body (hors des boutons)
+    const globalTooltip = document.createElement('div');
+    globalTooltip.style.cssText = `
+        position: fixed;
+        background: rgba(15, 3, 35, 0.95);
+        border: 1px solid #00f0ff;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), inset 0 0 10px rgba(180, 50, 255, 0.3);
+        color: #e0b0ff;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.78rem;
+        padding: 8px 12px;
+        border-radius: 6px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        transform: scale(0.9);
+        white-space: nowrap;
+        z-index: 99999;
+        backdrop-filter: blur(4px);
+    `;
+    document.body.appendChild(globalTooltip);
 
     // Générateur de paillettes (Sparkles)
     function createSparkle(x, y) {
@@ -251,61 +272,38 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => sparkle.remove(), 600);
     }
 
-    // CSS dynamique pour l'animation des paillettes et la position relative des boutons
-    const customStyle = document.createElement('style');
-    customStyle.innerHTML = `
+    // CSS dynamique pour l'animation des paillettes
+    const sparkleStyle = document.createElement('style');
+    sparkleStyle.innerHTML = `
         @keyframes sparkleAnim {
             0% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
             100% { opacity: 0; transform: translate(calc(-50% + ${(Math.random() - 0.5) * 60}px), calc(-50% + ${(Math.random() - 0.5) * 60}px)) scale(0) rotate(180deg); }
         }
-        .menu-btn {
-            position: relative !important;
-        }
     `;
-    document.head.appendChild(customStyle);
+    document.head.appendChild(sparkleStyle);
 
-    // Initialisation des infobulles et des effets de survol
+    // Gestion du survol pour chaque bouton
     tooltipsData.forEach(item => {
         const btn = document.querySelector(item.selector);
         if (!btn) return;
 
-        // Création de l'infobulle attachée à l'élément
-        const tooltip = document.createElement('div');
-        tooltip.textContent = item.text;
-        tooltip.style.cssText = `
-            position: absolute;
-            top: 0;
-            right: 0;
-            transform: translate(15px, -50%) scale(0.9);
-            background: rgba(15, 3, 35, 0.95);
-            border: 1px solid #00f0ff;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), inset 0 0 10px rgba(180, 50, 255, 0.3);
-            color: #e0b0ff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.78rem;
-            padding: 8px 12px;
-            border-radius: 6px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            white-space: nowrap;
-            z-index: 100;
-            backdrop-filter: blur(4px);
-        `;
-        btn.appendChild(tooltip);
-
         let sparkleInterval = null;
 
         btn.addEventListener('mouseenter', () => {
-            // Afficher l'infobulle en haut à droite
-            tooltip.style.opacity = '1';
-            tooltip.style.transform = 'translate(15px, -50%) scale(1)';
+            globalTooltip.textContent = item.text;
+            globalTooltip.style.opacity = '1';
+            globalTooltip.style.transform = 'scale(1)';
 
-            // Générer des paillettes en continu autour du bouton
+            // Positionner l'infobulle exactement en haut à droite du bouton
+            const rect = btn.getBoundingClientRect();
+            globalTooltip.style.left = `${rect.right + 10}px`;
+            globalTooltip.style.top = `${rect.top}px`;
+
+            // Lancer les paillettes
             sparkleInterval = setInterval(() => {
-                const rect = btn.getBoundingClientRect();
-                const rx = rect.left + Math.random() * rect.width;
-                const ry = rect.top + Math.random() * rect.height;
+                const r = btn.getBoundingClientRect();
+                const rx = r.left + Math.random() * r.width;
+                const ry = r.top + Math.random() * r.height;
                 createSparkle(rx, ry);
             }, 60);
         });
@@ -317,10 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         btn.addEventListener('mouseleave', () => {
-            // Masquer l'infobulle
-            tooltip.style.opacity = '0';
-            tooltip.style.transform = 'translate(15px, -50%) scale(0.9)';
-
+            globalTooltip.style.opacity = '0';
+            globalTooltip.style.transform = 'scale(0.9)';
             if (sparkleInterval) clearInterval(sparkleInterval);
         });
     });
