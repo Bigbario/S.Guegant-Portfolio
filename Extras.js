@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         align-items: center;
     `;
     
-    // 1. Bouton Vidéos avec Liste Déroulante par Thème et Miniatures
+    // 1. Bouton Vidéos avec Liste Déroulante par Thème
     const videoDropdownWrapper = document.createElement('div');
     videoDropdownWrapper.style.cssText = `
         position: relative;
@@ -47,51 +47,52 @@ document.addEventListener('DOMContentLoaded', () => {
         backdrop-filter: blur(6px);
     `;
 
-    // Définition des 3 thèmes avec toutes les vidéos et leurs vrais noms
+    // Définition propre des 3 thèmes avec tous les liens nettoyés et noms personnalisés
     const videoThemes = [
         {
             title: "🎞️ Trailers",
             videos: [
                 { name: "Echoes of Above - Trailer", url: "https://www.youtube.com/watch?v=EFDunIAB8hs" },
-                { name: "Trailer 2", url: "https://youtu.be/P_WHjH_yi3I" },
+                { name: "Echoes of Above - Teaser", url: "https://youtu.be/P_WHjH_yi3I" },
                 { name: "The Unseelie Court - Trailer", url: "https://youtu.be/hk353Cy4Huw" },
                 { name: "FlipIt - Trailer", url: "https://youtu.be/M2mBmCmd5LU" },
-                { name: "Trailer 5", url: "https://youtu.be/vQxWOf6QIAw" },
-                { name: "Trailer 6", url: "https://youtu.be/nb3zCLr5TnM" }
+                { name: "Project Trailer 5", url: "https://youtu.be/vQxWOf6QIAw" },
+                { name: "Project Trailer 6", url: "https://youtu.be/nb3zCLr5TnM" }
             ]
         },
         {
             title: "🗺️ RPG Maker Map Timelapse",
             videos: [
-                { name: "RPG Maker - Timelapse 1", url: "https://youtu.be/a2bUaBWah_A" },
-                { name: "RPG Maker - Timelapse 2", url: "https://youtu.be/3ZlE5SEOLiE" },
-                { name: "RPG Maker - Timelapse 3", url: "https://youtu.be/cjRbIqoNsZo" },
+                { name: "RPG Maker - Map Timelapse #1", url: "https://youtu.be/a2bUaBWah_A" },
+                { name: "RPG Maker - Map Timelapse #2", url: "https://youtu.be/3ZlE5SEOLiE" },
+                { name: "RPG Maker - Map Timelapse #3", url: "https://youtu.be/cjRbIqoNsZo" },
                 { name: "RPG Maker MV - Map Timelapse", url: "https://youtu.be/MGyzw5mewII" },
-                { name: "RPG Maker - Timelapse 5", url: "https://youtu.be/zHT0c7xg9MQ" },
-                { name: "RPG Maker - Timelapse 6", url: "https://youtu.be/7yKQ_D_bSx8" },
-                { name: "RPG Maker - Timelapse 7", url: "https://youtu.be/UlvPPSAcnoE" },
-                { name: "RPG Maker - Timelapse 8", url: "https://youtu.be/27OE5Dp3D14" }
+                { name: "RPG Maker - Map Timelapse #5", url: "https://youtu.be/zHT0c7xg9MQ" },
+                { name: "RPG Maker - Map Timelapse #6", url: "https://youtu.be/7yKQ_D_bSx8" },
+                { name: "RPG Maker - Map Timelapse #7", url: "https://youtu.be/UlvPPSAcnoE" },
+                { name: "RPG Maker - Map Timelapse #8", url: "https://youtu.be/27OE5Dp3D14" }
             ]
         },
         {
             title: "🎮 Walkthrough & Others",
             videos: [
-                { name: "Walkthrough 1", url: "https://youtu.be/ATCY-amVKQc" },
-                { name: "Walkthrough 2", url: "https://youtu.be/y1OSUefHp_4" },
-                { name: "Walkthrough 3", url: "https://youtu.be/WHcZmxElsiw" },
+                { name: "Gameplay Walkthrough #1", url: "https://youtu.be/ATCY-amVKQc" },
+                { name: "Gameplay Walkthrough #2", url: "https://youtu.be/y1OSUefHp_4" },
+                { name: "Gameplay Walkthrough #3", url: "https://youtu.be/WHcZmxElsiw" },
                 { name: "3D Blockout - Walkthrough", url: "https://youtu.be/HWfIMcgbHo0" },
                 { name: "Portal Level - Walkthrough", url: "https://youtu.be/0MizN12rNUk" }
             ]
         }
     ];
 
-    // Fonctions utilitaires YouTube
+    // Extraction propre de l'ID YouTube (gestion des caractères cachés/espaces)
     function getYouTubeVideoId(url) {
         if (!url) return "";
-        if (url.includes('youtu.be/')) {
-            return url.split('youtu.be/')[1].split('?')[0];
-        } else if (url.includes('watch?v=')) {
-            return url.split('v=')[1].split('&')[0];
+        const cleanUrl = url.replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
+        if (cleanUrl.includes('youtu.be/')) {
+            return cleanUrl.split('youtu.be/')[1].split('?')[0].split('&')[0];
+        } else if (cleanUrl.includes('watch?v=')) {
+            return cleanUrl.split('v=')[1].split('&')[0];
         }
         return "";
     }
@@ -103,12 +104,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     videoThemes.forEach(theme => {
         const themeContainer = document.createElement('div');
+        themeContainer.className = "video-theme-block";
         themeContainer.style.cssText = `
             border-bottom: 1px solid rgba(0, 240, 255, 0.25);
         `;
 
         const themeHeader = document.createElement('div');
-        themeHeader.textContent = theme.title;
         themeHeader.style.cssText = `
             padding: 12px 16px;
             color: #00f0ff;
@@ -120,10 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            user-select: none;
         `;
-        themeHeader.innerHTML += ` <span style="font-size: 0.7rem;">▶</span>`;
+        themeHeader.innerHTML = `<span>${theme.title}</span> <span class="arrow-icon" style="font-size: 0.7rem; transition: transform 0.2s;">▶</span>`;
 
         const subList = document.createElement('div');
+        subList.className = "video-sublist";
         subList.style.cssText = `
             display: none;
             background: rgba(10, 2, 25, 0.96);
@@ -172,12 +175,19 @@ document.addEventListener('DOMContentLoaded', () => {
             subList.appendChild(vidLink);
         });
 
-        // Dérouler/Enrouler les sous-catégories au clic
+        // Correction stricte de la bascule d'affichage (accordéon)
         themeHeader.addEventListener('click', (e) => {
             e.stopPropagation();
             const isOpen = subList.style.display === 'block';
-            dropdownMenu.querySelectorAll('div > div:nth-child(2)').forEach(sl => sl.style.display = 'none');
-            subList.style.display = isOpen ? 'none' : 'block';
+            
+            // Ferme toutes les sous-listes spécifiquement via leur classe
+            dropdownMenu.querySelectorAll('.video-sublist').forEach(sl => sl.style.display = 'none');
+            dropdownMenu.querySelectorAll('.arrow-icon').forEach(arrow => arrow.style.transform = 'rotate(0deg)');
+
+            if (!isOpen) {
+                subList.style.display = 'block';
+                themeHeader.querySelector('.arrow-icon').style.transform = 'rotate(90deg)';
+            }
         });
 
         themeContainer.appendChild(themeHeader);
@@ -200,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdownMenu.style.display = 'none';
     });
 
-    // Fonction pour ouvrir la modale vidéo dédiée
+    // Fonction pour ouvrir la modale vidéo
     function openCustomVideoModal(embedUrl) {
         let modal = document.getElementById('extraVideoModal');
         if (!modal) {
