@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS-MODIFS.JS - Ajouts ciblés (Sélection, Flèches Stage & Nav Projets Modale)
+// EXTRAS-MODIFS.JS - Version corrigée et complète
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -148,19 +148,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const projectsStage = document.getElementById('projectsStage');
+    
     function openDomainStageDirect(domainId) {
         if (typeof domains === 'undefined') return;
+        
         const index = domains.findIndex(d => d.id === domainId);
-        if (index !== -1 && typeof currentDomainIndex !== 'undefined') {
-            currentDomainIndex = index;
+        if (index !== -1) {
+            window.currentDomainIndex = index;
+            if (typeof currentDomainIndex !== 'undefined') currentDomainIndex = index;
         }
 
         document.body.classList.add('curtains-closed');
         setTimeout(() => {
             projectMenuSelection.classList.remove('active');
             if (projectsStage) projectsStage.classList.add('active');
-            if (typeof updateStage === 'function') updateStage();
-            setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
+
+            // Appel sécurisé de la fonction updateStage globale
+            if (typeof window.updateStage === 'function') {
+                window.updateStage();
+            } else if (typeof updateStage === 'function') {
+                updateStage();
+            }
+
+            setTimeout(() => {
+                document.body.classList.remove('curtains-closed');
+            }, 300);
         }, 600);
     }
 
@@ -186,16 +198,24 @@ document.addEventListener('DOMContentLoaded', () => {
         projectsStage.appendChild(nextStageBtn);
 
         prevStageBtn.addEventListener('click', () => {
-            if (typeof currentDomainIndex !== 'undefined' && typeof domains !== 'undefined' && typeof updateStage === 'function') {
-                currentDomainIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
-                updateStage();
+            if (typeof domains !== 'undefined') {
+                let currIdx = typeof currentDomainIndex !== 'undefined' ? currentDomainIndex : (window.currentDomainIndex || 0);
+                currIdx = (currIdx - 1 + domains.length) % domains.length;
+                currentDomainIndex = currIdx;
+                window.currentDomainIndex = currIdx;
+                if (typeof window.updateStage === 'function') window.updateStage();
+                else if (typeof updateStage === 'function') updateStage();
             }
         });
 
         nextStageBtn.addEventListener('click', () => {
-            if (typeof currentDomainIndex !== 'undefined' && typeof domains !== 'undefined' && typeof updateStage === 'function') {
-                currentDomainIndex = (currentDomainIndex + 1) % domains.length;
-                updateStage();
+            if (typeof domains !== 'undefined') {
+                let currIdx = typeof currentDomainIndex !== 'undefined' ? currentDomainIndex : (window.currentDomainIndex || 0);
+                currIdx = (currIdx + 1) % domains.length;
+                currentDomainIndex = currIdx;
+                window.currentDomainIndex = currIdx;
+                if (typeof window.updateStage === 'function') window.updateStage();
+                else if (typeof updateStage === 'function') updateStage();
             }
         });
     }
@@ -223,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.addEventListener('click', (e) => {
                 const bubble = e.target.closest('.project-bubble');
-                if (bubble && typeof domains !== 'undefined' && typeof currentDomainIndex !== 'undefined') {
+                if (bubble && typeof domains !== 'undefined') {
                     const grid = bubble.parentNode;
                     const bubbles = Array.from(grid.children);
                     const localIdx = bubbles.indexOf(bubble);
@@ -234,20 +254,27 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             function navigateProjectModal(direction) {
-                if (typeof domains === 'undefined' || typeof currentDomainIndex === 'undefined' || typeof openProjectModal !== 'function') return;
+                if (typeof domains === 'undefined' || typeof openProjectModal !== 'function') return;
                 
-                const currentDomain = domains[currentDomainIndex];
+                let currDomainIdx = typeof currentDomainIndex !== 'undefined' ? currentDomainIndex : (window.currentDomainIndex || 0);
+                const currentDomain = domains[currDomainIdx];
                 globalProjectIndex += direction;
 
                 if (globalProjectIndex < 0) {
-                    currentDomainIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
-                    const newDomain = domains[currentDomainIndex];
+                    currDomainIdx = (currDomainIdx - 1 + domains.length) % domains.length;
+                    currentDomainIndex = currDomainIdx;
+                    window.currentDomainIndex = currDomainIdx;
+                    const newDomain = domains[currDomainIdx];
                     globalProjectIndex = newDomain.projects.length - 1;
-                    if (typeof updateStage === 'function') updateStage();
+                    if (typeof window.updateStage === 'function') window.updateStage();
+                    else if (typeof updateStage === 'function') updateStage();
                 } else if (globalProjectIndex >= currentDomain.projects.length) {
-                    currentDomainIndex = (currentDomainIndex + 1) % domains.length;
+                    currDomainIdx = (currDomainIdx + 1) % domains.length;
+                    currentDomainIndex = currDomainIdx;
+                    window.currentDomainIndex = currDomainIdx;
                     globalProjectIndex = 0;
-                    if (typeof updateStage === 'function') updateStage();
+                    if (typeof window.updateStage === 'function') window.updateStage();
+                    else if (typeof updateStage === 'function') updateStage();
                 }
 
                 const nextProj = domains[currentDomainIndex].projects[globalProjectIndex];
