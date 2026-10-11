@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Fusées Interactives
+// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Fusées Droites avec Onde
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         align-items: center;
     `;
     
-    // Bouton CV (transformé pour ouvrir la modale PDF)
+    // Bouton CV
     const cvBtn = document.createElement('button');
     cvBtn.className = "contact-top-btn";
     cvBtn.style.position = "static";
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // E. RACCOURCI CLAVIER (ÉCHAP)
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            const activeModals = document.querySelectorAll('.video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active, #cvModal');
+            const activeModals = document.querySelectorAll('.video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active, #cvModal.active');
             activeModals.forEach(modal => {
                 modal.classList.remove('active');
                 if (modal.id === 'videoModal') {
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // H. FUSÉES ALÉATOIRES PÉRIODIQUES & EXPLOSIONS
+    // H. FUSÉES DROITES, ONDES DE COULEUR & EXPLOSIONS
     // ==========================================
 
     function triggerScreenShake() {
@@ -374,12 +374,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
     }
 
+    // Effet d'onde de couleur qui se propage du point d'explosion vers les côtés
+    function createColorWave(x, y) {
+        const wave = document.createElement('div');
+        wave.style.cssText = `
+            position: fixed;
+            left: ${x}px;
+            top: ${y}px;
+            width: 10px;
+            height: 10px;
+            border: 3px solid #00f0ff;
+            box-shadow: 0 0 20px #00f0ff, inset 0 0 10px #d488ff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            transition: transform 0.6s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 0.6s ease-out;
+        `;
+        document.body.appendChild(wave);
+
+        // Calculer la taille nécessaire pour couvrir l'écran de part et d'autre
+        const maxDist = Math.max(window.innerWidth, window.innerHeight) * 1.5;
+
+        requestAnimationFrame(() => {
+            wave.style.transform = `translate(-50%, -50%) scale(${maxDist / 5})`;
+            wave.style.opacity = '0';
+        });
+
+        setTimeout(() => wave.remove(), 600);
+    }
+
     function createExplosionConfetti(x, y) {
-        const confettiCount = 18;
+        const confettiCount = 20;
         for (let i = 0; i < confettiCount; i++) {
             const confetti = document.createElement('div');
             const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 80 + 30;
+            const speed = Math.random() * 90 + 35;
             const tx = Math.cos(angle) * speed;
             const ty = Math.sin(angle) * speed;
 
@@ -408,7 +439,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function spawnRocket() {
-        // Ne spawn pas si une modale est ouverte pour éviter les interférences visuelles
         if (document.querySelector('.contact-modal.active, .video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, #cvModal.active')) {
             return;
         }
@@ -417,37 +447,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const startX = Math.random() * (window.innerWidth - 100) + 50;
         
         rocket.innerHTML = '🚀';
+        // Rotation -90deg pour que l'emoji fusée pointe bien vers le haut
         rocket.style.cssText = `
             position: fixed;
             left: ${startX}px;
             bottom: -40px;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             pointer-events: auto;
             cursor: pointer;
-            z-index: 9998;
+            z-index: 9997;
             user-select: none;
-            transition: transform 0.1s;
+            transform: rotate(-90deg);
             filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.8));
         `;
         document.body.appendChild(rocket);
 
         let currentY = -40;
-        let currentX = startX;
-        const speedY = Math.random() * 1.5 + 1.2; // Vitesse de montée
-        const wobbleSpeed = Math.random() * 0.03 + 0.01;
-        const wobbleAmplitude = Math.random() * 30 + 10;
-        let startTime = Date.now();
-
+        const speedY = Math.random() * 1.8 + 1.5; // Vitesse de montée bien droite
         let isAlive = true;
 
-        // Clic sur la fusée en vol -> Explosion + Shake
         rocket.addEventListener('click', (e) => {
             e.stopPropagation();
             if (!isAlive) return;
             isAlive = false;
 
             const rect = rocket.getBoundingClientRect();
-            createExplosionConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+
+            createColorWave(cx, cy);
+            createExplosionConfetti(cx, cy);
             triggerScreenShake();
             playUiBeep();
             rocket.remove();
@@ -456,14 +485,9 @@ document.addEventListener('DOMContentLoaded', () => {
         function animateRocket() {
             if (!isAlive) return;
 
-            let elapsed = (Date.now() - startTime) / 1000;
             currentY += speedY;
-            let currentXPos = currentX + Math.sin(elapsed * wobbleAmplitude * 0.1) * 15;
-
             rocket.style.bottom = `${currentY}px`;
-            rocket.style.left = `${currentXPos}px`;
 
-            // Si elle sort de l'écran par le haut
             if (currentY > window.innerHeight + 60) {
                 isAlive = false;
                 rocket.remove();
@@ -476,16 +500,15 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animateRocket);
     }
 
-    // Lancement périodique d'une fusée toutes les 4 à 8 secondes (discret et aléatoire)
+    // Apparition plus régulière (toutes les 2 à 4 secondes)
     function scheduleNextRocket() {
-        const randomDelay = Math.random() * 4000 + 4000; // Entre 4s et 8s
+        const randomDelay = Math.random() * 2000 + 2000; // Entre 2s et 4s
         setTimeout(() => {
             spawnRocket();
             scheduleNextRocket();
         }, randomDelay);
     }
 
-    // Démarrer le cycle des fusées après 3 secondes
-    setTimeout(scheduleNextRocket, 3000);
+    setTimeout(scheduleNextRocket, 2500);
 
 });
