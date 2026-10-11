@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes & Tooltips externes
+// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Paillettes, Tooltips & Modale CV
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,10 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         align-items: center;
     `;
     
-    // Bouton CV
-    const cvBtn = document.createElement('a');
-    cvBtn.href = "https://drive.google.com/file/d/1NDAKqytWr7U1Gritd7IpsqdXnHcfKrBD/view?usp=sharing";
-    cvBtn.target = "_blank";
+    // Bouton CV (transformé pour ouvrir la modale PDF)
+    const cvBtn = document.createElement('button');
     cvBtn.className = "contact-top-btn";
     cvBtn.style.position = "static";
     cvBtn.textContent = "📄 MON CV";
@@ -35,7 +33,48 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(topBarContainer);
 
 
-    // B. CRÉATION DE LA MODALE DE CONTACT FORMSPREE
+    // B. CRÉATION DE LA MODALE DU CV
+    const cvModalOverlay = document.createElement('div');
+    cvModalOverlay.className = 'contact-modal'; // Utilise le style des modales globales
+    cvModalOverlay.id = 'cvModal';
+    cvModalOverlay.innerHTML = `
+        <div class="contact-modal-container" style="width: 85vw; max-width: 900px; height: 85vh; display: flex; flex-direction: column;">
+            <button class="close-btn" id="closeCvModalBtn">FERMER [X]</button>
+            <h2 style="font-family: 'Orbitron', sans-serif; color: #00f0ff; font-size: 1.8rem; border-bottom: 2px solid rgba(0, 240, 255, 0.4); padding-bottom: 10px; margin-bottom: 15px;">MON CV - SAMUEL GUEGANT</h2>
+            
+            <div style="flex-grow: 1; width: 100%; border: 1px solid rgba(0, 240, 255, 0.5); border-radius: 8px; overflow: hidden; background: #000;">
+                <embed src="Guegant_Samuel_CV.pdf" type="application/pdf" width="100%" height="100%">
+            </div>
+
+            <div style="margin-top: 15px; display: flex; justify-content: flex-end;">
+                <a href="Guegant_Samuel_CV.pdf" download="Guegant_Samuel_CV.pdf" class="submit-btn" style="text-decoration: none; text-align: center; padding: 10px 20px; margin-top: 0;">
+                    📥 TÉLÉCHARGER LE CV ➔
+                </a>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(cvModalOverlay);
+
+    // Ouverture / Fermeture de la modale CV
+    cvBtn.addEventListener('click', () => {
+        cvModalOverlay.classList.add('active');
+    });
+
+    const closeCvBtn = document.getElementById('closeCvModalBtn');
+    if (closeCvBtn) {
+        closeCvBtn.addEventListener('click', () => {
+            cvModalOverlay.classList.remove('active');
+        });
+    }
+
+    cvModalOverlay.addEventListener('click', (e) => {
+        if (!e.target.closest('.contact-modal-container')) {
+            cvModalOverlay.classList.remove('active');
+        }
+    });
+
+
+    // C. CRÉATION DE LA MODALE DE CONTACT FORMSPREE
     const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnpjvbgp";
 
     const modalHTML = `
@@ -66,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalOverlay.innerHTML = modalHTML;
     document.body.appendChild(modalOverlay);
 
-    // Ouverture / Fermeture de la modale
+    // Ouverture / Fermeture de la modale Contact
     contactBtn.addEventListener('click', () => {
         modalOverlay.classList.add('active');
     });
@@ -85,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // C. SÉLECTEUR DE COULEUR DE FOND
+    // D. SÉLECTEUR DE COULEUR DE FOND
     const colorPickerContainer = document.createElement('div');
     colorPickerContainer.id = 'themePickerWidget';
     colorPickerContainer.style.cssText = `
@@ -173,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // D. RACCOURCI CLAVIER (ÉCHAP)
+    // E. RACCOURCI CLAVIER (ÉCHAP)
     window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             const activeModals = document.querySelectorAll('.video-modal-overlay.active, .char-sheet-modal.active, .project-detail-modal.active, .lightbox-modal.active, .contact-modal.active');
@@ -188,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // E. SON DE CLIC RÉTRO FEUTRÉ
+    // F. SON DE CLIC RÉTRO FEUTRÉ
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playUiBeep() {
         try {
@@ -220,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // F. EFFETS DE SURVOL (PAILLETTES & POPUP EXTERNE HAUT-DROITE)
+    // G. EFFETS DE SURVOL (PAILLETTES & POPUP EXTERNE HAUT-DROITE)
     // ==========================================
 
     const tooltipsData = [
@@ -229,7 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
         { selector: '.btn-about', text: "Quelques informations sur moi" }
     ];
 
-    // Création d'une infobulle unique globale placée directement dans le body (hors des boutons)
     const globalTooltip = document.createElement('div');
     globalTooltip.style.cssText = `
         position: fixed;
@@ -251,7 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.body.appendChild(globalTooltip);
 
-    // Générateur de paillettes (Sparkles)
     function createSparkle(x, y) {
         const sparkle = document.createElement('div');
         sparkle.style.cssText = `
@@ -272,7 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => sparkle.remove(), 600);
     }
 
-    // CSS dynamique pour l'animation des paillettes
     const sparkleStyle = document.createElement('style');
     sparkleStyle.innerHTML = `
         @keyframes sparkleAnim {
@@ -282,7 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(sparkleStyle);
 
-    // Gestion du survol pour chaque bouton
     tooltipsData.forEach(item => {
         const btn = document.querySelector(item.selector);
         if (!btn) return;
@@ -294,12 +329,10 @@ document.addEventListener('DOMContentLoaded', () => {
             globalTooltip.style.opacity = '1';
             globalTooltip.style.transform = 'scale(1)';
 
-            // Positionner l'infobulle exactement en haut à droite du bouton
             const rect = btn.getBoundingClientRect();
             globalTooltip.style.left = `${rect.right + 10}px`;
             globalTooltip.style.top = `${rect.top}px`;
 
-            // Lancer les paillettes
             sparkleInterval = setInterval(() => {
                 const r = btn.getBoundingClientRect();
                 const rx = r.left + Math.random() * r.width;
