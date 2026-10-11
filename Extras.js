@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - Améliorations, UI, Thèmes, Sons & Formspree Natif
+// EXTRAS.JS - Améliorations, UI, Thèmes, Sons, Effets & Tooltips
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(topBarContainer);
 
 
-    // B. CRÉATION DE LA MODALE DE CONTACT FORMSPREE (METHODE NATIVE)
+    // B. CRÉATION DE LA MODALE DE CONTACT FORMSPREE
     const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnpjvbgp";
 
     const modalHTML = `
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // C. SÉLECTEUR DE COULEUR DE FOND (VISIBLE UNIQUEMENT SUR LA HOME)
+    // C. SÉLECTEUR DE COULEUR DE FOND
     const colorPickerContainer = document.createElement('div');
     colorPickerContainer.id = 'themePickerWidget';
     colorPickerContainer.style.cssText = `
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.head.appendChild(styleDyn);
     });
 
-    // Observer les changements de scène pour masquer / afficher le sélecteur de thème
+    // Observer pour le sélecteur de thème
     const projectsStage = document.getElementById('projectsStage');
     if (projectsStage) {
         const observer = new MutationObserver((mutations) => {
@@ -216,6 +216,111 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.project-bubble')) {
             playUiBeep();
         }
+    });
+
+
+    // ==========================================
+    // F. EFFETS DE SURVOL (PAILLETTES & POPUP INFOBULLE)
+    // ==========================================
+
+    // 1. Création du composant Infobulle (Tooltip)
+    const tooltip = document.createElement('div');
+    tooltip.id = 'extraHoverTooltip';
+    tooltip.style.cssText = `
+        position: fixed;
+        pointer-events: none;
+        z-index: 100000;
+        background: rgba(15, 3, 35, 0.9);
+        border: 1px solid #00f0ff;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.5), inset 0 0 10px rgba(180, 50, 255, 0.3);
+        color: #e0b0ff;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.82rem;
+        padding: 8px 14px;
+        border-radius: 6px;
+        opacity: 0;
+        transform: translate(-50%, -130%);
+        transition: opacity 0.2s ease, transform 0.15s ease-out;
+        white-space: nowrap;
+        backdrop-filter: blur(4px);
+    `;
+    document.body.appendChild(tooltip);
+
+    // Textes pour chaque bouton
+    const tooltipsData = [
+        { selector: '.btn-projets', text: "Liste de quelques projets que j'ai pu réaliser" },
+        { selector: '.btn-demo', text: "Vidéo de présentation de certains de mes projets." },
+        { selector: '.btn-about', text: "Quelques informations sur moi" }
+    ];
+
+    // 2. Générateur de paillettes (Sparkles) au survol
+    function createSparkle(x, y) {
+        const sparkle = document.createElement('div');
+        sparkle.style.cssText = `
+            position: fixed;
+            left: ${x}px;
+            top: ${y}px;
+            width: ${Math.random() * 6 + 3}px;
+            height: ${Math.random() * 6 + 3}px;
+            background: ${Math.random() > 0.5 ? '#00f0ff' : '#d488ff'};
+            box-shadow: 0 0 10px ${Math.random() > 0.5 ? '#00f0ff' : '#d488ff'};
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            animation: sparkleAnim 0.6s ease-out forwards;
+        `;
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 600);
+    }
+
+    // Ajout du CSS dynamique pour l'animation des paillettes
+    const sparkleStyle = document.createElement('style');
+    sparkleStyle.innerHTML = `
+        @keyframes sparkleAnim {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translate(calc(-50% + ${(Math.random() - 0.5) * 60}px), calc(-50% + ${(Math.random() - 0.5) * 60}px)) scale(0) rotate(180deg); }
+        }
+    `;
+    document.head.appendChild(sparkleStyle);
+
+    // 3. Liaison des événements de survol
+    tooltipsData.forEach(item => {
+        const btn = document.querySelector(item.selector);
+        if (!btn) return;
+
+        let sparkleInterval = null;
+
+        btn.addEventListener('mouseenter', () => {
+            // Activer la popup
+            tooltip.textContent = item.text;
+            tooltip.style.opacity = '1';
+
+            // Lancer la génération de paillettes en continu
+            sparkleInterval = setInterval(() => {
+                const rect = btn.getBoundingClientRect();
+                const rx = rect.left + Math.random() * rect.width;
+                const ry = rect.top + Math.random() * rect.height;
+                createSparkle(rx, ry);
+            }, 60);
+        });
+
+        btn.addEventListener('mousemove', (e) => {
+            // La popup suit la souris
+            tooltip.style.left = `${e.clientX}px`;
+            tooltip.style.top = `${e.clientY}px`;
+            
+            // Génération ponctuelle au mouvement
+            if (Math.random() < 0.3) {
+                createSparkle(e.clientX, e.clientY);
+            }
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            // Masquer la popup et stopper les paillettes
+            tooltip.style.opacity = '0';
+            if (sparkleInterval) clearInterval(sparkleInterval);
+        });
     });
 
 });
