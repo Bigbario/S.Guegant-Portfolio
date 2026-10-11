@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV, Vidéos par Thème & Fusées Restreintes au Menu
+// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV, Vidéos par Thème avec Miniatures & Fusées Restreintes au Menu
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         align-items: center;
     `;
     
-    // 1. Bouton Vidéos avec Liste Déroulante par Thème
+    // 1. Bouton Vidéos avec Liste Déroulante par Thème et Miniatures
     const videoDropdownWrapper = document.createElement('div');
     videoDropdownWrapper.style.cssText = `
         position: relative;
@@ -40,21 +40,22 @@ document.addEventListener('DOMContentLoaded', () => {
         border: 2px solid #00f0ff;
         border-radius: 8px;
         box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
-        min-width: 240px;
+        width: 320px;
+        max-height: 75vh;
+        overflow-y: auto;
         z-index: 1000;
         backdrop-filter: blur(6px);
-        overflow: hidden;
     `;
 
-    // Définition des 3 thèmes et de leurs listes de vidéos
+    // Définition des 3 thèmes, leurs noms explicites, liens mis à jour (dont Echoes of Above)
     const videoThemes = [
         {
             title: "🎞️ Trailers",
             videos: [
-                { name: "Trailer 1", url: "https://youtu.be/Wj6ApHOwUqg" },
+                { name: "Echoes of Above - Trailer", url: "https://www.youtube.com/watch?v=EFDunIAB8hs" },
                 { name: "Trailer 2", url: "https://youtu.be/P_WHjH_yi3I" },
-                { name: "The Unseelie Court Trailer", url: "https://youtu.be/hk353Cy4Huw" },
-                { name: "FlipIt Trailer", url: "https://youtu.be/M2mBmCmd5LU" },
+                { name: "The Unseelie Court - Trailer", url: "https://youtu.be/hk353Cy4Huw" },
+                { name: "FlipIt - Trailer", url: "https://youtu.be/M2mBmCmd5LU" },
                 { name: "Trailer 5", url: "https://youtu.be/vQxWOf6QIAw" },
                 { name: "Trailer 6", url: "https://youtu.be/nb3zCLr5TnM" }
             ]
@@ -62,14 +63,14 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             title: "🗺️ RPG Maker Map Timelapse",
             videos: [
-                { name: "Timelapse 1", url: "https://youtu.be/a2bUaBWah_A" },
-                { name: "Timelapse 2", url: "https://youtu.be/3ZlE5SEOLiE" },
-                { name: "Timelapse 3", url: "https://youtu.be/cjRbIqoNsZo" },
-                { name: "RPG Maker MV Timelapse", url: "https://youtu.be/MGyzw5mewII" },
-                { name: "Timelapse 5", url: "https://youtu.be/zHT0c7xg9MQ" },
-                { name: "Timelapse 6", url: "https://youtu.be/7yKQ_D_bSx8" },
-                { name: "Timelapse 7", url: "https://youtu.be/UlvPPSAcnoE" },
-                { name: "Timelapse 8", url: "https://youtu.be/27OE5Dp3D14" }
+                { name: "RPG Maker - Timelapse 1", url: "https://youtu.be/a2bUaBWah_A" },
+                { name: "RPG Maker - Timelapse 2", url: "https://youtu.be/3ZlE5SEOLiE" },
+                { name: "RPG Maker - Timelapse 3", url: "https://youtu.be/cjRbIqoNsZo" },
+                { name: "RPG Maker MV - Map Timelapse", url: "https://youtu.be/MGyzw5mewII" },
+                { name: "RPG Maker - Timelapse 5", url: "https://youtu.be/zHT0c7xg9MQ" },
+                { name: "RPG Maker - Timelapse 6", url: "https://youtu.be/7yKQ_D_bSx8" },
+                { name: "RPG Maker - Timelapse 7", url: "https://youtu.be/UlvPPSAcnoE" },
+                { name: "RPG Maker - Timelapse 8", url: "https://youtu.be/27OE5Dp3D14" }
             ]
         },
         {
@@ -78,27 +79,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 { name: "Walkthrough 1", url: "https://youtu.be/ATCY-amVKQc" },
                 { name: "Walkthrough 2", url: "https://youtu.be/y1OSUefHp_4" },
                 { name: "Walkthrough 3", url: "https://youtu.be/WHcZmxElsiw" },
-                { name: "Blockout 3D Walkthrough", url: "https://youtu.be/HWfIMcgbHo0" },
-                { name: "Portal Level Walkthrough", url: "https://youtu.be/0MizN12rNUk" }
+                { name: "3D Blockout - Walkthrough", url: "https://youtu.be/HWfIMcgbHo0" },
+                { name: "Portal Level - Walkthrough", url: "https://youtu.be/0MizN12rNUk" }
             ]
         }
     ];
 
-    // Fonction utilitaire pour transformer une URL YouTube classique en embed propre
-    function convertToEmbedUrl(url) {
-        let videoId = "";
+    // Fonctions utilitaires YouTube
+    function getYouTubeVideoId(url) {
+        if (!url) return "";
         if (url.includes('youtu.be/')) {
-            videoId = url.split('youtu.be/')[1].split('?')[0];
+            return url.split('youtu.be/')[1].split('?')[0];
         } else if (url.includes('watch?v=')) {
-            videoId = url.split('v=')[1].split('&')[0];
+            return url.split('v=')[1].split('&')[0];
         }
+        return "";
+    }
+
+    function convertToEmbedUrl(url) {
+        const videoId = getYouTubeVideoId(url);
         return videoId ? `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1` : url;
     }
 
     videoThemes.forEach(theme => {
         const themeContainer = document.createElement('div');
         themeContainer.style.cssText = `
-            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.25);
         `;
 
         const themeHeader = document.createElement('div');
@@ -109,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             font-family: 'Orbitron', sans-serif;
             font-size: 0.88rem;
             font-weight: 700;
-            background: rgba(140, 30, 255, 0.15);
+            background: rgba(140, 30, 255, 0.2);
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -120,46 +126,56 @@ document.addEventListener('DOMContentLoaded', () => {
         const subList = document.createElement('div');
         subList.style.cssText = `
             display: none;
-            background: rgba(10, 2, 25, 0.95);
-            padding-left: 10px;
+            background: rgba(10, 2, 25, 0.96);
+            padding: 6px;
         `;
 
-        theme.videos.forEach((vid, idx) => {
+        theme.videos.forEach((vid) => {
+            const videoId = getYouTubeVideoId(vid.url);
+            const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '';
+
             const vidLink = document.createElement('a');
             vidLink.href = "#";
-            vidLink.textContent = `• ${vid.name}`;
             vidLink.style.cssText = `
-                display: block;
-                padding: 10px 14px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 6px 8px;
                 color: #ffffff;
                 font-family: 'Montserrat', sans-serif;
-                font-size: 0.82rem;
+                font-size: 0.78rem;
                 text-decoration: none;
+                border-radius: 6px;
                 transition: all 0.2s;
+                margin-bottom: 4px;
             `;
+
+            vidLink.innerHTML = `
+                <img src="${thumbnailUrl}" alt="${vid.name}" style="width: 64px; height: 38px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(0, 240, 255, 0.4);" onerror="this.style.display='none'">
+                <span style="flex-grow: 1; line-height: 1.2;">${vid.name}</span>
+            `;
+
             vidLink.addEventListener('mouseenter', () => {
+                vidLink.style.background = 'rgba(0, 240, 255, 0.15)';
                 vidLink.style.color = '#00f0ff';
-                vidLink.style.paddingLeft = '18px';
             });
             vidLink.addEventListener('mouseleave', () => {
+                vidLink.style.background = 'transparent';
                 vidLink.style.color = '#ffffff';
-                vidLink.style.paddingLeft = '14px';
             });
             vidLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 dropdownMenu.style.display = 'none';
-                
-                // Ouvre la vidéo dans la modale vidéo existante ou en crée une
                 openCustomVideoModal(convertToEmbedUrl(vid.url));
             });
+
             subList.appendChild(vidLink);
         });
 
-        // Dérouler/Enrouler les sous-catégories de vidéos au survol ou clic
+        // Dérouler/Enrouler les sous-catégories
         themeHeader.addEventListener('click', (e) => {
             e.stopPropagation();
             const isOpen = subList.style.display === 'block';
-            // Fermer les autres sous-listes
             dropdownMenu.querySelectorAll('div > div:nth-child(2)').forEach(sl => sl.style.display = 'none');
             subList.style.display = isOpen ? 'none' : 'block';
         });
@@ -172,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     videoDropdownWrapper.appendChild(dropdownMenu);
     topBarContainer.appendChild(videoDropdownWrapper);
 
-    // Afficher/Cacher le menu déroulant principal au clic sur le bouton Vidéos
+    // Afficher/Cacher le menu déroulant principal
     videoDropdownBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const isVisible = dropdownMenu.style.display === 'block';
