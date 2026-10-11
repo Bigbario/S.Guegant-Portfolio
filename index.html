@@ -1935,10 +1935,13 @@
             const ytUrl = getYouTubeEmbedUrl(item.img);
             if (ytUrl) {
                 mediaBox.classList.add('is-video');
-                mediaBox.innerHTML = `<iframe src="${ytUrl}" allowfullscreen></iframe>`;
+                // Ajout de autoplay=1 et mute=1 pour forcer le lancement automatique
+                const autoYtUrl = ytUrl.includes('?') ? `${ytUrl}&autoplay=1&mute=1` : `${ytUrl}?autoplay=1&mute=1`;
+                mediaBox.innerHTML = `<iframe src="${autoYtUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             } else if (item.img.endsWith('.mp4')) {
                 mediaBox.classList.add('is-video');
-                mediaBox.innerHTML = `<video src="${item.img}" controls></video>`;
+                // Ajout de autoplay et muted
+                mediaBox.innerHTML = `<video src="${item.img}" controls autoplay muted></video>`;
             } else {
                 mediaBox.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu'}" loading="lazy" onerror="this.src='https://via.placeholder.com/500x300/1a0033/00f0ff?text=IMAGE+INDISPONIBLE'">`;
                 mediaBox.addEventListener('click', () => openLightbox(currentGalleryIndex));
@@ -2003,9 +2006,10 @@
 
             const ytUrl = getYouTubeEmbedUrl(item.img);
             if (ytUrl) {
-                wrapper.innerHTML = `<iframe src="${ytUrl}" allowfullscreen></iframe>`;
+                const autoYtUrl = ytUrl.includes('?') ? `${ytUrl}&autoplay=1&mute=1` : `${ytUrl}?autoplay=1&mute=1`;
+                wrapper.innerHTML = `<iframe src="${autoYtUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             } else if (item.img.endsWith('.mp4')) {
-                wrapper.innerHTML = `<video src="${item.img}" controls autoplay></video>`;
+                wrapper.innerHTML = `<video src="${item.img}" controls autoplay muted></video>`;
             } else {
                 wrapper.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu'}">`;
             }
