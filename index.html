@@ -338,11 +338,12 @@
             box-shadow: 0 0 25px #00f0ff;
         }
 
+        /* --- SCÈNE DES PROJETS & RECTANGLES CYBER --- */
         .cone-viewport {
             position: relative;
             width: 100%;
-            max-width: 1200px;
-            height: 65vh;
+            max-width: 1300px;
+            height: 70vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -353,72 +354,96 @@
         .projects-grid {
             position: relative;
             z-index: 5;
-            width: 1000px;
-            height: 750px;
+            width: 100%;
+            max-width: 1150px;
+            height: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
-            gap: 20px;
+            gap: 30px;
             justify-items: center;
             align-items: center;
             transition: opacity 0.3s;
         }
 
         .project-bubble {
-            width: 270px;
-            height: 270px;
-            border-radius: 50%;
-            background: rgba(30, 10, 60, 0.85);
-            border: 3px solid #00f0ff;
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+            width: 100%;
+            max-width: 530px;
+            height: 230px;
+            background: rgba(25, 8, 50, 0.85);
+            border: 2px solid #00f0ff;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.35), inset 0 0 15px rgba(180, 50, 255, 0.25);
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-direction: row;
             align-items: center;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             position: relative;
             overflow: hidden;
             color: #fff;
+            /* Forme cyber biseautée originale */
+            clip-path: polygon(25px 0%, 100% 0%, calc(100% - 25px) 100%, 0% 100%);
+            padding: 15px;
+            gap: 20px;
         }
 
-        .project-bubble:nth-child(1) { grid-column: 1 / span 2; grid-row: 1; transform: translateY(-10px); }
-        .project-bubble:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; transform: translateX(40px); }
-        .project-bubble:nth-child(3) { grid-column: 1 / span 2; grid-row: 2; transform: translateY(10px); }
-        .project-bubble:nth-child(4) { grid-column: 1; grid-row: 1 / span 2; transform: translateX(-40px); }
+        /* Disposition et légers décalages dynamiques pour casser la symétrie */
+        .project-bubble:nth-child(1) { transform: perspective(800px) rotateY(2deg) translateY(-5px); }
+        .project-bubble:nth-child(2) { transform: perspective(800px) rotateY(-2deg) translateY(5px); }
+        .project-bubble:nth-child(3) { transform: perspective(800px) rotateY(2deg) translateY(5px); }
+        .project-bubble:nth-child(4) { transform: perspective(800px) rotateY(-2deg) translateY(-5px); }
 
         .project-bubble img {
-            width: 100%;
+            width: 220px;
             height: 100%;
+            object-type: cover;
             object-fit: cover;
-            position: absolute;
-            top: 0; left: 0;
-            opacity: 0.75;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            opacity: 0.85;
             transition: opacity 0.3s, transform 0.3s;
         }
 
-        .project-bubble .bubble-title {
-            position: relative;
+        .project-bubble-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
             z-index: 2;
+        }
+
+        .project-bubble .bubble-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.85rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            text-align: center;
-            padding: 6px 10px;
-            background: rgba(10, 2, 25, 0.88);
-            border-radius: 12px;
-            border: 1px solid rgba(0, 240, 255, 0.5);
-            text-shadow: 0 0 8px #00f0ff;
-            max-width: 90%;
+            color: #00f0ff;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+            letter-spacing: 1px;
+        }
+
+        .project-bubble .bubble-desc {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.82rem;
+            color: #d1c4e9;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .project-bubble:hover {
-            transform: scale(1.18) !important;
+            transform: scale(1.03) translateY(-3px) !important;
             border-color: #ffffff;
-            box-shadow: 0 0 45px #00f0ff, inset 0 0 20px rgba(255, 255, 255, 0.8);
+            background: rgba(45, 12, 80, 0.95);
+            box-shadow: 0 0 40px #00f0ff, inset 0 0 20px rgba(255, 255, 255, 0.4);
             z-index: 10;
         }
 
-        .project-bubble:hover img { opacity: 1; transform: scale(1.1); }
+        .project-bubble:hover img { 
+            opacity: 1; 
+            transform: scale(1.05); 
+            border-color: #00f0ff;
+        }
 
         .stage-nav-bar {
             width: 100%;
