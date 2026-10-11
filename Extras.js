@@ -1,5 +1,5 @@
 // ==========================================
-// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips, Modale CV & Spatiale Instantanée au Clic
+// EXTRAS.JS - UI, Thèmes, Sons, Paillettes, Tooltips Agrandis, Modale CV & Onde Spatio-Temporelle Lente
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // G. EFFETS DE SURVOL (PAILLETTES & TOOLTIPS)
+    // G. EFFETS DE SURVOL (PAILLETTES & TOOLTIPS AGRANDIS)
     // ==========================================
 
     const tooltipsData = [
@@ -291,21 +291,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const globalTooltip = document.createElement('div');
     globalTooltip.style.cssText = `
         position: fixed;
-        background: rgba(15, 3, 35, 0.95);
-        border: 1px solid #00f0ff;
-        box-shadow: 0 0 15px rgba(0, 240, 255, 0.4), inset 0 0 10px rgba(180, 50, 255, 0.3);
-        color: #e0b0ff;
+        background: rgba(15, 3, 35, 0.96);
+        border: 2px solid #00f0ff;
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.5), inset 0 0 12px rgba(180, 50, 255, 0.3);
+        color: #ffffff;
         font-family: 'Orbitron', sans-serif;
-        font-size: 0.78rem;
-        padding: 8px 12px;
-        border-radius: 6px;
+        font-size: 0.95rem;
+        padding: 12px 18px;
+        border-radius: 8px;
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.2s ease, transform 0.2s ease;
         transform: scale(0.9);
         white-space: nowrap;
         z-index: 99999;
-        backdrop-filter: blur(4px);
+        backdrop-filter: blur(6px);
     `;
     document.body.appendChild(globalTooltip);
 
@@ -361,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
             globalTooltip.style.transform = 'scale(1)';
 
             const rect = btn.getBoundingClientRect();
-            globalTooltip.style.left = `${rect.right + 10}px`;
+            globalTooltip.style.left = `${rect.right + 15}px`;
             globalTooltip.style.top = `${rect.top}px`;
 
             sparkleInterval = setInterval(() => {
@@ -387,13 +387,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // H. DÉFORMATION ESPACE-TEMPS & FUSÉES (SPAWN INSTANTANÉ AU CLIC)
+    // H. DÉFORMATION ESPACE-TEMPS (ONDE LENTE & PROGRESSIVE)
     // ==========================================
 
     const svgFilterHTML = `
         <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
             <filter id="spacetimeDistortion">
-                <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" />
+                <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise" />
                 <feDisplacementMap id="spacetimeDisplacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
             </filter>
         </svg>
@@ -416,25 +416,26 @@ document.addEventListener('DOMContentLoaded', () => {
             width: 20px;
             height: 20px;
             border: 4px solid #00f0ff;
-            box-shadow: 0 0 35px #00f0ff, inset 0 0 25px #d488ff;
+            box-shadow: 0 0 45px #00f0ff, inset 0 0 30px #d488ff;
             border-radius: 50%;
             pointer-events: none;
             z-index: 9996;
             transform: translate(-50%, -50%) scale(1);
             opacity: 1;
-            transition: transform 0.8s cubic-bezier(0.05, 0.8, 0.1, 1), opacity 0.8s ease-out;
+            transition: transform 1.8s cubic-bezier(0.1, 0.4, 0.1, 1), opacity 1.8s ease-out;
         `;
         document.body.appendChild(wave);
 
-        let maxScale = 180;
+        let maxScale = 160;
         if (displacement) displacement.setAttribute('scale', maxScale);
 
         requestAnimationFrame(() => {
-            wave.style.transform = `translate(-50%, -50%) scale(60)`;
+            wave.style.transform = `translate(-50%, -50%) scale(85)`;
             wave.style.opacity = '0';
         });
 
-        let duration = 800;
+        // Onde lente : durée augmentée à 1800 ms (1.8 seconde) pour bien voir la propagation
+        let duration = 1800;
         let startTime = performance.now();
 
         function animateResorption(now) {
@@ -442,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let progress = elapsed / duration;
 
             if (progress < 1) {
-                let currentScale = maxScale * Math.cos(progress * Math.PI * 0.5);
+                let currentScale = maxScale * (1 - progress);
                 if (displacement) displacement.setAttribute('scale', currentScale);
                 requestAnimationFrame(animateResorption);
             } else {
@@ -533,7 +534,6 @@ document.addEventListener('DOMContentLoaded', () => {
             activeRocketCount = Math.max(0, activeRocketCount - 1);
 
             if (respawnInstant) {
-                // Fait apparaître une nouvelle fusée instantanément (avec un tout petit délai de 500ms)
                 if (nextRocketTimeout) clearTimeout(nextRocketTimeout);
                 nextRocketTimeout = setTimeout(() => spawnRocket(true), 500);
             } else {
@@ -554,7 +554,6 @@ document.addEventListener('DOMContentLoaded', () => {
             triggerScreenShake();
             playExplosionSound();
             
-            // true = déclenche un respawn immédiat
             destroyRocket(true);
         });
 
@@ -565,7 +564,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rocket.style.bottom = `${currentY}px`;
 
             if (currentY > window.innerHeight + 80) {
-                // false = sortie normale de l'écran, respecte le délai normal
                 destroyRocket(false);
                 return;
             }
@@ -578,13 +576,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function scheduleNextRocket() {
         if (nextRocketTimeout) clearTimeout(nextRocketTimeout);
-        const randomDelay = Math.random() * 4000 + 4000; // 4 à 8 secondes
+        const randomDelay = Math.random() * 4000 + 4000;
         nextRocketTimeout = setTimeout(() => {
             spawnRocket();
         }, randomDelay);
     }
 
-    // Premier lancement après 3 secondes
     setTimeout(spawnRocket, 3000);
 
 });
