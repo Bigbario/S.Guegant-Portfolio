@@ -1924,78 +1924,75 @@
         function renderCarousel() {
             const galleryCol = document.getElementById('modalProjectGallery');
             galleryCol.innerHTML = '';
-
+        
             if (currentGalleryItems.length === 0) {
                 galleryCol.innerHTML = '<p style="color:#888;">Aucun média disponible.</p>';
                 return;
             }
-
+        
             const container = document.createElement('div');
             container.className = 'carousel-container';
-
-            // On ne récupère et n'affiche QUE l'élément actif actuel (Chargement à la demande)
+        
             const item = currentGalleryItems[currentGalleryIndex];
-
+        
             const galleryItem = document.createElement('div');
             galleryItem.className = 'gallery-item active';
-
+        
             const mediaBox = document.createElement('div');
             mediaBox.className = 'gallery-media';
-
+        
             const ytUrl = getYouTubeEmbedUrl(item.img);
             if (ytUrl) {
                 mediaBox.classList.add('is-video');
-                // Ajout de autoplay=1 et mute=1 pour forcer le lancement automatique
                 const autoYtUrl = ytUrl.includes('?') ? `${ytUrl}&autoplay=1&mute=1` : `${ytUrl}?autoplay=1&mute=1`;
-                mediaBox.innerHTML = `<iframe src="${autoYtUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                mediaBox.innerHTML = `<iframe src="${autoYtUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
             } else if (item.img.endsWith('.mp4')) {
                 mediaBox.classList.add('is-video');
-                // Ajout de autoplay et muted
-                mediaBox.innerHTML = `<video src="${item.img}" controls autoplay muted></video>`;
+                mediaBox.innerHTML = `<video src="${item.img}" controls autoplay muted preload="metadata"></video>`;
             } else {
+                // Ajout de loading="lazy" et désactivation du tremblement
                 mediaBox.innerHTML = `<img src="${item.img}" alt="${item.caption || 'Aperçu'}" loading="lazy" onerror="this.src='https://via.placeholder.com/500x300/1a0033/00f0ff?text=IMAGE+INDISPONIBLE'">`;
                 mediaBox.addEventListener('click', () => openLightbox(currentGalleryIndex));
             }
-
+        
             const caption = document.createElement('div');
             caption.className = 'gallery-caption';
             caption.textContent = item.caption || '';
-
+        
             galleryItem.appendChild(mediaBox);
             galleryItem.appendChild(caption);
             container.appendChild(galleryItem);
-
-            // Contrôles du carrousel (générés uniquement si plusieurs médias)
+        
             if (currentGalleryItems.length > 1) {
                 const controls = document.createElement('div');
                 controls.className = 'carousel-controls';
-
+        
                 const prevBtn = document.createElement('button');
                 prevBtn.className = 'carousel-btn';
                 prevBtn.textContent = '◄ Précédent';
                 prevBtn.addEventListener('click', () => {
                     currentGalleryIndex = (currentGalleryIndex - 1 + currentGalleryItems.length) % currentGalleryItems.length;
-                    renderCarousel(); // Recharge dynamiquement l'index précédent
+                    renderCarousel();
                 });
-
+        
                 const counter = document.createElement('span');
                 counter.className = 'carousel-counter';
                 counter.textContent = `${currentGalleryIndex + 1} / ${currentGalleryItems.length}`;
-
+        
                 const nextBtn = document.createElement('button');
                 nextBtn.className = 'carousel-btn';
                 nextBtn.textContent = 'Suivant ►';
                 nextBtn.addEventListener('click', () => {
                     currentGalleryIndex = (currentGalleryIndex + 1) % currentGalleryItems.length;
-                    renderCarousel(); // Recharge dynamiquement l'index suivant
+                    renderCarousel();
                 });
-
+        
                 controls.appendChild(prevBtn);
                 controls.appendChild(counter);
                 controls.appendChild(nextBtn);
                 container.appendChild(controls);
             }
-
+        
             galleryCol.appendChild(container);
         }
 
