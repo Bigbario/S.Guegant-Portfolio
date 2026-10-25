@@ -146,28 +146,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openDomainStageDirect(domainId) {
-        if (typeof domains === 'undefined') return;
-        
-        const index = domains.findIndex(d => d.id === domainId);
-        if (index !== -1) {
-            currentDomainIndex = index;
-        }
-
-        document.body.classList.add('curtains-closed');
-        setTimeout(() => {
-            projectMenuSelection.classList.remove('active');
-            if (projectsStage) projectsStage.classList.add('ask-visible', 'active');
-
-            // Appel direct de la fonction updateStage globale du fichier HTML
-            if (typeof window.updateStage === 'function') {
-                window.updateStage();
+            if (typeof domains === 'undefined') return;
+            
+            const index = domains.findIndex(d => d.id === domainId);
+            if (index !== -1) {
+                currentDomainIndex = index;
             }
-
+        
+            document.body.classList.add('curtains-closed');
             setTimeout(() => {
-                document.body.classList.remove('curtains-closed');
-            }, 300);
-        }, 600);
-    }
+                projectMenuSelection.classList.remove('active');
+                if (projectsStage) projectsStage.classList.add('active');
+        
+                // Mettre à jour la scène pendant que les rideaux sont fermés
+                if (typeof window.updateStage === 'function') {
+                    window.updateStage();
+                }
+        
+                setTimeout(() => {
+                    document.body.classList.remove('curtains-closed');
+                }, 150);
+            }, 400); // Réduction légère du délai pour fluidifier le retour
+        }
 
     const btnGd = document.getElementById('selectGdProgBtn');
     const btnLd = document.getElementById('selectLdBtn');
