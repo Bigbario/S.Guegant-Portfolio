@@ -1426,13 +1426,22 @@
 
         let frameCount = 0;
         function animate() {
-            ctx.clearRect(0, 0, width, height);
-            frameCount++;
-            updateAndDrawBgParticles(frameCount);
-            updateTitleAnimation();
+            // Si la scène des projets ou la sélection est active, on ralentit/stoppe le dessin du canvas
+            const projectsStage = document.getElementById('projectsStage');
+            const projectMenuSelection = document.getElementById('projectMenuSelection');
+            
+            const isStageActive = projectsStage && projectsStage.classList.contains('active');
+            const isSelectActive = projectMenuSelection && projectMenuSelection.classList.contains('active');
+        
+            if (!isStageActive && !isSelectActive) {
+                ctx.clearRect(0, 0, width, height);
+                frameCount++;
+                updateAndDrawBgParticles(frameCount);
+                updateTitleAnimation();
+            }
+        
             requestAnimationFrame(animate);
         }
-        animate();
 
         // FONCTION UTILITAIRE YOUTUBE
         function getYouTubeEmbedUrl(url) {
@@ -1791,46 +1800,44 @@
         function updateStage() {
             const domain = domains[currentDomainIndex];
             document.getElementById('domainTitle').textContent = domain.title;
-
+        
             const prevIndex = (currentDomainIndex - 1 + domains.length) % domains.length;
             const nextIndex = (currentDomainIndex + 1) % domains.length;
-
+        
             document.getElementById('prevDomainLabel').textContent = `Vers ${domains[prevIndex].title}`;
             document.getElementById('nextDomainLabel').textContent = `Vers ${domains[nextIndex].title}`;
-
+        
             const grid = document.getElementById('projectsGrid');
+            
+            // Vider la grille proprement
             grid.innerHTML = '';
-
+        
+            // Utilisation d'un DocumentFragment pour éviter de multiples reflows DOM
+            const fragment = document.createDocumentFragment();
+        
             domain.projects.forEach((proj) => {
                 const bubble = document.createElement('div');
                 bubble.className = 'project-bubble';
                 
-                // Génération conditionnelle du tag moteur si la propriété "engine" existe dans ton objet projet
                 const engineHtml = proj.engine ? `<span class="engine-tag">⚡ ${proj.engine}</span>` : '';
-
+        
+                // Utilisation de loading="lazy" sur les vignettes de la grille
                 bubble.innerHTML = `
-                    <img src="${proj.img}" alt="${proj.title}" onerror="this.src='https://via.placeholder.com/210x180/1a0033/00f0ff?text=${encodeURIComponent(proj.title)}'">
+                    <img src="${proj.img}" alt="${proj.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/210x180/1a0033/00f0ff?text=${encodeURIComponent(proj.title)}'">
                     <div class="project-bubble-content">
                         <div class="bubble-title">${proj.title}</div>
                         ${engineHtml}
                         <div class="bubble-desc">${proj.desc || ''}</div>
                     </div>
                 `;
-
-                bubble.addEventListener('mouseenter', () => {
-                    const bgPreview = document.getElementById('stageBgPreview');
-                    bgPreview.style.backgroundImage = `url('${proj.bgImg || proj.img}')`;
-                    bgPreview.classList.add('active');
-                });
-
-                bubble.addEventListener('mouseleave', () => {
-                    document.getElementById('stageBgPreview').classList.remove('active');
-                });
-
+        
+                // Ouverture de la modale au clic
                 bubble.addEventListener('click', () => openProjectModal(proj));
-
-                grid.appendChild(bubble);
+        
+                fragment.appendChild(bubble);
             });
+        
+            grid.appendChild(fragment);
         }
 
         // GESTION DES BOUTONS DE NAVIGATION DU STAGE
