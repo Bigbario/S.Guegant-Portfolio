@@ -122,14 +122,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (openProjectsBtn) {
         openProjectsBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopImmediatePropagation(); // Évite qu'un autre listener s'exécute en double
             document.body.classList.add('curtains-closed');
             setTimeout(() => {
                 if (mainMenu) mainMenu.classList.add('hidden');
                 if (titleContainer) titleContainer.classList.add('hidden');
                 projectMenuSelection.classList.add('active');
-                setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
-            }, 600);
-        });
+                setTimeout(() => document.body.classList.remove('curtains-closed'), 250);
+            }, 450);
+        }, true);
     }
 
     const backBtnSelect = document.getElementById('backToMainFromSelectBtn');
@@ -146,28 +147,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openDomainStageDirect(domainId) {
-            if (typeof domains === 'undefined') return;
-            
-            const index = domains.findIndex(d => d.id === domainId);
-            if (index !== -1) {
-                currentDomainIndex = index;
-            }
-        
-            document.body.classList.add('curtains-closed');
-            setTimeout(() => {
-                projectMenuSelection.classList.remove('active');
-                if (projectsStage) projectsStage.classList.add('active');
-        
-                // Mettre à jour la scène pendant que les rideaux sont fermés
-                if (typeof window.updateStage === 'function') {
-                    window.updateStage();
-                }
-        
-                setTimeout(() => {
-                    document.body.classList.remove('curtains-closed');
-                }, 150);
-            }, 400); // Réduction légère du délai pour fluidifier le retour
+        if (typeof domains === 'undefined') return;
+
+        const index = domains.findIndex(d => d.id === domainId);
+        if (index !== -1) {
+            currentDomainIndex = index;
         }
+
+        // Prépare le contenu immédiatement pendant que les rideaux se ferment
+        if (typeof window.updateStage === 'function') {
+            window.updateStage();
+        }
+
+        document.body.classList.add('curtains-closed');
+        setTimeout(() => {
+            projectMenuSelection.classList.remove('active');
+            if (projectsStage) projectsStage.classList.add('active');
+
+            requestAnimationFrame(() => {
+                document.body.classList.remove('curtains-closed');
+            });
+        }, 350);
+    }
 
     const btnGd = document.getElementById('selectGdProgBtn');
     const btnLd = document.getElementById('selectLdBtn');
