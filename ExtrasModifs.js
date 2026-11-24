@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.4s ease;
+            will-change: opacity;
             background: rgba(11, 2, 26, 0.95);
         }
         #projectMenuSelection.active {
@@ -122,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (openProjectsBtn) {
         openProjectsBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            e.stopImmediatePropagation(); // Évite qu'un autre listener s'exécute en double
+            e.stopImmediatePropagation();
             document.body.classList.add('curtains-closed');
             setTimeout(() => {
                 if (mainMenu) mainMenu.classList.add('hidden');
@@ -141,20 +142,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 projectMenuSelection.classList.remove('active');
                 if (mainMenu) mainMenu.classList.remove('hidden');
                 if (titleContainer) titleContainer.classList.remove('hidden');
-                setTimeout(() => document.body.classList.remove('curtains-closed'), 300);
-            }, 600);
+                setTimeout(() => document.body.classList.remove('curtains-closed'), 250);
+            }, 450);
         });
     }
 
     function openDomainStageDirect(domainId) {
         if (typeof domains === 'undefined') return;
-
+        
         const index = domains.findIndex(d => d.id === domainId);
         if (index !== -1) {
             currentDomainIndex = index;
         }
 
-        // Prépare le contenu immédiatement pendant que les rideaux se ferment
         if (typeof window.updateStage === 'function') {
             window.updateStage();
         }
