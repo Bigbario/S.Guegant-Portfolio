@@ -1005,5 +1005,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(spawnRocket, 3000);
     }
+    #themePickerWidget {
+            backdrop-filter: none !important; /* Gain GPU notable lors des transitions */
+        }
 
 });
