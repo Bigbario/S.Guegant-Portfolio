@@ -544,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
         border: 1px solid rgba(0, 240, 255, 0.5);
         padding: 8px 14px;
         border-radius: 8px;
-        backdrop-filter: blur(6px);
+        backdrop-filter: none;
         font-family: 'Orbitron', sans-serif;
         font-size: 0.75rem;
         color: #00f0ff;
@@ -1005,8 +1005,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(spawnRocket, 3000);
     }
-    #themePickerWidget {
-            backdrop-filter: none !important; /* Gain GPU notable lors des transitions */
-        }
 
 });
